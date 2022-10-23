@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block base %}
+
+{% include "messages.html" %}
+<div class="flex flex-col border flex-wrap justify-center items-center  w-3/5">
+    {% for room in rooms %}
+    <div class="border-b-4 bg-slate-700 flex flex-col mx-2 my-5 w-full p-5 m-auto ">
+        <div class="flex flex-row justify-between items-center">
+            <span>@{{room.host.username}}</span>
+            <span>{{room.created}}</span>
+        </div>
+        <div>
+            <a href=" {% url 'core:room_detail' room.id %}"> {{room.name}} </a>
+        </div>
+        <div>
+            <a href=" {% url 'core:room_detail' room.id %}"> {{room.topic}} </a>
+        </div>
+        {% if request.user.is_authenticated %}
+        <div class="mt-5 mb-2">
+            <a href="{% url 'core:update_room' room.id %}"
+                class="bg-green-600 w-32 py-2 px-4 text-center text-xl text-white m-2 rounded">Update
+            </a>
+            <a href="{% url 'core:delete_room' room.id %}"
+                class="bg-red-600 w-32 m-2 py-2 px-4 text-center text-xl text-white rounded">delete
+            </a>
+        </div>
+
+        {% endif %}
+    </div>
+
+    {% endfor %}
+</div>
+
+
+{% endblock base %}

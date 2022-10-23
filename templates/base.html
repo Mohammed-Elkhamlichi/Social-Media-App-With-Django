@@ -1,0 +1,27 @@
+{% load tailwind_tags %}
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    {% tailwind_css %}
+    <title>{{ title }}</title>
+</head>
+
+<body class="bg-slate-700 ">
+    {% include "navbar.html" %}
+    <div class="w-full h-screen flex flex-row flex-nowrap items-start">
+        {% block base %}
+
+
+        {% endblock base %}
+
+    </div>
+    {% include "footer.html" %}
+    <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
+</body>
+
+</html>

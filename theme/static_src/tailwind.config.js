@@ -24,7 +24,7 @@ module.exports = {
          * Templates in other django apps (BASE_DIR/<any_app_name>/templates).
          * Adjust the following line to match your project structure.
          */
-        '../../**/templates/**/*.html',
+        '../../**/templates/**/*.html'
 
         /**
          * JS: If you use Tailwind CSS in JavaScript, uncomment the following lines and make sure
@@ -42,7 +42,7 @@ module.exports = {
         // '../../**/*.py'
     ],
     theme: {
-        extend: {},
+        extend: {}
     },
     plugins: [
         /**
@@ -53,6 +53,6 @@ module.exports = {
         require('@tailwindcss/forms'),
         require('@tailwindcss/typography'),
         require('@tailwindcss/line-clamp'),
-        require('@tailwindcss/aspect-ratio'),
-    ],
-}
+        require('@tailwindcss/aspect-ratio')
+    ]
+};
