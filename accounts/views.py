@@ -12,15 +12,23 @@ def login_user(request):
     if request.method == "POST":
         email = request.POST.get('email')
         password = request.POST.get('password')
-        user = authenticate(email=email, password=password)
-        print('auth user', user)
-        if user is not None:
-            login(request, user)
-            messages.success(
-                request, f'welcome back,{user.username} you login success to your account')
-        else:
-            messages.error(request, 'enter a valid email and password')
-
+        try:
+            user = User.objects.get(email=email)
+            user = authenticate(
+                request,
+                username=user.username,
+                password=password
+            )
+            if user is not None:
+                login(request, user)
+                messages.success(
+                    request, f'welcome back,{user.username} you login success to your account')
+                return redirect('core:home')
+            else:
+                messages.error(request, 'enter a valid email and password')
+        except:
+            messages.error(
+                request, 'user with this credentials not exist')
     return render(request, 'accounts/login_user.html')
 
 
@@ -37,7 +45,6 @@ def register_user(request):
                 user.username = user.username.lower()
                 user.email = user.email.lower()
                 user.save()
-                print('user', user)
                 login(request, user)
                 messages.success(request, 'registration success')
                 return redirect('core:home')

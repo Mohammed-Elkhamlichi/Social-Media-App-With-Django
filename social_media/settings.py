@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     # packages
     'tailwind',
     'theme.apps.ThemeConfig',
-    # 'django_browser_reload',
+    'django_browser_reload',
 ]
 
 
@@ -67,7 +67,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     #
-    # "django_browser_reload.middleware.BrowserReloadMiddleware",
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = 'social_media.urls'

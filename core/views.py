@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
-from .models import Room
+from .models import Room, Topic
 from django.contrib.auth.decorators import login_required
 from .forms import RoomForm
+from django.db.models import Q
+from django.contrib.auth.models import User
+import math
 # Create your views here.
 
 #
@@ -12,8 +15,34 @@ from .forms import RoomForm
 def home(request):
     if not request.user.is_authenticated:
         redirect('auth:login_user')
-    rooms = Room.objects.all()
-    return render(request, 'core/home.html', {"title": 'Room Page', 'rooms': rooms},)
+    print('request', request.GET)
+    topics = Topic.objects.all().order_by('name')
+    hosts = User.objects.all().order_by('username')
+    limit_display_rooms = 4
+    rooms = Room.objects.all()[:limit_display_rooms]
+
+    # pagination
+    page_number = request.GET.get('page')
+    if page_number is not None:
+        x = int(page_number)*limit_display_rooms
+        rooms = Room.objects.all()[(x-limit_display_rooms):x]
+        print(rooms)
+    pages = math.floor(Room.objects.count() / limit_display_rooms)
+
+    # search for rooms
+    search = request.GET.get('search')
+    if search is not None:
+        rooms = Room.objects.filter(
+            Q(name__contains=search)
+        ).order_by('-created', '-updated')
+    context = {
+        "title": 'Room Page',
+        'rooms': rooms,
+        "range": range(1, pages+1),
+        "topics": topics,
+        "hosts": hosts,
+    }
+    return render(request, 'core/home.html', context)
 
 
 @login_required(login_url='auth:login')
