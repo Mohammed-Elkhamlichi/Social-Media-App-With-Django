@@ -1,93 +1,70 @@
 {% load static %}
-<div class="flex flex-col col-span-2  flex-wrap justify-start items-start  w-11/12 m-auto">
-    {% for room in rooms %}
-    <div
-        class=" flex flex-col mx-2 my-5 w-full p-5  m-auto bg-slate-700 shadow-md shadow-gray-800 hover:shadow-gray-900 rounded transition dely-700  hover:scale-105 ease-in-out ">
-        <div class="flex flex-row justify-between items-center">
-            <div class="flex flex-row">
-                <img
-                    src='{% static "images/mylogo.png" %}'
-                    alt=""
-                    class="h-8 w-8 rounded-full mr-1"
-                />
-                <a
-                    href=""
-                    class="text-sm"
-                >
-                    <div class="flex flex-col">
-                        <span class="text-gray-400">Host @{{room.host.username}}</span>
-                        <span
-                            style="font-size:12px;"
-                            class="text-gray-400"
-                        >{{room.updated|timesince }} ago</span>
-                    </div>
-                </a>
-            </div>
-            {% if request.user.is_authenticated and room.host.username == request.user.username %}
-            <div class="mt-5 mb-2">
-                <a
-                    href="{% url 'core:update_room' room.id %}"
-                    class="bg-green-600 w-32 py-1 px-4 text-center text-sm text-white m-2 rounded"
-                >Update
-                </a>
-                <a
-                    href="{% url 'core:delete_room' room.id %}"
-                    class="bg-red-500 w-32 m-2 py-1 px-4 text-center text-sm text-white rounded"
-                >delete
-                </a>
-            </div>
-            {% endif %}
-
-            <!-- <span>{{room.created|date:'Y-m-d'}}</span> -->
-        </div>
-        <div class="my-5 ">
-            <a
-                href=" {% url 'core:room_detail' room.id %}"
-                class="text-gray-400"
-            > {{room.name}} </a>
-        </div>
-        <hr class="border border-slate-600 mt-5">
-        <div class="flex flex-row justify-between item-center">
-            <div class="flex flex-row mt-5 mb-2">
-                <img
-                    src='{% static "images/avatar.png" %}'
-                    alt=""
-                    class="h-6 w-6 rounded-full mr-1"
-                />
-                <a
-                    href=""
-                    class="text-sm font-weight h-6"
-                ><span class="text-gray-400 font-weight text-sm">{{room.participants.count}}
-                        Joined</span></a>
-            </div>
-            <div class="flex flex-row mt-5 mb-2">
-                {% for participant in room.participants.all %}
-                <div class="mx-1">
-
-                    <a
-                        href=""
-                        class="text-sm font-weight"
-                    >
-                        <img
-                            src='{% static "images/avatar.png" %}'
-                            alt=""
-                            class="h-6 w-6 rounded-full mr-1"
-                        />
+<div class="col-span-2">
+    <div class="flex flex-col   flex-wrap justify-start items-start  w-11/12 m-auto">
+        <h1 class="text-2xl text-center text-gray-400">@Interesting Rooms</h1>
+        {% for room in rooms %}
+        <div
+            class=" flex flex-col mx-2 my-5 w-full p-5  m-auto bg-slate-700 shadow-md shadow-gray-800 hover:shadow-gray-900 rounded transition dely-700  hover:scale-105 ease-in-out ">
+            <div class="flex flex-row justify-between items-center">
+                <div class="flex flex-row">
+                    <img src='{% static "images/mylogo.png" %}' alt=""
+                        class="h-8 w-8 rounded-full mr-1" />
+                    <a href="" class="text-sm">
+                        <div class="flex flex-col">
+                            <span class="text-gray-400">Host @{{room.host.username}}</span>
+                            <span style="font-size:12px;"
+                                class="text-gray-400">{{room.updated|timesince }} ago</span>
+                        </div>
                     </a>
                 </div>
-                {% endfor %}
+                {%if request.user.is_authenticated and room.host.username == request.user.username%}
+                <div class="mt-5 mb-2">
+                    <a href="{% url 'core:update_room' room.id %}"
+                        class="bg-green-600 w-32 py-1 px-4 text-center text-sm text-white m-2 rounded">Update
+                    </a>
+                    <a href="{% url 'core:delete_room' room.id %}"
+                        class="bg-red-500 w-32 m-2 py-1 px-4 text-center text-sm text-white rounded">delete
+                    </a>
+                </div>
+                {% endif %}
+
+                <!-- <span>{{room.created|date:'Y-m-d'}}</span> -->
+            </div>
+            <div class="my-5 ">
+                <a href=" {% url 'core:room_detail' room.id %}" class="text-gray-400"> {{room.name}}
+                </a>
+            </div>
+            <hr class="border border-slate-600 mt-5">
+            <div class="flex flex-row justify-between item-center">
+                <div class="flex flex-row mt-5 mb-2">
+                    <img src='{% static "images/avatar.png" %}' alt=""
+                        class="h-6 w-6 rounded-full mr-1" />
+                    <a href="" class="text-sm font-weight h-6"><span
+                            class="text-gray-400 font-weight text-sm">{{room.participants.count}}
+                            Joined</span></a>
+                </div>
+                <div class="flex flex-row mt-5 mb-2">
+                    {% for participant in room.participants.all %}
+                    <div class="mx-1">
+
+                        <a href="" class="text-sm font-weight">
+                            <img src='{% static "images/avatar.png" %}' alt=""
+                                class="h-6 w-6 rounded-full mr-1" />
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="mt-5 mb-2">
+                    <a href=" {% url 'core:room_detail' room.id %}"
+                        class="bg-slate-600 text-gray-300 px-4 py-2 rounded-full text-sm">
+                        {{room.topic}} </a>
+                </div>
             </div>
 
-            <div class="mt-5 mb-2">
-                <a
-                    href=" {% url 'core:room_detail' room.id %}"
-                    class="bg-slate-600 text-gray-300 px-4 py-2 rounded-full text-sm"
-                > {{room.topic}} </a>
-            </div>
+
         </div>
 
-
+        {% endfor %}
     </div>
-
-    {% endfor %}
 </div>

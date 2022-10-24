@@ -4,10 +4,17 @@ from django.contrib.auth.models import User
 
 
 class Topic(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
+    users = models.ManyToManyField(User, null=True)
 
     def __str__(self):
         return self.name
+
+    def is_user_joined(self, request):
+        for user in self.users.all():
+            if user == request.user:
+                return True
+        return False
 
 
 class Room(models.Model):

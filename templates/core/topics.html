@@ -1,18 +1,28 @@
-<div class="flex flex-col  flex-wrap justify-center items-start   w-11/12 m-auto ">
-    <h1 class="text-2xl text-center text-gray-400">@ Interesting Topics</h1>
-    {% for topic in topics %}
-    <div
-        class="transition ease-in-out dely-100 duration-500 flex flex-row justify-between items-center my-4 w-full p-4  m-auto bg-slate-700 shadow-md shadow-gray-800 hover:shadow-gray-900 rounded  hover:scale-105">
-        <span class="text-gray-400 font-bold">{{topic.name}}</span>
-        <form
-            action=""
-            method="get"
-            class="transition ease-in-out dely-100 duration-500 text-gray-300 bg-cyan-300 opacity-50 font-bold  px-5 py-2 rounded dark:text-slate-800 hover:opacity-100  "
-        ><input
-                type="submit"
-                value="Join"
-            ></form>
-    </div>
+{% load join_quit_topic_tags %}
+<div class="col-span-1">
+    <div class="flex flex-col  flex-wrap justify-center items-start   w-11/12 m-auto ">
+        <h1 class="text-2xl text-center text-gray-400">@Interesting Topics</h1>
+        {% for topic in topics %}
+        <div
+            class="transition ease-in-out dely-100 duration-500 flex flex-row justify-between items-center my-4 w-full p-4  m-auto bg-slate-700 shadow-md shadow-gray-800 hover:shadow-gray-900 rounded  hover:scale-105">
 
-    {% endfor %}
+
+            <span class="text-gray-400 font-bold">{{topic.name}}</span>
+
+
+            <form action="" method="post"
+                class="transition ease-in-out dely-100 duration-500 text-gray-300 bg-cyan-300 opacity-50 font-bold  px-5 py-2 rounded dark:text-slate-800 hover:opacity-100  ">
+                {% csrf_token %}
+                <input type="hidden" name="joined_topic" value="{{topic.name}}">
+                <input type="hidden" name="quit_join" value="{% join_quit_topic topic request %}">
+                <input type="submit" value="{% join_quit_topic topic request %}">
+
+
+
+
+            </form>
+        </div>
+
+        {% endfor %}
+    </div>
 </div>

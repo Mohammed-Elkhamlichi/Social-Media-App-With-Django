@@ -1,18 +1,16 @@
-<div class="flex flex-col   flex-wrap justify-center items-start   w-11/12 m-auto ">
-    <h1 class="text-2xl text-center text-gray-400">@Top Hosts</h1>
-    {% for host in hosts %}
-    <div
-        class="transition ease-in-out dely-100 duration-500 flex flex-row justify-between items-center my-4 w-full p-4  m-auto bg-slate-700 shadow-md shadow-gray-800 hover:shadow-gray-900 rounded  hover:scale-105">
-        <span class="text-gray-400 font-bold">@{{host.username}}</span>
-        <form
-            action=""
-            method="get"
-            class="transition ease-in-out dely-100 duration-500 text-gray-300 bg-cyan-300 opacity-50 font-bold  px-5 py-2 rounded dark:text-slate-800 hover:opacity-100  "
-        ><input
-                type="submit"
-                value="Follow"
-            ></form>
-    </div>
+<div class="col-span-1">
+    <div class="flex flex-col   flex-wrap justify-center items-start   w-11/12 m-auto ">
+        <h1 class="text-2xl text-center text-gray-400">@Top Hosts {{hosts.count}}</h1>
+        {% for host in hosts %}
+        <div
+            class="transition ease-in-out dely-100 duration-500 flex flex-row justify-between items-center my-4 w-full p-4  m-auto bg-slate-700 shadow-md shadow-gray-800 hover:shadow-gray-900 rounded  hover:scale-105">
+            <span class="text-gray-400 font-bold">@{{host.username}}</span>
+            <form action="" method="get"
+                class="transition ease-in-out dely-100 duration-500 text-gray-300 bg-cyan-300 opacity-50 font-bold  px-5 py-2 rounded dark:text-slate-800 hover:opacity-100  ">
+                <input type="submit" value="Follow">
+            </form>
+        </div>
 
-    {% endfor %}
+        {% endfor %}
+    </div>
 </div>

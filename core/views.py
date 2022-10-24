@@ -6,6 +6,7 @@ from .forms import RoomForm
 from django.db.models import Q
 from django.contrib.auth.models import User
 import math
+from django.contrib import messages
 # Create your views here.
 
 #
@@ -15,18 +16,39 @@ import math
 def home(request):
     if not request.user.is_authenticated:
         redirect('auth:login_user')
-    print('request', request.GET)
-    topics = Topic.objects.all().order_by('name')
     hosts = User.objects.all().order_by('username')
     limit_display_rooms = 4
     rooms = Room.objects.all()[:limit_display_rooms]
+
+    # add new Joined (join a topic)
+    if request.method == 'POST':
+        joined_topic_name = request.POST.get('joined_topic')
+        quit_join = request.POST.get('quit_join')
+        # if the topic name exist and the user need to join the topic
+        try:
+            if joined_topic_name is not None and quit_join == "Join":
+                joined_topic = Topic.objects.get(name=joined_topic_name)
+                joined_topic.users.add(request.user)
+                messages.success(request, f'you joined the Topic successfully')
+        except:
+            messages.success(request, f'Internal Server Error')
+
+        # if the topic name exist and the user need to join the topic
+        try:
+            if joined_topic_name is not None and quit_join == "Quit":
+                joined_topic = Topic.objects.get(name=joined_topic_name)
+                joined_topic.users.remove(request.user)
+                messages.success(request, f'you quit the Topic successfully')
+        except:
+            messages.success(request, f'Internal Server Error')
+
+    topics = Topic.objects.all().order_by('name')
 
     # pagination
     page_number = request.GET.get('page')
     if page_number is not None:
         x = int(page_number)*limit_display_rooms
         rooms = Room.objects.all()[(x-limit_display_rooms):x]
-        print(rooms)
     pages = math.floor(Room.objects.count() / limit_display_rooms)
 
     # search for rooms
@@ -45,7 +67,7 @@ def home(request):
     return render(request, 'core/home.html', context)
 
 
-@login_required(login_url='auth:login')
+@ login_required(login_url='auth:login')
 def room_detail(request, room_id):
     if not request.user.is_authenticated:
         redirect('auth:login_user')
@@ -54,7 +76,7 @@ def room_detail(request, room_id):
     return render(request, 'core/room_detail.html', {"title": 'Room Detail Page', 'room': room})
 
 
-@login_required(login_url='auth:login')
+@ login_required(login_url='auth:login')
 def create_room(request):
     if not request.user.is_authenticated:
         redirect('auth:login_user')
@@ -68,7 +90,7 @@ def create_room(request):
     return render(request, 'core/room_form.html', {"form": form, "is_update": True, "method": "POST"})
 
 
-@login_required(login_url='auth:login')
+@ login_required(login_url='auth:login')
 def update_room(request, room_id):
     if not request.user.is_authenticated:
         redirect('auth:login_user')
@@ -83,7 +105,7 @@ def update_room(request, room_id):
     return render(request, 'core/room_form.html', {"form": form, "is_update": True, "method": "PUT"})
 
 
-@login_required(login_url='auth:login')
+@ login_required(login_url='auth:login')
 def delete_room(request, room_id):
     if not request.user.is_authenticated:
         redirect('auth:login_user')
