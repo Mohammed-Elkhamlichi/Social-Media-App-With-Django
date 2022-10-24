@@ -1,6 +1,5 @@
 {% load static %}
-<div
-    class="flex flex-col col-span-2 row-span-4 row-start-1 row-end-4 flex-wrap justify-center    w-10/12 m-auto">
+<div class="flex flex-col col-span-2  flex-wrap justify-start items-start  w-11/12 m-auto">
     {% for room in rooms %}
     <div
         class=" flex flex-col mx-2 my-5 w-full p-5  m-auto bg-slate-700 shadow-md shadow-gray-800 hover:shadow-gray-900 rounded transition dely-700  hover:scale-105 ease-in-out ">
@@ -20,7 +19,7 @@
                         <span
                             style="font-size:12px;"
                             class="text-gray-400"
-                        >{{room.updated|date:'Y-m-d: H:m:s'}}</span>
+                        >{{room.updated|timesince }} ago</span>
                     </div>
                 </a>
             </div>
@@ -51,16 +50,33 @@
         <div class="flex flex-row justify-between item-center">
             <div class="flex flex-row mt-5 mb-2">
                 <img
-                    src='{% static "images/mylogo.png" %}'
+                    src='{% static "images/avatar.png" %}'
                     alt=""
                     class="h-6 w-6 rounded-full mr-1"
                 />
                 <a
                     href=""
-                    class="text-sm font-weight"
-                ><span class="text-gray-400 font-weight text-sm">10 joined</span></a>
+                    class="text-sm font-weight h-6"
+                ><span class="text-gray-400 font-weight text-sm">{{room.participants.count}}
+                        Joined</span></a>
             </div>
+            <div class="flex flex-row mt-5 mb-2">
+                {% for participant in room.participants.all %}
+                <div class="mx-1">
 
+                    <a
+                        href=""
+                        class="text-sm font-weight"
+                    >
+                        <img
+                            src='{% static "images/avatar.png" %}'
+                            alt=""
+                            class="h-6 w-6 rounded-full mr-1"
+                        />
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
 
             <div class="mt-5 mb-2">
                 <a
