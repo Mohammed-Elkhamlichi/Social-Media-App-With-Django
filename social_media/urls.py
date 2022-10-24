@@ -19,7 +19,7 @@ from core.views import home
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home),
-    path('core/', include('core.urls', namespace='core')),
+    path('', include('core.urls', namespace='core')),
     path('auth/', include('accounts.urls', namespace='auth')),
     path("__reload__/", include("django_browser_reload.urls")),
 ]

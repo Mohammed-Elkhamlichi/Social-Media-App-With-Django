@@ -2,16 +2,42 @@
 
 {% block base %}
 
-<h1 class="text-center mx-auto my-5 text-4xl border-b-2 w-72 border-white ">Room Form Page</h1>
-<form action="" method='post' class="bg-green items-center bg-slate-400">
-    {% csrf_token %}
-    {{form.as_p}}
-    {% if is_update %}
-    <input type="submit" value="Update Room" class="py-2 px-5 border rounded bg-green-500">
-    {% else %}
-    <input type="submit" value="Update Room">
+<div class="h-screen flex flex-col items-center justify-center">
+    <form action="" method='post'
+        class="bg-green items-center dark:bg-gray-700 shadow-md shadow-slate-800  hover:shadow-slate-900 flex flex-col justify-center w-96 m-auto rounded my-10 ">
+        <h2
+            class="text-center m-auto  text-xl border-b-2  py-5  w-full dark:bg-gray-700 text-gray-300">
+            Create Or Update Study Room
+        </h2>
+        {% csrf_token %}
+        <div class="flex flex-col w-11/12 my-3">
+            <label for="topic" class="text-gray-400 text-md">Enter a Topic</label>
+            <input type="text" name="room_topic" class="rounded  my-2" list="room_topics"
+                id="room_topic" placeholder="Django">
+            <datalist id="room_topics" name="room_topics" class="rounded  my-2 w-full">
+                <option value="Chocolate" class="w-full">
+                <option value="Coconut">
+                <option value="Mint">
+                <option value="Strawberry">
+                <option value="Vanilla">
 
-    {% endif %}
-</form>
+            </datalist>
+        </div>
+        <div class="flex flex-col w-11/12 my-2">
+            <label for="topic" class="text-gray-400 text-md">Room Name</label>
+            <input type="text" name="topic" class="rounded  my-2">
+        </div>
+        <div class="flex flex-col w-11/12 my-2">
+            <label for="topic" class="text-gray-400 text-md">Room Description</label>
+            <input type="text" name="topic" class="rounded  my-2 h-32 ">
+        </div>
+        {% if is_update %}
+        <input type="submit" value="Update Room" class="py-2 px-5 border rounded bg-green-500 my-5">
+        {% else %}
+        <input type="submit" value="Update Room">
+
+        {% endif %}
+    </form>
+</div>
 
 {% endblock base %}
