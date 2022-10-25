@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block base %}
+{% include "core/search_rooms.html" %}
+
+<div class="flex flex-col justify-start items-center h-screen w-full">
+    <div class="block group h-28 w-28  rounded-full border-2 border-white bg-green-700 my-14">
+        <div
+            class="relative group-hover:bg-green-400 -bottom-4 h-5 w-5 -mb-5 border-2 bg-green-600 rounded-full">
+        </div>
+        <img class='block' src="{% static 'images/avatar.png' %}"
+            alt="{{request.user.username}} logo">
+        <h2 class="text-xl text-gray-300 my-2">@{{request.user.username|title}}</h2>
+    </div>
+    <div>
+        <span
+            class="px-5 py-2 bg-slate-600 rounded shadow-sm shadow-slate-700 text-gray-400 transition duration-300 ease-in-out hover:shadow-sm hover:border-2 hover:border-slate-700 hover:text-white hover:shadow-slate-800">1K
+            Following</span>
+        <span class="px-5 py-2 bg-slate-600 rounded shadow-sm shadow-slate-700 text-gray-400">100
+            Follower</span>
+    </div>
+</div>
+
+{% endblock base %}

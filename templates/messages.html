@@ -7,11 +7,11 @@
     {% for message in messages %}
 
     {% if message.tags == "error" %}
-    <div class="p-4 mb-4 text-sm text-white bg-red-500 rounded-lg " role="alert">
+    <div class="p-4 mb-4 text-sm text-white bg-red-500 rounded-lg rounded-b-none " role="alert">
         <span class="font-medium">{{ message.tags }}!</span> {{ message }}
     </div>
     {% else %}
-    <div class="p-4 mb-4 text-sm text-white bg-green-500 rounded-lg " role="alert">
+    <div class="p-4 mb-4 text-sm text-white bg-green-500 rounded-lg rounded-b-none " role="alert">
         <span class="font-medium">{{message.tags}}!</span> {{ message }}
     </div>
     {% endif %}

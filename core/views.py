@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect, HttpResponseNotAllowed
 from .models import Room, Topic
 from django.contrib.auth.decorators import login_required
 from .forms import RoomForm
@@ -8,8 +8,6 @@ from django.contrib.auth.models import User
 import math
 from django.contrib import messages
 # Create your views here.
-
-#
 
 
 @login_required(login_url='auth:login_user')
@@ -82,12 +80,40 @@ def create_room(request):
         redirect('auth:login_user')
     form = RoomForm()
     if request.method == 'POST':
+        host = request.POST.get('id_host')
+        participant = request.POST.get('id_participants')
+        topic = Topic.objects.filter(name=request.POST.get('id_topic')).first()
+        if topic is None:
+            # create new topic
+            topic = Topic.objects.create(name=request.POST.get('id_topic'))
+            topic = topic.users.add(request.user)
+            return topic
+        description = request.POST.get('description')
+        name = request.POST.get('name')
         form = RoomForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('core:home')
+            room = form.save(commit=False)
+            room.host = request.user
+            room.topic = topic
+            room.description = description
+            room.name = name
+            room.save()
+            # room.participants_set.create(participant)
+            messages.success(request, 'room has been created')
+            return redirect("core:home")
+        else:
+            messages.error(request, 'Form not valid')
+            return redirect("core:create_room")
 
-    return render(request, 'core/room_form.html', {"form": form, "is_update": True, "method": "POST"})
+    else:
+        form = RoomForm()
+    context = {
+        "form": form,
+        "is_update": False,
+        "method": "POST",
+        'topics': Topic.objects.all()
+    }
+    return render(request, 'core/room_form.html', context)
 
 
 @ login_required(login_url='auth:login')
@@ -97,12 +123,28 @@ def update_room(request, room_id):
     room = Room.objects.get(pk=room_id)
     form = RoomForm(instance=room)
     if request.method == "POST":
+        topic = Topic.objects.filter(name=request.POST.get('id_topic')).first()
+        if topic is None:
+            # create new topic
+            topic = Topic.objects.create(name=request.POST.get('id_topic'))
+            topic = topic.users.add(request.user)
+            return topic
         form = RoomForm(request.POST, instance=room)
         if form.is_valid():
+            form = form.save(commit=False)
+            form.host = request.user
+            form.topic = topic
             form.save()
             return redirect('core:home')
-
-    return render(request, 'core/room_form.html', {"form": form, "is_update": True, "method": "PUT"})
+    else:
+        form = RoomForm()
+    context = {
+        "form": form,
+        "room": room,
+        "is_update": True,
+        "method": "PUT"
+    }
+    return render(request, 'core/room_form.html', context)
 
 
 @ login_required(login_url='auth:login')

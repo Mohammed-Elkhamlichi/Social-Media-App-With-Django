@@ -4,12 +4,6 @@ from .models import Room
 
 
 class RoomForm(forms.ModelForm):
-    name = forms.EmailField(
-        required=True, widget=forms.EmailInput(attrs={
-            "placeholder": "enter the room name",
-            "class": "rounded placeholder:text-green",
-        }))
-
     class Meta:
         model = Room
-        fields = '__all__'
+        fields = ('host', 'name', 'topic', 'description')

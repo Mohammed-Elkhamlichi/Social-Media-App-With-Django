@@ -8,6 +8,10 @@ from django.db.models import Q
 # Create your views here.
 
 
+def profile(request):
+    return render(request, 'accounts/profile.html')
+
+
 def login_user(request):
     if request.method == "POST":
         email = request.POST.get('email')
