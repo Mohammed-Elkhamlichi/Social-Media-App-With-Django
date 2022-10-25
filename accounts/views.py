@@ -2,15 +2,26 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, UserForm
 from accounts.models import User
 from django.db.models import Q
 from core.models import Room
 import online_users.models
 from datetime import timedelta
+from django.contrib.auth.decorators import login_required
+from django.core.files.storage import FileSystemStorage
+import datetime
 # Create your views here.
+get_date = datetime.datetime.now()
+year = get_date.year
+month = get_date.month
+day = get_date.day
+hour = get_date.hour
+second = get_date.second
+minute = get_date.minute
 
 
+@login_required(login_url="accounts:login_user")
 def profile(request, username):
     rooms = Room.objects.filter(host=request.user)
     # get all the users online
@@ -22,11 +33,28 @@ def profile(request, username):
         # check if the admin online
         if user.user == request.user:
             is_user_online = True
-    return render(request, 'accounts/profile.html', {"rooms": rooms, "is_user_online": is_user_online})
+    user_profile = request.user.profile_pic.url
+    return render(request, 'accounts/profile.html', {"user_profile": user_profile, "rooms": rooms, "is_user_online": is_user_online})
 
 
+@login_required(login_url="accounts:login_user")
 def edit_profile(request, username):
-    return render(request, "accounts/edit_profile.html", {})
+    # http://localhost:8000/auth/mohammed/profile/edit
+    user = request.user
+    form = UserForm(instance=user)
+    if request.method == "POST":
+        profile_pic = request.FILES['profile_pic']
+        form = UserForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form = form.save(commit=False)
+            fs = FileSystemStorage()
+
+            profile_pic = fs.save(
+                f'{year}-{month}-{day}-{profile_pic.name}', profile_pic)
+            print(fs.url(profile_pic))
+            form.save()
+            redirect("accounts:edit_profile", user.username)
+    return render(request, "accounts/edit_profile.html",)
 
 
 def login_user(request):

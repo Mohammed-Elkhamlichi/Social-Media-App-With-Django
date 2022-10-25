@@ -95,7 +95,7 @@ def create_room(request):
             room = form.save(commit=False)
             room.host = request.user
             room.topic = topic
-            room.participants.add(request.user)
+            room.participants.add(request.user.username.id)
             room.description = description
             room.name = name
             room.save()
