@@ -14,7 +14,7 @@ from .forms import RoomForm, MessageForm
 def home(request):
     if not request.user.is_authenticated:
         redirect('auth:login_user')
-    hosts = User.objects.all().order_by('username')
+    hosts = User.objects.all().order_by('-username')
     limit_display_rooms = 10
     rooms = Room.objects.all()[:limit_display_rooms]
 
@@ -62,7 +62,7 @@ def home(request):
         "topics": topics,
         "hosts": hosts,
     }
-    return render(request, 'core/home.html', context)
+    return render(request, 'core/home.html', context=context)
 
 
 @ login_required(login_url='auth:login')
@@ -111,19 +111,19 @@ def create_room(request):
             return topic
         description = request.POST.get('description')
         name = request.POST.get('name')
+        user = User.objects.get(username=request.user.username)
         form = RoomForm(request.POST)
         if form.is_valid():
-            room = form.save(commit=False)
-            room.host = request.user
-            room.topic = topic
-            room.participants.add(request.user.username.id)
-            room.description = description
-            room.name = name
-            room.save()
-            # room.participants_set.create(participant)
+            form = form.save(commit=False)
+            form.host = request.user
+            form.topic = topic
+            form.description = description
+            form.name = name
+            form.save()
+            form.participants.add(request.user)
+            form = MessageForm()
             messages.success(request, 'room has been created')
             redirect("core:home")
-            return room
         else:
             messages.error(request, 'Form not valid')
             HttpResponseRedirect('core:create_room')

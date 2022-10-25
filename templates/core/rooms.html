@@ -42,7 +42,7 @@
             {% for participant in room.participants.all %}
             <div class="mx-1">
 
-                <a href="" class="text-sm font-weight">
+                <a href="{% url 'accounts:profile' participant.username %}" class="text-sm font-weight">
                     <img src='{{participant.profile_pic.url}}' alt="participant" class="h-5 w-5 rounded-full" />
                 </a>
             </div>

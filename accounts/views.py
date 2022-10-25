@@ -16,19 +16,21 @@ import datetime
 
 @login_required(login_url="accounts:login_user")
 def profile(request, username):
-    rooms = Room.objects.filter(host=request.user)
+    # get the user object
+    get_user = User.objects.get(username=username)
+    # get rooms of this user
+    rooms = Room.objects.filter(host=get_user)
     # get all the users online
     user_status = online_users.models.OnlineUserActivity.get_user_activities(
         timedelta(seconds=60))
     users = (user for user in user_status)
     is_user_online = False
     for user in users:
-        # check if the admin online
-        if user.user == request.user:
+        # check if the user is online
+        if user.user == get_user:
             is_user_online = True
-    user_profile = request.user.profile_pic.url
-    user = User.objects.get(username=username)
-    return render(request, 'accounts/profile.html', {"user": user, "user_profile": user_profile, "rooms": rooms, "is_user_online": is_user_online})
+    hosts = User.objects.all()
+    return render(request, 'accounts/profile.html', {"hosts": hosts, "user": get_user,  "rooms": rooms, "is_user_online": is_user_online})
 
 
 @login_required(login_url="accounts:login_user")
@@ -60,7 +62,7 @@ def login_user(request):
                 login(request, user)
                 messages.success(
                     request, f'welcome back,{user.username} you login success to your account')
-                return redirect('core:home')
+                return redirect('accounts:profile', user.username)
             else:
                 messages.error(request, 'enter a valid email and password')
         except:

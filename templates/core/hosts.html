@@ -4,7 +4,7 @@
         {% for host in hosts %}
         <div
             class="transition ease-in-out dely-100 duration-500 flex flex-row justify-between items-center my-4 w-full p-4  m-auto bg-slate-700 shadow-md shadow-gray-800 hover:shadow-gray-900 rounded  hover:scale-105">
-            <span class="text-gray-400 font-bold">@{{host.username}}</span>
+            <a href="{% url 'accounts:profile' host.username %}" class="text-gray-400 font-bold">@{{host.username}}</a>
             <form action="" method="get"
                 class="transition ease-in-out dely-100 duration-500 text-gray-300 bg-cyan-300 opacity-50 font-bold  px-5 py-2 rounded dark:text-slate-800 hover:opacity-100  ">
                 <input type="submit" value="Follow">
