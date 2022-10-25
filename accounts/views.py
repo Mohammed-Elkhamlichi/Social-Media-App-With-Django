@@ -12,13 +12,6 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 import datetime
 # Create your views here.
-get_date = datetime.datetime.now()
-year = get_date.year
-month = get_date.month
-day = get_date.day
-hour = get_date.hour
-second = get_date.second
-minute = get_date.minute
 
 
 @login_required(login_url="accounts:login_user")
@@ -46,14 +39,9 @@ def edit_profile(request, username):
         profile_pic = request.FILES['profile_pic']
         form = UserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
-            form = form.save(commit=False)
-            fs = FileSystemStorage()
-
-            profile_pic = fs.save(
-                f'{year}-{month}-{day}-{profile_pic.name}', profile_pic)
-            print(fs.url(profile_pic))
             form.save()
-            redirect("accounts:edit_profile", user.username)
+            return redirect("accounts:profile", user.username)
+        form = UserForm(instance=user)
     return render(request, "accounts/edit_profile.html",)
 
 

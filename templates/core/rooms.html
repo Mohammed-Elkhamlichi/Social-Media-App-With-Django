@@ -5,7 +5,7 @@
     <div class="flex flex-row justify-between items-center">
         <div class="flex flex-row">
             <img src="{{room.host.profile_pic.url}}" alt="" class="h-8 w-8 rounded-full mr-1" />
-            <a href="" class="text-sm">
+            <a href="{% url 'accounts:profile' room.host.username %}" class="text-sm">
                 <div class="flex flex-col">
                     <span class="text-gray-400">@{{room.host.username}}</span>
                     <span style="font-size:12px;" class="text-gray-400">{{room.updated|timesince }}

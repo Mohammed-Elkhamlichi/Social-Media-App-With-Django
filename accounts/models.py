@@ -14,7 +14,7 @@ class User(AbstractUser):
     minute = get_date.minute
 
     profile_pic = models.ImageField(
-        upload_to=f"profile/", blank=True, null=True, default="profile/avatar.png")
+        upload_to=f"profile/{day}-{month}-{year}/{hour}-{minute}-{second}", blank=True, null=True, default="profile/avatar.png")
     bio = models.TextField(null=True, blank=True)
     phone = models.IntegerField(unique=True, blank=True, null=True)
     country = models.CharField(max_length=200, blank=True, null=True)

@@ -101,10 +101,10 @@ def create_room(request):
             room.save()
             # room.participants_set.create(participant)
             messages.success(request, 'room has been created')
-            redirect("core:home")
+            return redirect("core:home")
         else:
             messages.error(request, 'Form not valid')
-            redirect("core:create_room")
+            return redirect("core:create_room")
 
     else:
         form = RoomForm()
