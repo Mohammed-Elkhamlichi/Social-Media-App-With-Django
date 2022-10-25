@@ -4,7 +4,7 @@ from .models import Room, Topic
 from django.contrib.auth.decorators import login_required
 from .forms import RoomForm
 from django.db.models import Q
-from django.contrib.auth.models import User
+from accounts.models import User
 import math
 from django.contrib import messages
 # Create your views here.
@@ -15,7 +15,7 @@ def home(request):
     if not request.user.is_authenticated:
         redirect('auth:login_user')
     hosts = User.objects.all().order_by('username')
-    limit_display_rooms = 4
+    limit_display_rooms = 10
     rooms = Room.objects.all()[:limit_display_rooms]
 
     # add new Joined (join a topic)
@@ -95,15 +95,16 @@ def create_room(request):
             room = form.save(commit=False)
             room.host = request.user
             room.topic = topic
+            room.participants.add(request.user)
             room.description = description
             room.name = name
             room.save()
             # room.participants_set.create(participant)
             messages.success(request, 'room has been created')
-            return redirect("core:home")
+            redirect("core:home")
         else:
             messages.error(request, 'Form not valid')
-            return redirect("core:create_room")
+            redirect("core:create_room")
 
     else:
         form = RoomForm()

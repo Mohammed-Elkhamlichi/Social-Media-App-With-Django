@@ -46,9 +46,10 @@ INSTALLED_APPS = [
     'tailwind',
     'theme.apps.ThemeConfig',
     'django_browser_reload',
+    'online_users',
 ]
 
-
+AUTH_USER_MODEL = 'accounts.User'
 # tailwind css config
 TAILWIND_APP_NAME = 'theme'
 TAILWIND_DEV_MODE = True
@@ -68,6 +69,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     #
     "django_browser_reload.middleware.BrowserReloadMiddleware",
+    'online_users.middleware.OnlineNowMiddleware',
 ]
 
 ROOT_URLCONF = 'social_media.urls'
@@ -136,11 +138,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'theme/static/'
+STATIC_URL = '/theme/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     BASE_DIR / 'theme/static'
 ]
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 

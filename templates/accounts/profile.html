@@ -4,24 +4,45 @@
 
 
 {% block base %}
-{% include "core/search_rooms.html" %}
 
-<div class="flex flex-col justify-start items-center h-screen w-full">
-    <div class="block group h-28 w-28  rounded-full border-2 border-white bg-green-700 my-14">
+<div class="flex flex-col justify-start items-center  w-full mb-32 mt-10">
+    <div
+        class="flex flex-col group h-28 w-28 transition duration-300 ease-in-out rounded-full border border-white hover:border-slate-800 bg-green-700 mt-4">
+        {% if is_user_online %}
         <div
-            class="relative group-hover:bg-green-400 -bottom-4 h-5 w-5 -mb-5 border-2 bg-green-600 rounded-full">
+            class="relative group-hover:bg-green-400 group-hover:border-slate-800 -bottom-4 h-5 w-5 -mb-5 border-2 bg-green-600 rounded-full">
         </div>
-        <img class='block' src="{% static 'images/avatar.png' %}"
-            alt="{{request.user.username}} logo">
-        <h2 class="text-xl text-gray-300 my-2">@{{request.user.username|title}}</h2>
+        {% endif %}
+
+        <img class='block rounded-full' src="{{ request.user.profile_pic.url }}" alt="{{request.user.username}} logo">
     </div>
-    <div>
+    <div class="my-5 flex flex-row">
+        <h2 class="text-xl text-gray-300 ">@{{request.user.username|title}}
+            <a class="text-green-500  border-2 rounded-full py-0 px-4 transition duration-200 ease-in-out hover:border-green-500 hover:text-white"
+                href="{% url 'accounts:edit_profile' request.user.username %}">
+                Edit
+            </a>
+        </h2>
+
+    </div>
+    <div class="my-4 flex flex-row  items-center">
         <span
-            class="px-5 py-2 bg-slate-600 rounded shadow-sm shadow-slate-700 text-gray-400 transition duration-300 ease-in-out hover:shadow-sm hover:border-2 hover:border-slate-700 hover:text-white hover:shadow-slate-800">1K
+            class="px-5 mx-1  py-2 bg-slate-600 rounded shadow-sm shadow-slate-700 text-gray-400 transition duration-300 ease-in-out hover:shadow-sm  hover:border-slate-700 hover:text-white hover:shadow-slate-800">1K
             Following</span>
-        <span class="px-5 py-2 bg-slate-600 rounded shadow-sm shadow-slate-700 text-gray-400">100
-            Follower</span>
+        <span
+            class="px-5 mx-1 py-2 bg-slate-600 rounded shadow-sm shadow-slate-700 text-gray-400 transition duration-300 ease-in-out hover:shadow-sm  hover:border-slate-700 hover:text-white hover:shadow-slate-800">1K
+            Followers</span>
     </div>
+    <div
+        class="flex flex-col px-5 py-2 my-5 w-11/12 bg-slate-600 rounded shadow-sm shadow-slate-700 text-gray-400 transition duration-300 ease-in-out hover:shadow-sm  hover:border-slate-700 hover:text-white hover:shadow-slate-800">
+        <h1 class="px-4 py-2 text">@about</h1>
+        <p class="p-4 text-left">{{request.user.bio}}</p>
+    </div>
+</div>
+<div class="flex flex-col  justify-start items-center  w-11/12 m-auto">
+    <h1 class="text-2xl text-center text-gray-400">@Created Rooms</h1>
+    <!-- include rooms templates -->
+    {% include "core/rooms.html" with rooms=rooms %}
 </div>
 
 {% endblock base %}

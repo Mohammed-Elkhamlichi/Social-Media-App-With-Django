@@ -3,13 +3,30 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from .forms import UserRegisterForm
-from django.contrib.auth.models import User
+from accounts.models import User
 from django.db.models import Q
+from core.models import Room
+import online_users.models
+from datetime import timedelta
 # Create your views here.
 
 
-def profile(request):
-    return render(request, 'accounts/profile.html')
+def profile(request, username):
+    rooms = Room.objects.filter(host=request.user)
+    # get all the users online
+    user_status = online_users.models.OnlineUserActivity.get_user_activities(
+        timedelta(seconds=60))
+    users = (user for user in user_status)
+    is_user_online = False
+    for user in users:
+        # check if the admin online
+        if user.user == request.user:
+            is_user_online = True
+    return render(request, 'accounts/profile.html', {"rooms": rooms, "is_user_online": is_user_online})
+
+
+def edit_profile(request, username):
+    return render(request, "accounts/edit_profile.html", {})
 
 
 def login_user(request):

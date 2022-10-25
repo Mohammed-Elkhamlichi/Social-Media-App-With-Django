@@ -14,13 +14,19 @@
         Rooms available
     </div>
 </div>
-<div class="grid grid-cols-4 ">
+<div class="lg:grid lg:grid-cols-4 ">
+    <div class="lg:col-span-2">
 
+
+        <div class="flex flex-col  justify-start items-center  w-11/12 m-auto">
+            <h1 class="text-2xl text-center text-gray-400">@Interesting Rooms</h1>
+            <!-- include rooms templates -->
+            {% include "core/rooms.html" with rooms=rooms %}
+        </div>
+    </div>
     <!-- include the topics left side -->
     {% include "core/topics.html" with topics=topics %}
 
-    <!-- include rooms templates -->
-    {% include "core/rooms.html" with rooms=rooms %}
 
     <!-- include the topics left side -->
     {% include "core/hosts.html" with hosts=hosts %}
