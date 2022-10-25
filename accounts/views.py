@@ -27,7 +27,8 @@ def profile(request, username):
         if user.user == request.user:
             is_user_online = True
     user_profile = request.user.profile_pic.url
-    return render(request, 'accounts/profile.html', {"user_profile": user_profile, "rooms": rooms, "is_user_online": is_user_online})
+    user = User.objects.get(username=username)
+    return render(request, 'accounts/profile.html', {"user": user, "user_profile": user_profile, "rooms": rooms, "is_user_online": is_user_online})
 
 
 @login_required(login_url="accounts:login_user")
@@ -36,7 +37,6 @@ def edit_profile(request, username):
     user = request.user
     form = UserForm(instance=user)
     if request.method == "POST":
-        profile_pic = request.FILES['profile_pic']
         form = UserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()

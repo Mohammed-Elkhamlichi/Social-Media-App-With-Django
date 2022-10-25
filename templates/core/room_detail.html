@@ -3,14 +3,59 @@
 {% block base %}
 
 
-<h1 class="text-center mx-auto my-5 text-4xl border-b-2 w-72 border-white ">Room Page</h1>
 <!-- rooms -->
-<div class="flex flex-row flex-wrap justify-center items-center">
-    <div class="bg-cyan-500 my-4 w-96 p-4  m-auto rounded break-words text-ellipsis">
-        <h1 class="w-full border-b-4 mb-5  py-2 text-center text-2xl border-black">{{room.name}}
-        </h1>
 
-        <p>{{room.description}}</p>
+<div class="flex flex-col justify-start items-start my-4 ">
+    <div class="bg-slate-600  w-11/12 p-4  m-auto rounded ">
+        <div class="flex flex-row justify-between items-center w-full my-5">
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.errors }}
+            </div>
+            {% endif %}
+            <h1 class="text-xl text-gray-300">{{room.name}}</h1>
+            <span
+                class="text-xs text-slate-300 mx-1 border px-4 py-2 transition duration-200 ease-in-out bg-slate-600 hover:text-black hover:bg-green-500 hover:border-2 rounded">join</span>
+        </div>
+        <div class="flex flex-row items-center justify-start w-full ">
+            <img src="{{room.host.profile_pic.url}}" alt="room host" class=" h-10 w-10 mr-1 rounded-full">
+            <div class="flex flex-col">
+                <a href="{% url 'accounts:profile' room.host.username %}"
+                    class="text-sm font-bold text-slate-300">@{{room.host.username}}</a>
+                <span class="text-sm text-slate-400">{{room.created|timesince}}</span>
+            </div>
+        </div>
+        <div
+            class="flex flex-col justify-start items-center content-start  h-96 w-full m-auto border rounded bg-slate-700 mt-5 px-3 pt-2">
+
+            <div class=" flex flex-col h-5/6 justify-start items-start  w-full overflow-y-auto">
+                {% for message in conversation %}
+                <div
+                    class="flex flex-col  my-4 border-l-4 rounded-md {% if room.host == message.user %} border-green-600 {% else %} border-l-white {% endif %} ">
+                    <div class="flex flex-row ml-1 items-center">
+                        <img src="{{message.user.profile_pic.url}}" alt="room host" class=" h-8 w-8  rounded-full">
+                        <a href="{% url 'accounts:profile' message.user.username %}"
+                            class="text-xs mx-1 text-slate-300">@{{message.user}} at</a>
+                        <span class="text-xs text-slate-400">{{message.created|time}}</span>
+                        <span
+                            class="text-xs text-slate-300 mx-1 border px-2 py-1 transition duration-200 ease-in-out bg-slate-600 hover:text-black hover:bg-green-500 hover:border-2 rounded">Follow</span>
+
+                    </div>
+                    <div class="text-xs text-gray-300 px-2 py-0 ml-1">{{message.body}}
+                    </div>
+                </div>
+                {% empty %}
+                <h1 class="text-gray-300">No message yet</h1>
+                {% endfor %}
+            </div>
+            <form action="" method="post" class="block w-full m-auto">
+                {% csrf_token %}
+                <input type="text" name="body" id="body" placeholder="write your message here and start discovering"
+                    class="w-full rounded bottom-0 right-0 left-0 -mb-6 text-sm" required>
+                <input type="hidden" name="user" value="">
+                <input type="hidden" name="room" value="">
+            </form>
+        </div>
     </div>
 </div>
 

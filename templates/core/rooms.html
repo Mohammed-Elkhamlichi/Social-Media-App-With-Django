@@ -43,7 +43,7 @@
             <div class="mx-1">
 
                 <a href="" class="text-sm font-weight">
-                    <img src='{{participant.profile_pic.url}}' alt="" class="h-6 w-6 rounded-full mr-1" />
+                    <img src='{{participant.profile_pic.url}}' alt="participant" class="h-5 w-5 rounded-full" />
                 </a>
             </div>
             {% endfor %}
@@ -58,5 +58,9 @@
 
 
 </div>
+{% empty %}
+<h1 class="text-gray-400">
+    no existing room yet
+</h1>
 
 {% endfor %}

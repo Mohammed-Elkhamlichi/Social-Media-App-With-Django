@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect, HttpResponseNotAllowed
-from .models import Room, Topic
 from django.contrib.auth.decorators import login_required
-from .forms import RoomForm
 from django.db.models import Q
 from accounts.models import User
 import math
 from django.contrib import messages
+from .models import Room, Topic, Message
+from .forms import RoomForm, MessageForm
 # Create your views here.
 
 
@@ -71,7 +71,28 @@ def room_detail(request, room_id):
         redirect('auth:login_user')
     room_id = int(room_id)
     room = Room.objects.get(pk=room_id)
-    return render(request, 'core/room_detail.html', {"title": 'Room Detail Page', 'room': room})
+    form = MessageForm()
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        print(form)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.user = request.user
+            form.room = room
+            form.save()
+            room.participants.add(request.user)
+            form = MessageForm()
+            return redirect('core:room_detail', room.id)
+        else:
+            return redirect('core:room_detail', room.id)
+        form = MessageForm()
+    conversation = Message.objects.filter(room=room)
+    context = {
+        "title": 'Room Detail Page',
+        'room': room,
+        "conversation": conversation
+    }
+    return render(request, 'core/room_detail.html', context)
 
 
 @ login_required(login_url='auth:login')
@@ -101,10 +122,11 @@ def create_room(request):
             room.save()
             # room.participants_set.create(participant)
             messages.success(request, 'room has been created')
-            return redirect("core:home")
+            redirect("core:home")
+            return room
         else:
             messages.error(request, 'Form not valid')
-            return redirect("core:create_room")
+            HttpResponseRedirect('core:create_room')
 
     else:
         form = RoomForm()
