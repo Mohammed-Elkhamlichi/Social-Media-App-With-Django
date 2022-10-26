@@ -20,23 +20,18 @@ def home(request):
 
     # add new Joined (join a topic)
     if request.method == 'POST':
-        joined_topic_name = request.POST.get('joined_topic')
-        quit_join = request.POST.get('quit_join')
-        # if the topic name exist and the user need to join the topic
+        topic_name = request.POST.get('joined_topic')
+        quit_topic = request.POST.get('quit')
+        join_topic = request.POST.get('join')
         try:
-            if joined_topic_name is not None and quit_join == "Join":
-                joined_topic = Topic.objects.get(name=joined_topic_name)
+            # if the topic name exist and the user need to join the topic
+            if topic_name is not None and str(join_topic).lower() == "join":
+                joined_topic = Topic.objects.get(name=topic_name)
                 joined_topic.users.add(request.user)
-                messages.success(request, f'you joined the Topic successfully')
-        except:
-            messages.success(request, f'Internal Server Error')
-
-        # if the topic name exist and the user need to join the topic
-        try:
-            if joined_topic_name is not None and quit_join == "Quit":
-                joined_topic = Topic.objects.get(name=joined_topic_name)
+            # if the topic name exist and the user need to join the topic
+            elif topic_name is not None and str(quit_topic).lower() == "quit":
+                joined_topic = Topic.objects.get(name=topic_name)
                 joined_topic.users.remove(request.user)
-                messages.success(request, f'you quit the Topic successfully')
         except:
             messages.success(request, f'Internal Server Error')
 
@@ -123,10 +118,10 @@ def create_room(request):
             form.participants.add(request.user)
             form = MessageForm()
             messages.success(request, 'room has been created')
-            redirect("core:home")
+            return redirect("core:home")
         else:
             messages.error(request, 'Form not valid')
-            HttpResponseRedirect('core:create_room')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
     else:
         form = RoomForm()

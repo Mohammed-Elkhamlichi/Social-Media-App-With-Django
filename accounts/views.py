@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from .forms import UserRegisterForm, UserForm
@@ -33,6 +33,24 @@ def profile(request, username):
     return render(request, 'accounts/profile.html', {"hosts": hosts, "user": get_user,  "rooms": rooms, "is_user_online": is_user_online})
 
 
+def set_followers(request, username):
+    if request.method == "GET":
+        # get the user was clicked on follow him
+        user = User.objects.get(username=username)
+        if request.user in user.followers.all():
+            # remove follower
+            user.followers.remove(request.user)
+            # remove following
+            request.user.following.remove(user)
+        else:
+            # add new follower to the user
+            user.followers.add(request.user)
+            # add new following to the authenticated user
+            request.user.following.add(user)
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
 @login_required(login_url="accounts:login_user")
 def edit_profile(request, username):
     # http://localhost:8000/auth/mohammed/profile/edit
@@ -42,7 +60,7 @@ def edit_profile(request, username):
         form = UserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
-            return redirect("accounts:profile", user.username)
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         form = UserForm(instance=user)
     return render(request, "accounts/edit_profile.html",)
 
@@ -99,4 +117,4 @@ def register_user(request):
 def logout_user(request):
     logout(request)
     messages.success(request, 'success logout')
-    return redirect('core:home')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
