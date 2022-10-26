@@ -13,11 +13,23 @@ class User(AbstractUser):
     second = get_date.second
     minute = get_date.minute
     following = models.ManyToManyField(
-        'User', related_name="user_following", null=True, blank=True)
+
+        'User',
+        related_name="user_following",
+        null=True, blank=True
+    )
     followers = models.ManyToManyField(
-        'User', related_name="user_followers", null=True, blank=True)
+        'User',
+        related_name="user_followers",
+        null=True,
+        blank=True
+    )
     profile_pic = models.ImageField(
-        upload_to=f"profile/{day}-{month}-{year}/{hour}-{minute}-{second}", blank=True, null=True, default="profile/avatar.png")
+        upload_to='profile/%Y/%m/%d/',
+        blank=True,
+        null=True,
+        default="profile/avatar.png"
+    )
     bio = models.TextField(null=True, blank=True)
     phone = models.IntegerField(unique=True, blank=True, null=True)
     country = models.CharField(max_length=200, blank=True, null=True)

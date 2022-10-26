@@ -30,38 +30,45 @@ def profile(request, username):
         if user.user == get_user:
             is_user_online = True
     hosts = User.objects.all()
-    return render(request, 'accounts/profile.html', {"hosts": hosts, "user": get_user,  "rooms": rooms, "is_user_online": is_user_online})
+    return render(request, 'accounts/profile.html', {
+        "hosts": hosts, 
+        "user": get_user,  
+        "rooms": rooms, 
+        "is_user_online": is_user_online
+        }
+    )
 
 
 def set_followers(request, username):
     if request.method == "GET":
         # get the user was clicked on follow him
         user = User.objects.get(username=username)
-        if request.user in user.followers.all():
-            # remove follower
-            user.followers.remove(request.user)
-            # remove following
-            request.user.following.remove(user)
-        else:
-            # add new follower to the user
+        follow_user = request.GET.get('follow_user')
+        un_follow_user = request.GET.get('un_follow_user')
+        if request.user not in user.followers.all() and str(follow_user).lower() == "follow_user":
+            # add  follower  and following
             user.followers.add(request.user)
-            # add new following to the authenticated user
             request.user.following.add(user)
+        elif request.user in user.followers.all() and str(un_follow_user).lower() == 'un_follow_user':
+            # remove follower and following
+            user.followers.remove(request.user)
+            request.user.following.remove(user)
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 @login_required(login_url="accounts:login_user")
 def edit_profile(request, username):
-    # http://localhost:8000/auth/mohammed/profile/edit
     user = request.user
-    form = UserForm(instance=user)
     if request.method == "POST":
         form = UserForm(request.POST, request.FILES, instance=user)
+        profile_image = request.FILES['profile_pic'] or None
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-        form = UserForm(instance=user)
+            fs = FileSystemStorage()
+            fs.save(profile_image.name, profile_image)
+    else:
+        form = UserForm()
     return render(request, "accounts/edit_profile.html",)
 
 
@@ -87,7 +94,6 @@ def login_user(request):
             messages.error(
                 request, 'user with this credentials not exist')
     return render(request, 'accounts/login_user.html')
-
 
 def register_user(request):
     form = UserRegisterForm()

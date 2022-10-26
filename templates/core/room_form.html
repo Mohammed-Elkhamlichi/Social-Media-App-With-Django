@@ -1,48 +1,86 @@
-{% extends "base.html" %}
-
-{% block base %}
+{% extends "base.html" %} {% block base %}
 
 <div class="h-screen flex flex-col items-center justify-center">
-    <form action="" method='post'
-        class="bg-green items-center dark:bg-gray-700 shadow-md shadow-slate-800  hover:shadow-slate-900 flex flex-col justify-center w-96 m-auto rounded my-10 ">
-        <div class="w-full ">{% include "messages.html" %}</div>
+    <form
+        action=""
+        method="post"
+        class="bg-green items-center dark:bg-gray-700 shadow-md shadow-slate-800 hover:shadow-slate-900 flex flex-col justify-center w-96 m-auto rounded my-10"
+    >
+        <div class="w-full">
+            {% include "messages.html" %}
+        </div>
 
-        <h2 class="text-center m-auto  text-xl border-b-2  py-5  w-full dark:bg-gray-700 text-gray-300">
+        <h2
+            class="text-center m-auto text-xl border-b-2 py-5 w-full dark:bg-gray-700 text-gray-300"
+        >
             {% if is_updated %} Update {% else %} Create {% endif %} Study Room
-
         </h2>
         {% csrf_token %}
-        <input type="hidden" name="id_host" {% if room %} value="{{room.host}}" {% endif %}>
+        <input
+            type="hidden"
+            name="id_host"
+            {% if room %} value="{{room.host}}" {% endif %}
+        />
 
         <div class="flex flex-col w-11/12 my-3">
-            <label for="topic" class="text-gray-400 text-md">Enter a Topic</label>
-            <input type="text" name="id_topic" class="rounded  my-2" list="room_topics" id="id_topic"
-                placeholder="Django" {% if room %} value="{{room.topic}}" {% endif %}>
+            <label for="topic" class="text-gray-400 text-md"
+                >Enter a Topic</label
+            >
+            <input
+                type="text"
+                name="id_topic"
+                class="rounded my-2"
+                list="room_topics"
+                id="id_topic"
+                placeholder="Django"
+                {% if room %} value="{{room.topic}}"  {% endif %}
+            />
             <datalist id="room_topics">
                 {% for topic in topics %}
                 <option value="{{topic.name}}" />
                 {% endfor %}
             </datalist>
         </div>
-        <div class=" flex flex-col w-11/12 my-2">
-            <label for="room_name" class="text-gray-400 text-md">Room Name</label>
-            <input type="text" id="room_name" name="name" class="rounded  my-2" placeholder="Learn Django" {% if room %}
-                value="{{room.name}}" {% endif %}>
+        <div class="flex flex-col w-11/12 my-2">
+            <label for="room_name" class="text-gray-400 text-md"
+                >Room Name</label
+            >
+            <input
+                type="text"
+                id="room_name"
+                name="name"
+                class="rounded my-2"
+                placeholder="Learn Django"
+                {% if room %} value="{{room.name}}" {% endif %}
+            />
         </div>
-        <div class=" flex flex-col w-11/12 my-2">
-            <label for="room_description" class="text-gray-400 text-md">Room Description</label>
-            <textarea type="text" id="room_description" name="description" class="rounded  my-2 h-32 text-start "
-                placeholder="Django is a hight-level.............">{% if room %}
-                {{room.description}} {% endif %}</textarea>
+        <div class="flex flex-col w-11/12 my-2">
+            <label for="room_description" class="text-gray-400 text-md"
+                >Room Description</label
+            >
+            <textarea
+                type="text"
+                id="room_description"
+                name="description"
+                class="rounded my-2 h-32 text-start"
+                placeholder="Django is a hight-level............."
+            >
+            {% if room %} {{room.description}} {% endif %}
+            </textarea>
         </div>
         {% if is_update %}
-        <input type="submit" value="Update Room"
-            class="py-2 px-5 shadow-md shadow-slate-800 text-gray-300  transition duration-200 ease-in-out hover:text-white rounded hover:bg-green-700 my-5">
+        <input
+            type="submit"
+            value="Update Room"
+            class="py-2 px-5 shadow-md shadow-slate-800 text-gray-300 transition duration-200 ease-in-out hover:text-white rounded hover:bg-green-700 my-5"
+        />
         {% else %}
-        <input type="submit" value="Create Room"
-            class="py-2 px-5 shadow-md shadow-slate-800 text-gray-300  transition duration-200 ease-in-out hover:text-white rounded hover:bg-green-700 my-5">
+        <input
+            type="submit"
+            value="Create Room"
+            class="py-2 px-5 shadow-md shadow-slate-800 text-gray-300 transition duration-200 ease-in-out hover:text-white rounded hover:bg-green-700 my-5"
+        />
         {% endif %}
-
     </form>
 </div>
 

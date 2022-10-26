@@ -1,6 +1,4 @@
-{% extends "base.html" %}
-
-{% block base %}
+{% extends "base.html" %} {% block base %}
 <!-- include messages template -->
 {% include "messages.html" %}
 
@@ -9,17 +7,17 @@
 
 <!-- rooms number -->
 
-<div class="flex justify-center item-center  px-5 py-2">
-    <div class=" font-bold text-sm text-gray-400">{{rooms.count}}
-        Rooms available
+<div class="flex justify-center item-center px-5 py-2">
+    <div class="font-bold text-sm text-gray-400">
+        {{rooms.count}} Rooms available
     </div>
 </div>
-<div class="lg:grid lg:grid-cols-4 ">
+<div class="lg:grid lg:grid-cols-4">
     <div class="lg:col-span-2">
-
-
-        <div class="flex flex-col  justify-start items-center  w-11/12 m-auto">
-            <h1 class="text-2xl text-center text-gray-400">@Interesting Rooms</h1>
+        <div class="flex flex-col justify-start items-center w-11/12 m-auto">
+            <h1 class="text-2xl text-center text-gray-400">
+                @Interesting Rooms
+            </h1>
             <!-- include rooms templates -->
             {% include "core/rooms.html" with rooms=rooms %}
         </div>
@@ -27,11 +25,8 @@
     <!-- include the topics left side -->
     {% include "core/topics.html" with topics=topics %}
 
-
     <!-- include the topics left side -->
     {% include "core/hosts.html" with hosts=hosts %}
 </div>
 <!-- pagination -->
-{% include "core/pagination.html" with range=range %}
-
-{% endblock base %}
+{% include "core/pagination.html" with range=range %} {% endblock base %}

@@ -1,58 +1,111 @@
-{% extends "base.html" %}
-
-
-{% block base %}
-<div class=" flex justify-center items-center">
-    <form action="" method="post"
+{% extends "base.html" %} {% block base %}
+<div class="flex justify-center items-center">
+    <form
+        action=""
+        method="post"
         class="flex flex-col justify-center items-center w-11/12 m-auto rounded bg-gray-600 p-2 my-20"
-        enctype="multipart/form-data">
+        enctype="multipart/form-data"
+    >
         {% csrf_token %}
         <div class="w-full flex flex-col justify-center items-center">
-            <img src="{{ request.user.profile_pic.url }}" accept="image/png, image/jpg,image/jpeg" alt="user logo"
-                class="rounded-full w-32 h-32">
-            <label for="profile_pic"
-                class="cursor-pointer border transition duration-200 ease-in-out   rounded border-gray-300 text-gray-300 shadow-lg  text-center px-4 py-1 my-2 hover:shadow-slate-600 hover:border-gray-500 hover:text-green-500">
+            <img
+                src="{{ request.user.profile_pic.url }}"
+                alt=""
+                class="rounded-full w-32 h-32"
+            />
+            <label
+                for="profile_pic"
+                class="cursor-pointer border transition duration-200 ease-in-out rounded border-gray-300 text-gray-300 shadow-lg text-center px-4 py-1 my-2 hover:shadow-slate-600 hover:border-gray-500 hover:text-green-500"
+            >
                 Select image
-                <input type="file" name="profile_pic" id="profile_pic" class="text-gray-300 hidden">
+                <input
+                    type="file"
+                    name="profile_pic"
+                    id="profile_pic"
+                    class="text-gray-300 hidden"
+                />
             </label>
         </div>
-        <div class="flex flex-col w-full ">
-            <div class=" flex flex-col ">
-                <label for="first_name" class="my-2 text-gray-300">First Name</label>
-                <input type="text" name="first_name" id="first_name" placeholder="Mohammed"
+        <div class="flex flex-col w-full">
+            <div class="flex flex-col">
+                <label for="first_name" class="my-2 text-gray-300"
+                    >First Name</label
+                >
+                <input
+                    type="text"
+                    name="first_name"
+                    id="first_name"
+                    placeholder="Mohammed"
                     value="{{request.user.first_name}}"
-                    class="rounded  transition duration-200 ease-in-out shadow-md hover:outline-sky-500 hover:shadow-gray-800  hover:text-green-500">
+                    class="rounded transition duration-200 ease-in-out shadow-md hover:outline-sky-500 hover:shadow-gray-800 hover:text-green-500"
+                />
             </div>
-            <div class="flex flex-col ">
-                <label for="last_name" class="my-2 text-gray-300">Last Name</label>
-                <input type="text" name="last_name" id="last_name" placeholder="Elkhamlichi"
+            <div class="flex flex-col">
+                <label for="last_name" class="my-2 text-gray-300"
+                    >Last Name</label
+                >
+                <input
+                    type="text"
+                    name="last_name"
+                    id="last_name"
+                    placeholder="Elkhamlichi"
                     value="{{request.user.last_name}}"
-                    class="rounded  transition duration-200 ease-in-out shadow-md hover:outline-sky-500 hover:shadow-gray-800  hover:text-green-500">
+                    class="rounded transition duration-200 ease-in-out shadow-md hover:outline-sky-500 hover:shadow-gray-800 hover:text-green-500"
+                />
             </div>
         </div>
         <div class="w-full flex flex-col">
             <label for="email" class="my-2 text-gray-300">Email</label>
-            <input type="email" name="email" id="email" placeholder="mohammed@gmail.com" value="{{request.user.email}}"
-                class="rounded  transition duration-200 ease-in-out shadow-md hover:outline-sky-500 hover:shadow-gray-800  hover:text-green-500">
+            <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="mohammed@gmail.com"
+                value="{{request.user.email}}"
+                class="rounded transition duration-200 ease-in-out shadow-md hover:outline-sky-500 hover:shadow-gray-800 hover:text-green-500"
+            />
         </div>
         <div class="w-full flex flex-col">
             <label for="phone" class="my-2 text-gray-300">Phone Number</label>
-            <input type="tel" name="phone" id="phone" placeholder="+212712345678" value="{{request.user.phone}}"
-                class="rounded  transition duration-200 ease-in-out shadow-md hover:outline-sky-500 hover:shadow-gray-800  hover:text-green-500">
+            <input
+                type="tel"
+                name="phone"
+                id="phone"
+                placeholder="+212712345678"
+                value="{{request.user.phone}}"
+                class="rounded transition duration-200 ease-in-out shadow-md hover:outline-sky-500 hover:shadow-gray-800 hover:text-green-500"
+            />
         </div>
         <div class="w-full flex flex-col">
             <label for="bio" class="my-2 text-gray-300">Bio</label>
-            <textarea type="text" name="bio" id="bio" placeholder="full stack web developer python/django"
-                class="h-52  text-start  rounded  transition duration-200 ease-in-out shadow-md hover:outline-sky-500 hover:shadow-gray-800  hover:text-green-500">{{request.user.bio}}</textarea>
+            <textarea
+                type="text"
+                name="bio"
+                id="bio"
+                placeholder="full stack web developer python/django"
+                class="h-52 text-start rounded transition duration-200 ease-in-out shadow-md hover:outline-sky-500 hover:shadow-gray-800 hover:text-green-500"
+            >
+                {{request.user.bio}}
+                </textarea
+            >
         </div>
         <div class="w-full flex flex-col">
             <label for="country" class="my-2 text-gray-300">Country</label>
-            <input type="text" name="country" id="country" placeholder="Morocco" value="{{request.user.country}}"
-                class="rounded  transition duration-200 ease-in-out shadow-md hover:outline-sky-500 hover:shadow-gray-800  hover:text-green-500">
+            <input
+                type="text"
+                name="country"
+                id="country"
+                placeholder="Morocco"
+                value="{{request.user.country}}"
+                class="rounded transition duration-200 ease-in-out shadow-md hover:outline-sky-500 hover:shadow-gray-800 hover:text-green-500"
+            />
         </div>
         <div class="mt-5">
-            <input type="submit" value="Update Profile"
-                class="py-2 px-5 shadow-md shadow-slate-800 text-gray-300  transition duration-200 ease-in-out hover:text-white rounded hover:bg-green-700 my-5">
+            <input
+                type="submit"
+                value="Update Profile"
+                class="py-2 px-5 shadow-md shadow-slate-800 text-gray-300 transition duration-200 ease-in-out hover:text-white rounded hover:bg-green-700 my-5"
+            />
         </div>
     </form>
 </div>

@@ -1,8 +1,7 @@
-{% load tailwind_tags %}
-
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+{% load tailwind_tags %}
+{% load static %}
 
 <head>
     <meta charset="UTF-8" />
@@ -10,10 +9,9 @@
     {% tailwind_css %}
     <title>{{ title }}</title>
 </head>
-
 <body class="bg-slate-700 ">
     {% include "navbar.html" %}
-    <div class="  items-start justify-center m-auto ">
+    <div class="items-start justify-center m-auto ">
         {% block base %}
 
 
@@ -23,5 +21,4 @@
     {% include "footer.html" %}
     <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
 </body>
-
 </html>

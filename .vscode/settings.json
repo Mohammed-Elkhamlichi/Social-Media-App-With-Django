@@ -1,0 +1,8 @@
+{
+    "cSpell.words": ["psycopg"],
+    "editor.wordWrap": "off",
+    "html.format.wrapAttributes": "auto",
+    "debug.console.wordWrap": true,
+    "workbench.editor.wrapTabs": false,
+    "workbench.tree.indent": 15
+}

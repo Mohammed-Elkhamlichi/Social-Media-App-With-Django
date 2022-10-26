@@ -98,9 +98,14 @@ WSGI_APPLICATION = 'social_media.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'social-media-mem',
+        'USER': 'root',
+        'PASSWORD': 'MEM2022MEM',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
+
 }
 
 

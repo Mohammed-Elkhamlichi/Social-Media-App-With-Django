@@ -21,22 +21,21 @@ def home(request):
     # add new Joined (join a topic)
     if request.method == 'POST':
         topic_name = request.POST.get('joined_topic')
-        quit_topic = request.POST.get('quit')
-        join_topic = request.POST.get('join')
+        quit_topic = request.POST.get('quit_topic')
+        join_topic = request.POST.get('join_topic')
+        print(join_topic, quit_topic, topic_name)
         try:
             # if the topic name exist and the user need to join the topic
+            joined_topic = Topic.objects.get(name=topic_name)
             if topic_name is not None and str(join_topic).lower() == "join":
-                joined_topic = Topic.objects.get(name=topic_name)
-                joined_topic.users.add(request.user)
+                joined_topic.subscribers.add(request.user)
+
             # if the topic name exist and the user need to join the topic
             elif topic_name is not None and str(quit_topic).lower() == "quit":
-                joined_topic = Topic.objects.get(name=topic_name)
-                joined_topic.users.remove(request.user)
+                joined_topic.subscribers.remove(request.user)
         except:
             messages.success(request, f'Internal Server Error')
-
     topics = Topic.objects.all().order_by('name')
-
     # pagination
     page_number = request.GET.get('page')
     if page_number is not None:
@@ -67,6 +66,22 @@ def room_detail(request, room_id):
     room_id = int(room_id)
     room = Room.objects.get(pk=room_id)
     form = MessageForm()
+    if request.method == "GET":
+        join_room = request.GET.get('join_room')
+        quit_room = request.GET.get('quit_room')
+        # if the user not participant in the room and he want to join
+        if request.user not in room.participants.all() and str(join_room).lower() == "join":
+            room.participants.add(request.user)
+            room.save()
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+        # else
+        elif request.user in room.participants.all() and str(quit_room).lower() == "quit":
+            room.participants.remove(request.user)
+            room.save()
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+    else:
+        return redirect(request.META.get('HTTP_REFERER', '/'))
+
     if request.method == 'POST':
         form = MessageForm(request.POST)
         print(form)
@@ -77,17 +92,20 @@ def room_detail(request, room_id):
             form.save()
             room.participants.add(request.user)
             form = MessageForm()
-            return redirect('core:room_detail', room.id)
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+            # return redirect('core:room_detail', room.id)
         else:
-            return redirect('core:room_detail', room.id)
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+    else:
         form = MessageForm()
+        return form
     conversation = Message.objects.filter(room=room)
     context = {
         "title": 'Room Detail Page',
         'room': room,
         "conversation": conversation
     }
-    return render(request, 'core/room_detail.html', context)
+    return render(request, 'core/room_detail.html', context=context)
 
 
 @ login_required(login_url='auth:login')
@@ -102,7 +120,7 @@ def create_room(request):
         if topic is None:
             # create new topic
             topic = Topic.objects.create(name=request.POST.get('id_topic'))
-            topic = topic.users.add(request.user)
+            topic = topic.subscribers.add(request.user)
             return topic
         description = request.POST.get('description')
         name = request.POST.get('name')
@@ -117,52 +135,45 @@ def create_room(request):
             form.save()
             form.participants.add(request.user)
             form = MessageForm()
-            messages.success(request, 'room has been created')
-            return redirect("core:home")
-        else:
-            messages.error(request, 'Form not valid')
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+            return redirect('core:home')
 
-    else:
-        form = RoomForm()
-    context = {
+    return render(request, 'core/room_form.html', context={
         "form": form,
         "is_update": False,
         "method": "POST",
         'topics': Topic.objects.all()
-    }
-    return render(request, 'core/room_form.html', context)
+    })
 
 
 @ login_required(login_url='auth:login')
 def update_room(request, room_id):
     if not request.user.is_authenticated:
         redirect('auth:login_user')
+    room_id = int(room_id)
     room = Room.objects.get(pk=room_id)
     form = RoomForm(instance=room)
-    if request.method == "POST":
+    if request.method == 'POST':
         topic = Topic.objects.filter(name=request.POST.get('id_topic')).first()
-        if topic is None:
+        if topic is  None:
             # create new topic
             topic = Topic.objects.create(name=request.POST.get('id_topic'))
-            topic = topic.users.add(request.user)
+            topic = topic.subscribers.add(request.user)
             return topic
-        form = RoomForm(request.POST, instance=room)
+        # topic = Topic.objects.filter(name=request.POST.get('id_topic')).first()
+        form = RoomForm(request.POST or None, instance=room)
         if form.is_valid():
             form = form.save(commit=False)
             form.host = request.user
             form.topic = topic
             form.save()
             return redirect('core:home')
-    else:
-        form = RoomForm()
-    context = {
+           
+    return render(request, 'core/room_form.html', context={
         "form": form,
         "room": room,
         "is_update": True,
         "method": "PUT"
-    }
-    return render(request, 'core/room_form.html', context)
+    })
 
 
 @ login_required(login_url='auth:login')
@@ -171,7 +182,6 @@ def delete_room(request, room_id):
         redirect('auth:login_user')
     try:
         room = Room.objects.get(pk=room_id)
-
         room.delete()
         return redirect('core:home')
     except Room.DoesNotExist:
