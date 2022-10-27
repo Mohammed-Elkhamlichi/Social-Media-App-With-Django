@@ -7,6 +7,7 @@ import math
 from django.contrib import messages
 from .models import Room, Topic, Message
 from .forms import RoomForm, MessageForm
+from accounts.views import is_user_online
 # Create your views here.
 
 
@@ -71,26 +72,30 @@ def room_detail(request, room_id):
         "rooms":Room.objects.all(),
         "topics":Topic.objects.all(),
         "hosts":User.objects.all(),
-        "conversation": conversation
+        "conversation": conversation,
     }
     return render(request, 'core/room_detail.html', context=context)
 
+
+
+
 # join or quit room
-def join_quit_room(request, room_id):
+def join_quit_room(request, room_id,state):
     room_id = int(room_id)
     room = Room.objects.get(pk=room_id)
-    if request.method == "GET":
-        join_room = request.GET.get('join_room')
-        quit_room = request.GET.get('quit_room')
-        # if the user not participant in the room and he want to join
-        if request.user not in room.participants.all() and str(join_room).lower() == "join":
-            room.participants.add(request.user)
-            room.save()
-        # else
-        elif request.user in room.participants.all() and str(quit_room).lower() == "quit":
-            room.participants.remove(request.user)
-            room.save()
+    # if the user not participant in the room and he want to join
+    if request.user not in room.participants.all() and str(state).lower() == "join":
+        room.participants.add(request.user)
+        room.save()
+    # else
+    elif request.user in room.participants.all() and str(state).lower() == "quit":
+        room.participants.remove(request.user)
+        room.save()
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+
+
 
 # create new room
 @ login_required(login_url='auth:login')
@@ -132,6 +137,9 @@ def create_room(request):
     })
 
 
+
+
+
 # update room
 @ login_required(login_url='auth:login')
 def update_room(request, room_id):
@@ -161,7 +169,7 @@ def update_room(request, room_id):
         "room": room,
         "is_update": True,
         "method": "PUT",
-        "hosts":User.objects.all()
+        "hosts":User.objects.all(),
     })
 
 # delete room
@@ -176,6 +184,8 @@ def delete_room(request, room_id):
     except Room.DoesNotExist:
         raise Http404
 
+
+
 # get all room exist in every single topic
 def topic_rooms(request,topic_id):
     topic_id = int(topic_id)
@@ -185,8 +195,11 @@ def topic_rooms(request,topic_id):
     return render(request, 'core/topic_rooms.html', {
         "rooms":rooms,
         "topics":Topic.objects.all(),
-        "hosts":User.objects.all()
+        "hosts":User.objects.all(),
     })
+    
+    
+    
     
 # join or quit topic
 def join_quit_topic(request):

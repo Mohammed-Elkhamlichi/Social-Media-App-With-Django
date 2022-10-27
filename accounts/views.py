@@ -13,6 +13,18 @@ from django.core.files.storage import FileSystemStorage
 import datetime
 # Create your views here.
 
+# check if the user online or not
+def is_user_online(username):
+    # get the user object
+    get_user = User.objects.get(username=username)
+    # get all the users online
+    user_status = online_users.models.OnlineUserActivity.get_user_activities(
+        timedelta(seconds=60))
+    users = (user for user in user_status)
+    for user in users:
+        # check if the user is online
+        if user.user == get_user:
+            return True
 
 @login_required(login_url="accounts:login_user")
 def profile(request, username):
@@ -20,33 +32,26 @@ def profile(request, username):
     get_user = User.objects.get(username=username)
     # get rooms of this user
     rooms = Room.objects.filter(host=get_user)
-    # get all the users online
-    user_status = online_users.models.OnlineUserActivity.get_user_activities(
-        timedelta(seconds=60))
-    users = (user for user in user_status)
-    is_user_online = False
-    for user in users:
-        # check if the user is online
-        if user.user == get_user:
-            is_user_online = True
+    # is_user_online(username)
     hosts = User.objects.all()
-    return render(request, 'accounts/profile-new.html', {
+    return render(request, 'accounts/profile.html', {
         "hosts": hosts, 
         "user": get_user,  
         "rooms": rooms, 
         "topics":Topic.objects.all(),
-        "is_user_online": is_user_online
+        "is_user_online": is_user_online(username)
         }
     )
 # followers of every single user
-def user_followers(request,username):
+def user_followers(request, username):
     user = get_object_or_404(User, username=username)
-    followers = user.followers
+    followers = user.followers.all()
     return render(request, 'accounts/user_followers.html',{
         "followers":followers,
         "hosts":User.objects.all(),
         "rooms":Room.objects.all(),
-        "topics":Topic.objects.all()
+        "topics":Topic.objects.all(),
+        "is_user_online": is_user_online(username)
     })
     
 # following of every single user
@@ -57,7 +62,8 @@ def user_following(request,username):
         "following":following,
         "hosts":User.objects.all(),
         "rooms":Room.objects.all(),
-        "topics":Topic.objects.all()
+        "topics":Topic.objects.all(),
+        "is_user_online": is_user_online(username)
     })
 
 def follow_unfollow_user(request, username, state):
@@ -86,7 +92,8 @@ def edit_profile(request, username):
     return render(request, "accounts/edit_profile.html",{
         "rooms":Room.objects.all(),
         "topics":Topic.objects.all(),
-        "hosts":User.objects.all()
+        "hosts":User.objects.all(),
+        "is_user_online": is_user_online(username)
         }
     )
 

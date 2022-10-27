@@ -5,7 +5,7 @@
 
 <!-- rooms -->
 
-<div class="flex flex-col justify-start items-start my-4  w-full h-screen">
+<div class="flex flex-col justify-start items-start my-4  w-full ">
     <div class="bg-slate-600  w-11/12 p-4  m-auto rounded ">
         <div class="flex flex-row justify-between items-center w-full my-5">
             {% if form.errors %}
@@ -14,17 +14,15 @@
             </div>
             {% endif %}
             <h1 class="text-xl text-gray-300">{{room.name}}</h1>
-            <form method="get" action="{% url 'core:join_quit_room' room.id %}" class="">
+            <div>
                 {% if request.user in room.participants.all %}
-                <input type="hidden" name="quit_room" value="quit">
-                <input type="submit" value="quit"
-                    class="py-2 px-4 bg-slate-600 border text-xs mx-1 rounded-lg text-gray-300 hover:bg-green-500 hover:text-black hover:font-bold">
+                <a href="{% url 'core:join_quit_room' room.id 'quit' %}"
+                    class="py-2 px-4 bg-slate-600 border text-xs mx-1 rounded-lg text-gray-300 hover:bg-green-500 hover:text-black hover:font-bold">Quit</a>
                 {% else %}
-                <input type="hidden" name="join_room" value="join">
-                <input type="submit" value="join"
-                    class="py-2 px-4 bg-slate-600 border text-xs mx-1 rounded-lg text-gray-300 hover:bg-green-500 hover:text-black hover:font-bold">
+                <a href="{% url 'core:join_quit_room' room.id 'join' %}"
+                    class="py-2 px-4 bg-slate-600 border text-xs mx-1 rounded-lg text-gray-300 hover:bg-green-500 hover:text-black hover:font-bold">Join</a>
                 {% endif %}
-            </form>
+            </div>
         </div>
         <div class="flex flex-row items-center justify-start w-full ">
             <img src="{{room.host.profile_pic.url}}" alt="room host" class=" h-10 w-10 mr-1 rounded-full">

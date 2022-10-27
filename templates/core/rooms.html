@@ -1,14 +1,20 @@
-{% load static %} {% for room in rooms %}
+{% load static %} 
+{% load is_user_online %}
+
+{% for room in rooms %}
 <div
     class="flex flex-col mx-2 my-5 w-full p-5 m-auto bg-slate-700 shadow-md shadow-gray-800 hover:shadow-gray-900 rounded transition dely-700 hover:scale-105 ease-in-out"
 >
     <div class="flex flex-row justify-between items-center">
         <div class="flex flex-row">
-            <img
-                src="{{room.host.profile_pic.url}}"
-                alt=""
-                class="h-8 w-8 rounded-full mr-1"
-            />
+            <div class="">
+                <div class="h-4 w-4 {% is_user_online room.host.username %} "></div>
+                <img
+                    src="{{room.host.profile_pic.url}}"
+                    alt=""
+                    class="h-8 w-8 rounded-full mr-1"
+                />
+            </div>
             <a
                 href="{% url 'accounts:profile' room.host.username %}"
                 class="text-sm"

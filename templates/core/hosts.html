@@ -1,4 +1,4 @@
-
+{% load is_user_online %}
 <h1 class="text-2xl text-center text-gray-400">
     @Top Hosts {{hosts.count}}
 </h1>
@@ -6,27 +6,33 @@
 <div
     class="transition ease-in-out  duration-300 flex flex-row justify-between items-center my-3 w-full p-2 m-auto bg-slate-700 shadow-sm shadow-gray-800 hover:shadow-gray-900 rounded hover:-translate-x-2"
 >
-    <a
+    <div class="flex flex-row items-center ">
+        <div class=" mr-1 rounded-full">
+            <div class="h-3 w-3 {% is_user_online host.username %} "></div>
+            <img src="{{host.profile_pic.url}}" alt="" class="object-cover rounded-full h-10 w-10">
+        </div>
+        <a
         href="{% url 'accounts:profile' host.username %}"
         class="text-gray-400 font-bold text-sm text-center"
-        >@{{host.username|title}}</a
+        >
+            @{{host.username|title}}
+        </a>
+    </div>
+    {% if request.user in host.followers.all %}
+
+    <a
+    href="{% url 'accounts:follow_unfollow_user' host.username 'unfollow' %}"
+    class="mx-2 text-green-500 border-2 rounded-full py-1 px-4 transition duration-200 ease-in-out hover:border-green-500 hover:text-white cursor-pointer"
     >
-    <form
-        action="{% url 'accounts:set_followers' host.username %}"
-        method="get"
-        class="group transition ease-in-out dely-100 duration-500 text-gray-300 bg-cyan-300 text-sm font-bold px-3 py-2 rounded dark:text-slate-800 cursor-pointer"
+        unfollow
+    </a>
+    {% else %}
+    <a
+    href="{% url 'accounts:follow_unfollow_user' host.username 'follow'  %}"
+        class="mx-2 text-green-500 border-2 rounded-full py-1 px-4 transition duration-200 ease-in-out hover:border-green-500 hover:text-white cursor-pointer"
     >
-        {% if host in request.user.following.all %}
-        <input
-            type="hidden"
-            name="un_follow_user"
-            value="un_follow_user"
-        />
-        <input type="submit" value="following" class="opacity-50 group-hover:opacity-100 cursor-pointer" />
-        {% else %}
-        <input type="hidden" name="follow_user" value="follow_user" />
-        <input type="submit" value="follow" class=" opacity-100  cursor-pointer"/>
-        {% endif %}
-    </form>
+        follow
+    </a>
+    {% endif %}
 </div>
 {% endif %} {% endfor %}
