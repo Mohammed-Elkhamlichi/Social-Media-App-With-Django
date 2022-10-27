@@ -13,11 +13,11 @@
             <a href="{% url 'accounts:profile' room.host.username %}" class="text-sm">
                 <div class="flex flex-col">
                     <span class="text-gray-400">@{{room.host.username}}</span>
-                    <span style="font-size: 12px" class="text-gray-400">{{room.updated|timesince }} ago</span>
+                    <span style="font-size: 12px" class="text-gray-400">{{room.created|timesince }} ago</span>
                 </div>
             </a>
         </div>
-        {%if request.user.is_authenticated and room.host.username == request.user.username %}
+        {% if request.user.is_authenticated and room.host.username == request.user.username %}
         <div class="mt-5 mb-2">
             <a href="{% url 'core:update_room' room.id %}"
                 class="bg-green-600 w-32 py-1 px-4 text-center text-sm text-white m-2 rounded">Update
@@ -27,8 +27,6 @@
             </a>
         </div>
         {% endif %}
-
-        <!-- <span>{{room.created|date:'Y-m-d'}}</span> -->
     </div>
     <div class="my-5">
         <a href=" {% url 'core:room_detail' room.id %}" class="text-gray-400">

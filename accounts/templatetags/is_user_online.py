@@ -4,9 +4,6 @@ import online_users.models
 register = template.Library()
 from datetime import timedelta
 
-
-
-
 @register.simple_tag()
 # check if the user online or not
 def is_user_online(username):
