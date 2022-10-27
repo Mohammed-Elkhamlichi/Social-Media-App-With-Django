@@ -64,7 +64,7 @@ def user_followers(request, username):
 
 def user_following(request, username):
     user = get_object_or_404(User, username=username)
-    following = user.following
+    following = user.following.all()
     return render(request, 'accounts/user_following.html', {
         "following": following,
         "hosts": User.objects.all(),

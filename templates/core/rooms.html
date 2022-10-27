@@ -1,43 +1,29 @@
-{% load static %} 
+{% load static %}
 {% load is_user_online %}
 
 {% for room in rooms %}
 <div
-    class="flex flex-col mx-2 my-5 w-full p-5 m-auto bg-slate-700 shadow-md shadow-gray-800 hover:shadow-gray-900 rounded transition dely-700 hover:scale-105 ease-in-out"
->
+    class="flex flex-col mx-2 my-5 w-full p-5 m-auto bg-slate-700 shadow-md shadow-gray-800 hover:shadow-gray-900 rounded transition dely-700 hover:scale-105 ease-in-out">
     <div class="flex flex-row justify-between items-center">
         <div class="flex flex-row">
             <div class="">
-                <div class="h-4 w-4 {% is_user_online room.host.username %} "></div>
-                <img
-                    src="{{room.host.profile_pic.url}}"
-                    alt=""
-                    class="h-8 w-8 rounded-full mr-1"
-                />
+                <div class="h-3 w-3 {% is_user_online room.host.username %} -mt-1 -ml-1"></div>
+                <img src="{{room.host.profile_pic.url}}" alt="" class="h-8 w-8 rounded-full mr-1" />
             </div>
-            <a
-                href="{% url 'accounts:profile' room.host.username %}"
-                class="text-sm"
-            >
+            <a href="{% url 'accounts:profile' room.host.username %}" class="text-sm">
                 <div class="flex flex-col">
                     <span class="text-gray-400">@{{room.host.username}}</span>
-                    <span style="font-size: 12px" class="text-gray-400"
-                        >{{room.updated|timesince }} ago</span
-                    >
+                    <span style="font-size: 12px" class="text-gray-400">{{room.updated|timesince }} ago</span>
                 </div>
             </a>
         </div>
         {%if request.user.is_authenticated and room.host.username == request.user.username %}
         <div class="mt-5 mb-2">
-            <a
-                href="{% url 'core:update_room' room.id %}"
-                class="bg-green-600 w-32 py-1 px-4 text-center text-sm text-white m-2 rounded"
-                >Update
+            <a href="{% url 'core:update_room' room.id %}"
+                class="bg-green-600 w-32 py-1 px-4 text-center text-sm text-white m-2 rounded">Update
             </a>
-            <a
-                href="{% url 'core:delete_room' room.id %}"
-                class="bg-red-500 w-32 m-2 py-1 px-4 text-center text-sm text-white rounded"
-                >delete
+            <a href="{% url 'core:delete_room' room.id %}"
+                class="bg-red-500 w-32 m-2 py-1 px-4 text-center text-sm text-white rounded">delete
             </a>
         </div>
         {% endif %}
@@ -52,50 +38,36 @@
     <hr class="border border-slate-600 mt-5" />
     <div class="flex flex-row justify-between item-center">
         <div class="flex flex-row mt-5 mb-2">
-            <img
-                src="{{room.participants.first.profile_pic.url}}"
-                alt=""
-                class="h-6 w-6 rounded-full mr-1"
-            />
+            <img src="{{room.participants.first.profile_pic.url}}" alt="" class="h-6 w-6 rounded-full mr-1" />
             <a href="" class="text-sm font-weight h-6">
-                <span class="text-gray-400 font-weight text-sm"
-                    >{{room.participants.count}} Joined
+                <span class="text-gray-400 font-weight text-sm">{{room.participants.count}} Joined
                 </span>
             </a>
         </div>
         <div class="flex flex-row mt-5 mb-2">
-            {% for participant in room.participants.all %}
+            {% for participant in room.participants.all|slice:":3" %}
             <div class="mx-1">
-                <a
-                    href="{% url 'accounts:profile' participant.username %}"
-                    class="text-sm font-weight"
-                >
-                    <img
-                        src="{{participant.profile_pic.url}}"
-                        alt="participant"
-                        class="h-5 w-5 rounded-full"
-                    />
+                <a href="{% url 'accounts:profile' participant.username %}" class="text-sm font-weight">
+                    <img src="{{participant.profile_pic.url}}" alt="participant" class="h-5 w-5 rounded-full" />
                 </a>
             </div>
             {% endfor %}
         </div>
 
         <div class="mt-5 mb-2">
-            <a
-                href=" {% url 'core:topic_rooms' room.topic.id %}"
-                class="bg-slate-600 text-gray-300 px-4 py-2 rounded-full text-sm"
-            >
+            <a href=" {% url 'core:topic_rooms' room.topic.id %}"
+                class="bg-slate-600 text-gray-300 px-4 py-2 rounded-full text-sm">
                 {{room.topic}}
             </a>
         </div>
     </div>
-   
+
 </div>
 {% empty %}
 <h1 class="text-gray-400">no existing room yet</h1>
 
 {% endfor %}
 {% if rooms %}
-    <!-- pagination -->
-    {% include "core/pagination.html" with range=range %} 
+<!-- pagination -->
+{% include "core/pagination.html" with range=range %}
 {% endif %}

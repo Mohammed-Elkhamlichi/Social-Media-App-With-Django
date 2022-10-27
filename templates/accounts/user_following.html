@@ -1,1 +1,19 @@
-{% extends "core/home.html" %} {% block home %} {% endblock home %}
+{% extends "core/home.html" %}
+{% load is_user_online %}
+{% block home %}
+<h1 class="text-2xl text-gray-400 my-2">@following</h1>
+<div class="flex flex-row flex-wrap my-5 justify-center itmes-center">
+    {% for follow in following %}
+    <div class="flex flex-col items-center  bg-slate-800  mx-2 my-5 p-4 rounded">
+        <div class="">
+            <div class="h-5 w-5 {% is_user_online follow.username %} -mb-1"></div>
+            <img src="{{follow.profile_pic.url}}" alt="" class="h-20 w-20 rounded-full mr-1" />
+        </div>
+        <div class="text-gray-400  my-1 px-2 py-1 font-bold">
+            <a href="{% url 'accounts:profile' follow.username %}">
+                @{{follow.username|title}}</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock home %}

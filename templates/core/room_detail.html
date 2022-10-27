@@ -36,7 +36,8 @@
         <div
             class="flex flex-col justify-start items-center content-start  h-96 w-full m-auto border rounded bg-slate-700 mt-5 px-3 pt-2">
 
-            <div class=" flex flex-col h-5/6 justify-start items-start  w-full overflow-y-auto">
+            <div
+                class=" flex flex-col h-5/6 justify-start items-start  w-full overflow-y-auto scrollbar scrollbar-thumb-gray-500 scrollbar-track-slate-600">
                 {% for message in conversation %}
                 <div
                     class="flex flex-col  my-4 border-l-4 rounded-md {% if room.host == message.user %} border-green-600 {% else %} border-l-white {% endif %} ">
@@ -50,17 +51,13 @@
                             {{message.created|time:'H:i'}}
                         </span>
                         {% if message.user != request.user %}
-                            {% if message.user in request.user.following.all %}
-                            <a
-                            href="{% url 'accounts:follow_unfollow_user' message.user.username 'unfollow' %}"
-                                class="mx-2 text-green-500 border-2 rounded-full py-1 px-2 text-xs transition duration-200 ease-in-out hover:border-green-500 hover:text-white cursor-pointer"
-                            >unfollow</a>
-                            {% else %}
-                            <a
-                            href="{% url 'accounts:follow_unfollow_user' message.user.username 'follow'  %}"
-                                class="mx-2 text-green-500 border-2 rounded-full py-1 px-2 text-xs transition duration-200 ease-in-out hover:border-green-500 hover:text-white cursor-pointer"
-                            >follow</a>
-                            {% endif %}
+                        {% if message.user in request.user.following.all %}
+                        <a href="{% url 'accounts:follow_unfollow_user' message.user.username 'unfollow' %}"
+                            class="mx-2 text-green-500 border-2 rounded-full py-1 px-2 text-xs transition duration-200 ease-in-out hover:border-green-500 hover:text-white cursor-pointer">unfollow</a>
+                        {% else %}
+                        <a href="{% url 'accounts:follow_unfollow_user' message.user.username 'follow'  %}"
+                            class="mx-2 text-green-500 border-2 rounded-full py-1 px-2 text-xs transition duration-200 ease-in-out hover:border-green-500 hover:text-white cursor-pointer">follow</a>
+                        {% endif %}
                         {% endif %}
                     </div>
                     <div class="text-xs text-gray-300 px-2 py-0 ml-1">
