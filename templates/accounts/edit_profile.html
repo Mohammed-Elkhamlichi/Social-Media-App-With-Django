@@ -1,9 +1,9 @@
-{% extends "base.html" %} {% block base %}
-<div class="flex justify-center items-center">
+{% extends "core/home.html" %} {% block home %}
+<div class="flex justify-center items-center w-full">
     <form
         action=""
-        method="post"
-        class="flex flex-col justify-center items-center w-11/12 m-auto rounded bg-gray-600 p-2 my-20"
+        method="POST"
+        class="flex flex-col justify-center items-center w-11/12 m-auto rounded bg-slate-700 shadow-sm shadow-slate-900 border-2 border-slate-700 p-2 my-20"
         enctype="multipart/form-data"
     >
         {% csrf_token %}
@@ -72,7 +72,9 @@
                 name="phone"
                 id="phone"
                 placeholder="+212712345678"
-                value="{{request.user.phone}}"
+                {% if request.user.phone is not None %}
+                    value="{{request.user.phone}}"
+                {% endif %}
                 class="rounded transition duration-200 ease-in-out shadow-md hover:outline-sky-500 hover:shadow-gray-800 hover:text-green-500"
             />
         </div>
@@ -85,7 +87,10 @@
                 placeholder="full stack web developer python/django"
                 class="h-52 text-start rounded transition duration-200 ease-in-out shadow-md hover:outline-sky-500 hover:shadow-gray-800 hover:text-green-500"
             >
+            {% if request.user.bio is not None %}
                 {{request.user.bio}}
+            {% endif %}
+                
                 </textarea
             >
         </div>
@@ -96,7 +101,9 @@
                 name="country"
                 id="country"
                 placeholder="Morocco"
-                value="{{request.user.country}}"
+                {% if request.user.country is not None %}
+                    value="{{request.user.country}}"
+                {% endif %}
                 class="rounded transition duration-200 ease-in-out shadow-md hover:outline-sky-500 hover:shadow-gray-800 hover:text-green-500"
             />
         </div>
@@ -104,9 +111,9 @@
             <input
                 type="submit"
                 value="Update Profile"
-                class="py-2 px-5 shadow-md shadow-slate-800 text-gray-300 transition duration-200 ease-in-out hover:text-white rounded hover:bg-green-700 my-5"
+                class="py-2 px-5 shadow-md shadow-slate-800 text-gray-300 transition duration-200 ease-in-out hover:text-white rounded hover:bg-green-700 my-5 cursor-pointer"
             />
         </div>
     </form>
 </div>
-{% endblock base %}
+{% endblock home %}

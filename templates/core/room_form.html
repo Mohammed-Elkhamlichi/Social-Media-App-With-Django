@@ -1,13 +1,13 @@
-{% extends "base.html" %} {% block base %}
+{% extends "core/home.html" %} {% block home %}
 
-<div class="h-screen flex flex-col items-center justify-center">
+<div class="h-screen flex flex-col items-start justify-center lg:w-full">
     <form
         action=""
         method="post"
-        class="bg-green items-center dark:bg-gray-700 shadow-md shadow-slate-800 hover:shadow-slate-900 flex flex-col justify-center w-96 m-auto rounded my-10"
+        class="bg-green items-center dark:bg-slate-700 shadow-md shadow-slate-800 hover:shadow-slate-900 flex flex-col justify-center w-96 lg:w-full m-auto rounded my-10"
     >
         <div class="w-full">
-            {% include "messages.html" %}
+            <!-- {#% include "messages.html" %#} -->
         </div>
 
         <h2
@@ -72,16 +72,16 @@
         <input
             type="submit"
             value="Update Room"
-            class="py-2 px-5 shadow-md shadow-slate-800 text-gray-300 transition duration-200 ease-in-out hover:text-white rounded hover:bg-green-700 my-5"
+            class="py-2 px-5 shadow-md shadow-slate-800 text-gray-300 transition duration-200 ease-in-out hover:text-white rounded hover:bg-green-700 my-5 cursor-pointer"
         />
         {% else %}
         <input
             type="submit"
             value="Create Room"
-            class="py-2 px-5 shadow-md shadow-slate-800 text-gray-300 transition duration-200 ease-in-out hover:text-white rounded hover:bg-green-700 my-5"
+            class="py-2 px-5 shadow-md shadow-slate-800 text-gray-300 transition duration-200 ease-in-out hover:text-white rounded hover:bg-green-700 my-5 cursor-pointer"
         />
         {% endif %}
     </form>
 </div>
 
-{% endblock base %}
+{% endblock home %}

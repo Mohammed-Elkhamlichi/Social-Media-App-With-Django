@@ -1,6 +1,8 @@
-{% extends "base.html" %} {% block base %}
+{% extends "base.html" %} 
+
+{% block base %}
 <!-- include messages template -->
-{% include "messages.html" %}
+{#% include "messages.html" %#}
 
 <!-- search rooms template -->
 {% include "core/search_rooms.html" %}
@@ -12,21 +14,34 @@
         {{rooms.count}} Rooms available
     </div>
 </div>
-<div class="lg:grid lg:grid-cols-4">
-    <div class="lg:col-span-2">
-        <div class="flex flex-col justify-start items-center w-11/12 m-auto">
+<div class="flex flex-col lg:grid lg:grid-cols-4">
+    <!-- include the topics left side lg screens -->
+    <div class="hidden lg:flex lg:flex-col  lg:col-span-1 lg:row-start-1 m-auto my-4 w-10/12">
+    {% include "core/topics.html" with topics=topics %}
+    </div>
+
+    <div class="lg:col-span-2 lg:row-start-1">
+        <div class="flex flex-col justify-start items-center mt-5 w-11/12 m-auto">
+        {% block home %}
             <h1 class="text-2xl text-center text-gray-400">
                 @Interesting Rooms
             </h1>
             <!-- include rooms templates -->
             {% include "core/rooms.html" with rooms=rooms %}
+            
+        {% endblock home %}
         </div>
     </div>
-    <!-- include the topics left side -->
-    {% include "core/topics.html" with topics=topics %}
+    <!-- include the topics left side small screens -->
+    <div class="flex  flex-col  lg:hidden  w-10/12 m-auto my-4 ">
+        {% include "core/topics.html" with topics=topics %}
+    </div>
 
-    <!-- include the topics left side -->
+    <!-- include the hosts left side -->
+    <div class="lg:col-span-1  w-10/12 m-auto my-4 ">
     {% include "core/hosts.html" with hosts=hosts %}
+    </div>
 </div>
-<!-- pagination -->
-{% include "core/pagination.html" with range=range %} {% endblock base %}
+
+
+{% endblock base %}

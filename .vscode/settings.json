@@ -1,6 +1,6 @@
 {
     "cSpell.words": ["psycopg"],
-    "editor.wordWrap": "off",
+    "editor.wordWrap": "on",
     "html.format.wrapAttributes": "auto",
     "debug.console.wordWrap": true,
     "workbench.editor.wrapTabs": false,

@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from .forms import UserRegisterForm, UserForm
 from accounts.models import User
 from django.db.models import Q
-from core.models import Room
+from core.models import Room, Topic
 import online_users.models
 from datetime import timedelta
 from django.contrib.auth.decorators import login_required
@@ -30,14 +30,20 @@ def profile(request, username):
         if user.user == get_user:
             is_user_online = True
     hosts = User.objects.all()
-    return render(request, 'accounts/profile.html', {
+    return render(request, 'accounts/profile-new.html', {
         "hosts": hosts, 
         "user": get_user,  
         "rooms": rooms, 
+        "topics":Topic.objects.all(),
         "is_user_online": is_user_online
         }
     )
-
+def user_followers(request,user_id):
+    
+    return render(request, 'core/user_followers.html',{
+        "hosts":User.objects.all(),
+        "rooms":Room.objects.all()
+    })
 
 def set_followers(request, username):
     if request.method == "GET":
@@ -53,23 +59,24 @@ def set_followers(request, username):
             # remove follower and following
             user.followers.remove(request.user)
             request.user.following.remove(user)
-
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 @login_required(login_url="accounts:login_user")
 def edit_profile(request, username):
     user = request.user
+    form = UserForm(instance=user)
     if request.method == "POST":
-        form = UserForm(request.POST, request.FILES, instance=user)
-        profile_image = request.FILES['profile_pic'] or None
+        form = UserForm(request.POST, request.FILES, instance=user)     
         if form.is_valid():
             form.save()
-            fs = FileSystemStorage()
-            fs.save(profile_image.name, profile_image)
-    else:
-        form = UserForm()
-    return render(request, "accounts/edit_profile.html",)
+            return redirect('accounts:profile', username)
+    return render(request, "accounts/edit_profile.html",{
+        "rooms":Room.objects.all(),
+        "topics":Topic.objects.all(),
+        "hosts":User.objects.all()
+        }
+    )
 
 
 def login_user(request):
@@ -99,25 +106,18 @@ def register_user(request):
     form = UserRegisterForm()
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
-        username = request.POST.get('username')
-        email = request.POST.get('email')
+        print(form)
+        username = str(request.POST.get('username'))
+        email = str(request.POST.get('email'))
         user = User.objects.filter(Q(username=username) | Q(email=email))
-        if user.count() == 0:
-            if form.is_valid():
-                user = form.save(commit=False)
-                user.username = user.username.lower()
-                user.email = user.email.lower()
-                user.save()
-                login(request, user)
-                messages.success(request, 'registration success')
-                return redirect('core:home')
-            else:
-                messages.error(request, 'enter a valid credentials')
-        else:
-            messages.error(
-                request, 'User with this username or email is already exist')
-
-    return render(request, 'accounts/register_user.html')
+        if user.count() == 0 and form.is_valid():
+            user = form.save(commit=False)
+            user.username = username.lower()
+            user.email = email.lower()
+            user.save()
+            login(request, user)
+            return redirect('core:home')
+    return render(request, 'accounts/register_user.html',{"form": form})
 
 
 def logout_user(request):

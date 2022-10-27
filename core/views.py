@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect, HttpResponseNotAllowed
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -17,24 +17,6 @@ def home(request):
     hosts = User.objects.all().order_by('-username')
     limit_display_rooms = 10
     rooms = Room.objects.all()[:limit_display_rooms]
-
-    # add new Joined (join a topic)
-    if request.method == 'POST':
-        topic_name = request.POST.get('joined_topic')
-        quit_topic = request.POST.get('quit_topic')
-        join_topic = request.POST.get('join_topic')
-        print(join_topic, quit_topic, topic_name)
-        try:
-            # if the topic name exist and the user need to join the topic
-            joined_topic = Topic.objects.get(name=topic_name)
-            if topic_name is not None and str(join_topic).lower() == "join":
-                joined_topic.subscribers.add(request.user)
-
-            # if the topic name exist and the user need to join the topic
-            elif topic_name is not None and str(quit_topic).lower() == "quit":
-                joined_topic.subscribers.remove(request.user)
-        except:
-            messages.success(request, f'Internal Server Error')
     topics = Topic.objects.all().order_by('name')
     # pagination
     page_number = request.GET.get('page')
@@ -47,7 +29,7 @@ def home(request):
     search = request.GET.get('search')
     if search is not None:
         rooms = Room.objects.filter(
-            Q(name__contains=search)
+            Q(name__icontains=search) 
         ).order_by('-created', '-updated')
     context = {
         "title": 'Room Page',
@@ -58,7 +40,7 @@ def home(request):
     }
     return render(request, 'core/home.html', context=context)
 
-
+# room detail
 @ login_required(login_url='auth:login')
 def room_detail(request, room_id):
     if not request.user.is_authenticated:
@@ -66,22 +48,6 @@ def room_detail(request, room_id):
     room_id = int(room_id)
     room = Room.objects.get(pk=room_id)
     form = MessageForm()
-    if request.method == "GET":
-        join_room = request.GET.get('join_room')
-        quit_room = request.GET.get('quit_room')
-        # if the user not participant in the room and he want to join
-        if request.user not in room.participants.all() and str(join_room).lower() == "join":
-            room.participants.add(request.user)
-            room.save()
-            return redirect(request.META.get('HTTP_REFERER', '/'))
-        # else
-        elif request.user in room.participants.all() and str(quit_room).lower() == "quit":
-            room.participants.remove(request.user)
-            room.save()
-            return redirect(request.META.get('HTTP_REFERER', '/'))
-    else:
-        return redirect(request.META.get('HTTP_REFERER', '/'))
-
     if request.method == 'POST':
         form = MessageForm(request.POST)
         print(form)
@@ -98,16 +64,35 @@ def room_detail(request, room_id):
             return redirect(request.META.get('HTTP_REFERER', '/'))
     else:
         form = MessageForm()
-        return form
     conversation = Message.objects.filter(room=room)
     context = {
         "title": 'Room Detail Page',
         'room': room,
+        "rooms":Room.objects.all(),
+        "topics":Topic.objects.all(),
+        "hosts":User.objects.all(),
         "conversation": conversation
     }
     return render(request, 'core/room_detail.html', context=context)
 
+# join or quit room
+def join_quit_room(request, room_id):
+    room_id = int(room_id)
+    room = Room.objects.get(pk=room_id)
+    if request.method == "GET":
+        join_room = request.GET.get('join_room')
+        quit_room = request.GET.get('quit_room')
+        # if the user not participant in the room and he want to join
+        if request.user not in room.participants.all() and str(join_room).lower() == "join":
+            room.participants.add(request.user)
+            room.save()
+        # else
+        elif request.user in room.participants.all() and str(quit_room).lower() == "quit":
+            room.participants.remove(request.user)
+            room.save()
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
+# create new room
 @ login_required(login_url='auth:login')
 def create_room(request):
     if not request.user.is_authenticated:
@@ -126,25 +111,28 @@ def create_room(request):
         name = request.POST.get('name')
         user = User.objects.get(username=request.user.username)
         form = RoomForm(request.POST)
-        if form.is_valid():
-            form = form.save(commit=False)
-            form.host = request.user
-            form.topic = topic
-            form.description = description
-            form.name = name
-            form.save()
-            form.participants.add(request.user)
-            form = MessageForm()
-            return redirect('core:home')
+        if not form.is_valid():
+            redirect('core:home')
+        form = form.save(commit=False)
+        form.host = request.user
+        form.topic = topic
+        form.description = description
+        form.name = name
+        form.save()
+        form.participants.add(request.user)
+        form = MessageForm()
+        return HttpResponseRedirect('.')
 
     return render(request, 'core/room_form.html', context={
         "form": form,
         "is_update": False,
         "method": "POST",
-        'topics': Topic.objects.all()
+        'topics': Topic.objects.all(),
+        'hosts':User.objects.all(),
     })
 
 
+# update room
 @ login_required(login_url='auth:login')
 def update_room(request, room_id):
     if not request.user.is_authenticated:
@@ -172,10 +160,11 @@ def update_room(request, room_id):
         "form": form,
         "room": room,
         "is_update": True,
-        "method": "PUT"
+        "method": "PUT",
+        "hosts":User.objects.all()
     })
 
-
+# delete room
 @ login_required(login_url='auth:login')
 def delete_room(request, room_id):
     if not request.user.is_authenticated:
@@ -186,3 +175,36 @@ def delete_room(request, room_id):
         return redirect('core:home')
     except Room.DoesNotExist:
         raise Http404
+
+# get all room exist in every single topic
+def topic_rooms(request,topic_id):
+    topic_id = int(topic_id)
+    topic = get_object_or_404(Topic,pk=topic_id)
+    rooms = Room.objects.filter(topic=topic)
+    
+    return render(request, 'core/topic_rooms.html', {
+        "rooms":rooms,
+        "topics":Topic.objects.all(),
+        "hosts":User.objects.all()
+    })
+    
+# join or quit topic
+def join_quit_topic(request):
+     # add new Joined (join a topic)
+    if request.method == 'POST':
+        topic_name = request.POST.get('joined_topic')
+        quit_topic = request.POST.get('quit_topic')
+        join_topic = request.POST.get('join_topic')
+        print(join_topic, quit_topic, topic_name)
+        try:
+            # if the topic name exist and the user need to join the topic
+            joined_topic = Topic.objects.get(name=topic_name)
+            if topic_name is not None and str(join_topic).lower() == "join":
+                joined_topic.subscribers.add(request.user)
+
+            # if the topic name exist and the user need to join the topic
+            elif topic_name is not None and str(quit_topic).lower() == "quit":
+                joined_topic.subscribers.remove(request.user)
+        except:
+            messages.success(request, f'Internal Server Error')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

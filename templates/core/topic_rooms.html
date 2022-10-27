@@ -1,0 +1,7 @@
+{% extends "core/home.html" %}
+
+
+{% block home %}
+  <!-- include rooms templates -->
+  {% include "core/rooms.html" with rooms=rooms %}
+{% endblock home %}

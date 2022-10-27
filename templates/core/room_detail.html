@@ -1,11 +1,11 @@
-{% extends "base.html" %}
+{% extends "core/home.html" %}
 
-{% block base %}
+{% block home %}
 
 
 <!-- rooms -->
 
-<div class="flex flex-col justify-start items-start my-4 ">
+<div class="flex flex-col justify-start items-start my-4  w-full h-screen">
     <div class="bg-slate-600  w-11/12 p-4  m-auto rounded ">
         <div class="flex flex-row justify-between items-center w-full my-5">
             {% if form.errors %}
@@ -14,7 +14,7 @@
             </div>
             {% endif %}
             <h1 class="text-xl text-gray-300">{{room.name}}</h1>
-            <form method="get" action="{% url 'core:room_detail' room.id %}" class="">
+            <form method="get" action="{% url 'core:join_quit_room' room.id %}" class="">
                 {% if request.user in room.participants.all %}
                 <input type="hidden" name="quit_room" value="quit">
                 <input type="submit" value="quit"
@@ -96,4 +96,4 @@
 </div>
 
 
-{% endblock base %}
+{% endblock home %}

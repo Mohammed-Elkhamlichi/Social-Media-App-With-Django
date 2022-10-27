@@ -11,13 +11,15 @@
 </head>
 <body class="bg-slate-700 ">
     {% include "navbar.html" %}
-    <div class="items-start justify-center m-auto ">
+    <!-- search rooms template -->
+    {#% include "core/search_rooms.html" %#}
+    <div class="items-start justify-center m-auto">
         {% block base %}
 
 
         {% endblock base %}
-
     </div>
+  
     {% include "footer.html" %}
     <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
 </body>

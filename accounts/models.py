@@ -31,7 +31,7 @@ class User(AbstractUser):
         default="profile/avatar.png"
     )
     bio = models.TextField(null=True, blank=True)
-    phone = models.IntegerField(unique=True, blank=True, null=True)
+    phone = models.IntegerField( blank=True, null=True)
     country = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):

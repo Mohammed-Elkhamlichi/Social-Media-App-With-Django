@@ -1,4 +1,6 @@
-{% extends "base.html" %} {% load static %} {% block base %}
+{% extends "core/home.html" %}
+ {% load static %} 
+ {% block home %}
 
 <div class="flex flex-col justify-start items-center w-full mb-32 mt-10">
     <div
@@ -26,6 +28,7 @@
                 Edit
             </a>
             {% endif %}
+            
         </h2>
     </div>
     <div class="my-4 flex flex-row items-center">
@@ -43,16 +46,16 @@
             <input type="hidden" name="un_follow_user" value="un_follow_user" />
             <input
                 type="submit"
-                value="{{user.followers.all.count}} Followers"
-                class="px-5 mx-1 py-2 bg-slate-600 rounded shadow-sm shadow-slate-700 text-gray-400 transition duration-300 ease-in-out hover:shadow-sm hover:border-slate-700 hover:text-white hover:shadow-slate-800"
+                value="{{user.followers.all.count}} follow"
+                class="px-5 mx-1 py-2 bg-slate-600 rounded shadow-sm shadow-slate-700 text-gray-400 transition duration-300 ease-in-out hover:shadow-sm hover:border-slate-700 hover:text-white hover:shadow-slate-800 cursor-pointer"
             />
             {% else %}
             <input type="hidden" name="follow_user" value="follow_user" />
 
             <input
                 type="submit"
-                value="{{user.followers.all.count}} Followers"
-                class="px-5 mx-1 py-2 bg-green-600 rounded shadow-sm shadow-slate-700 text-white transition duration-300 ease-in-out hover:shadow-sm hover:border-slate-700 hover:text-white hover:shadow-slate-800"
+                value="{{user.followers.all.count}} follow"
+                class="px-5 mx-1 py-2 bg-green-600 rounded shadow-sm shadow-slate-700 text-white transition duration-300 ease-in-out hover:shadow-sm hover:border-slate-700 hover:text-white hover:shadow-slate-800 cursor-pointer"
             />
             {% endif %}
         </form>
@@ -74,9 +77,10 @@
     </div>
 </div>
 {% if rooms %}
-<div class="flex flex-col justify-start items-center w-11/12 m-auto my-10">
+<div class="flex flex-col justify-start items-center w-11/12 m-auto">
     <h1 class="text-2xl text-center text-gray-400">@Created Rooms</h1>
     <!-- include rooms templates -->
     {% include "core/rooms.html" with rooms=rooms %}
 </div>
-{% endif %} {% endblock base %}
+{% endif %}
+ {% endblock home %}

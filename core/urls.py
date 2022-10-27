@@ -1,13 +1,16 @@
 from django.urls import path
-from core.views import home, room_detail, create_room, update_room, delete_room
+from . import views
 
 app_name = "core"
 
 urlpatterns = [
-    path('', home, name='home'),
-    path('create-room/', create_room, name='create_room'),
-    path('<str:room_id>/detail/', room_detail, name='room_detail'),
-    path('<str:room_id>/update/', update_room, name='update_room'),
-    path('<str:room_id>/delete/', delete_room, name='delete_room'),
+    path('', views.home, name='home'),
+    path('create-room/', views.create_room, name='create_room'),
+    path('<str:room_id>/detail/', views.room_detail, name='room_detail'),
+    path('<str:room_id>/update/', views.update_room, name='update_room'),
+    path('<str:room_id>/delete/', views.delete_room, name='delete_room'),
+    path('<int:topic_id>/rooms',views.topic_rooms, name='topic_rooms'),
+    path('quit-join-topic/',views.join_quit_topic, name='join_quit_topic'),
+    path('quit-join-room/<int:room_id>/',views.join_quit_room, name='join_quit_room'),
 
 ]
