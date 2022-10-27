@@ -20,49 +20,41 @@
     </div>
     <div class="my-5 flex flex-row">
         <h2 class="text-xl text-gray-300">
-            @{{user.username|title}} {% if user == request.user %}
-            <a
-                class="mx-2 text-green-500 border-2 rounded-full py-0 px-4 transition duration-200 ease-in-out hover:border-green-500 hover:text-white"
-                href="{% url 'accounts:edit_profile' user.username %}"
-            >
-                Edit
-            </a>
-            {% else %}
-            <a
-                class="mx-2 text-green-500 border-2 rounded-full py-0 px-4 transition duration-200 ease-in-out hover:border-green-500 hover:text-white"
-                href="{% url 'accounts:edit_profile' user.username %}"
-            >
-                follow
-            </a>
-            {% endif %}
-            
+            @{{user.username|title}}
         </h2>
-    </div>
-    <div class="my-4 flex flex-row items-center">
-        <span
-            class="px-5 mx-1 py-2 bg-slate-600 rounded shadow-sm shadow-slate-700 text-gray-400 transition duration-300 ease-in-out hover:shadow-sm hover:border-slate-700 hover:text-white hover:shadow-slate-800"
+        {% if user == request.user %}
+        <a
+            class="mx-2 text-green-500 border-2 rounded-full py-0 px-4 transition duration-200 ease-in-out hover:border-green-500 hover:text-white"
+            href="{% url 'accounts:edit_profile' user.username %}"
         >
-            {{user.following.all.count}} Following</span
-        >
-        {% if request.user != user %}
+            Edit
+        </a>
+        {% else %}
         <div>
             {% if request.user in user.followers.all %}
             <a
-                class="px-5 mx-1 py-2 bg-slate-600 rounded shadow-sm shadow-slate-700 text-gray-400 transition duration-300 ease-in-out hover:shadow-sm hover:border-slate-700 hover:text-white hover:shadow-slate-800 cursor-pointer"
-            >{{user.followers.all.count}} followers</a>
+            href="{% url 'accounts:follow_unfollow_user' user.username 'unfollow' %}"
+                class="mx-2 text-green-500 border-2 rounded-full py-1 px-4 transition duration-200 ease-in-out hover:border-green-500 hover:text-white cursor-pointer"
+            >unfollow</a>
             {% else %}
             <a
-                class="px-5 mx-1 py-2 bg-green-600 rounded shadow-sm shadow-slate-700 text-white transition duration-300 ease-in-out hover:shadow-sm hover:border-slate-700 hover:text-white hover:shadow-slate-800 cursor-pointer"
-            >{{user.followers.all.count}} followers</a>
+            href="{% url 'accounts:follow_unfollow_user' user.username 'follow'  %}"
+                class="mx-2 text-green-500 border-2 rounded-full py-1 px-4 transition duration-200 ease-in-out hover:border-green-500 hover:text-white cursor-pointer"
+            >follow</a>
             {% endif %}
         </div>
-        {% else %}
-        <span
-            class="px-5 mx-1 py-2 bg-slate-600 rounded shadow-sm shadow-slate-700 text-gray-400 transition duration-300 ease-in-out hover:shadow-sm hover:border-slate-700 hover:text-white hover:shadow-slate-800"
-        >
-            {{user.followers.all.count}} Followers
-        </span>
         {% endif %}
+    </div>
+    <div class="my-4 flex flex-row items-center">
+        <a
+        href="{% url 'accounts:user_following' user.username  %}"
+            class="px-5 mx-1 py-2 bg-slate-600 rounded shadow-sm shadow-slate-700 text-gray-400 transition duration-300 ease-in-out hover:shadow-sm hover:border-slate-700 hover:text-white hover:shadow-slate-800 cursor-pointer"
+        > {{user.following.all.count}} Following</a>
+        <a
+        href="{% url 'accounts:user_followers' user.username  %}"
+            class="px-5 mx-1 py-2 bg-slate-600 rounded shadow-sm shadow-slate-700 text-gray-400 transition duration-300 ease-in-out hover:shadow-sm hover:border-slate-700 hover:text-white hover:shadow-slate-800 cursor-pointer"
+        >{{user.followers.all.count}} followers</a>
+
     </div>
     <div
         class="flex flex-col px-5 py-2 my-5 w-11/12 bg-slate-600 rounded shadow-sm shadow-slate-700 text-gray-400 transition duration-300 ease-in-out hover:shadow-sm hover:border-slate-700 hover:text-white hover:shadow-slate-800"

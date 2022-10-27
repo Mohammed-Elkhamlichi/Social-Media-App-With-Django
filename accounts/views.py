@@ -38,27 +38,39 @@ def profile(request, username):
         "is_user_online": is_user_online
         }
     )
-def user_followers(request,user_id):
-    
-    return render(request, 'core/user_followers.html',{
+# followers of every single user
+def user_followers(request,username):
+    user = get_object_or_404(User, username=username)
+    followers = user.followers
+    return render(request, 'accounts/user_followers.html',{
+        "followers":followers,
         "hosts":User.objects.all(),
-        "rooms":Room.objects.all()
+        "rooms":Room.objects.all(),
+        "topics":Topic.objects.all()
+    })
+    
+# following of every single user
+def user_following(request,username):
+    user = get_object_or_404(User, username=username)
+    following = user.following
+    return render(request, 'accounts/user_following.html',{
+        "following":following,
+        "hosts":User.objects.all(),
+        "rooms":Room.objects.all(),
+        "topics":Topic.objects.all()
     })
 
-def set_followers(request, username):
-    if request.method == "GET":
-        # get the user was clicked on follow him
-        user = User.objects.get(username=username)
-        follow_user = request.GET.get('follow_user')
-        un_follow_user = request.GET.get('un_follow_user')
-        if request.user not in user.followers.all() and str(follow_user).lower() == "follow_user":
-            # add  follower  and following
-            user.followers.add(request.user)
-            request.user.following.add(user)
-        elif request.user in user.followers.all() and str(un_follow_user).lower() == 'un_follow_user':
-            # remove follower and following
-            user.followers.remove(request.user)
-            request.user.following.remove(user)
+def follow_unfollow_user(request, username, state):
+    # get the user was clicked on follow him
+    user = User.objects.get(username=username)
+    if request.user not in user.followers.all() and str(state).lower() == "follow":
+        # add  follower  and following
+        user.followers.add(request.user)
+        request.user.following.add(user)
+    elif request.user in user.followers.all() and str(state).lower() == 'unfollow':
+        # remove follower and following
+        user.followers.remove(request.user)
+        request.user.following.remove(user)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 

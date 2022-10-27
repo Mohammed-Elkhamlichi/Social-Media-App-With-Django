@@ -1,5 +1,8 @@
 {
-    "cSpell.words": ["psycopg"],
+    "cSpell.words": [
+        "psycopg",
+        "unfollow"
+    ],
     "editor.wordWrap": "on",
     "html.format.wrapAttributes": "auto",
     "debug.console.wordWrap": true,
