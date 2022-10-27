@@ -14,6 +14,8 @@ import datetime
 # Create your views here.
 
 # check if the user online or not
+
+
 def is_user_online(username):
     # get the user object
     get_user = User.objects.get(username=username)
@@ -26,6 +28,7 @@ def is_user_online(username):
         if user.user == get_user:
             return True
 
+
 @login_required(login_url="accounts:login_user")
 def profile(request, username):
     # get the user object
@@ -35,36 +38,41 @@ def profile(request, username):
     # is_user_online(username)
     hosts = User.objects.all()
     return render(request, 'accounts/profile.html', {
-        "hosts": hosts, 
-        "user": get_user,  
-        "rooms": rooms, 
-        "topics":Topic.objects.all(),
+        "hosts": hosts,
+        "user": get_user,
+        "rooms": rooms,
+        "topics": Topic.objects.all(),
         "is_user_online": is_user_online(username)
-        }
+    }
     )
 # followers of every single user
+
+
 def user_followers(request, username):
     user = get_object_or_404(User, username=username)
     followers = user.followers.all()
-    return render(request, 'accounts/user_followers.html',{
-        "followers":followers,
-        "hosts":User.objects.all(),
-        "rooms":Room.objects.all(),
-        "topics":Topic.objects.all(),
+    return render(request, 'accounts/user_followers.html', {
+        "followers": followers,
+        "hosts": User.objects.all(),
+        "rooms": Room.objects.all(),
+        "topics": Topic.objects.all(),
         "is_user_online": is_user_online(username)
     })
-    
+
 # following of every single user
-def user_following(request,username):
+
+
+def user_following(request, username):
     user = get_object_or_404(User, username=username)
     following = user.following
-    return render(request, 'accounts/user_following.html',{
-        "following":following,
-        "hosts":User.objects.all(),
-        "rooms":Room.objects.all(),
-        "topics":Topic.objects.all(),
+    return render(request, 'accounts/user_following.html', {
+        "following": following,
+        "hosts": User.objects.all(),
+        "rooms": Room.objects.all(),
+        "topics": Topic.objects.all(),
         "is_user_online": is_user_online(username)
     })
+
 
 def follow_unfollow_user(request, username, state):
     # get the user was clicked on follow him
@@ -85,16 +93,16 @@ def edit_profile(request, username):
     user = request.user
     form = UserForm(instance=user)
     if request.method == "POST":
-        form = UserForm(request.POST, request.FILES, instance=user)     
+        form = UserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
             return redirect('accounts:profile', username)
-    return render(request, "accounts/edit_profile.html",{
-        "rooms":Room.objects.all(),
-        "topics":Topic.objects.all(),
-        "hosts":User.objects.all(),
+    return render(request, "accounts/edit_profile.html", {
+        "rooms": Room.objects.all(),
+        "topics": Topic.objects.all(),
+        "hosts": User.objects.all(),
         "is_user_online": is_user_online(username)
-        }
+    }
     )
 
 
@@ -121,6 +129,7 @@ def login_user(request):
                 request, 'user with this credentials not exist')
     return render(request, 'accounts/login_user.html')
 
+
 def register_user(request):
     form = UserRegisterForm()
     if request.method == 'POST':
@@ -136,7 +145,7 @@ def register_user(request):
             user.save()
             login(request, user)
             return redirect('core:home')
-    return render(request, 'accounts/register_user.html',{"form": form})
+    return render(request, 'accounts/register_user.html', {"form": form})
 
 
 def logout_user(request):
