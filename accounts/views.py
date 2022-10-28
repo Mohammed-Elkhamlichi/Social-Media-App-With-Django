@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from .forms import UserRegisterForm, UserForm
@@ -46,8 +46,6 @@ def profile(request, username):
     }
     )
 # followers of every single user
-
-
 def user_followers(request, username):
     user = get_object_or_404(User, username=username)
     followers = user.followers.all()
@@ -59,9 +57,9 @@ def user_followers(request, username):
         "is_user_online": is_user_online(username)
     })
 
+
+
 # following of every single user
-
-
 def user_following(request, username):
     user = get_object_or_404(User, username=username)
     following = user.following.all()
@@ -74,6 +72,8 @@ def user_following(request, username):
     })
 
 
+
+# 
 def follow_unfollow_user(request, username, state):
     # get the user was clicked on follow him
     user = User.objects.get(username=username)
@@ -88,6 +88,8 @@ def follow_unfollow_user(request, username, state):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
+
+# 
 @login_required(login_url="accounts:login_user")
 def edit_profile(request, username):
     user = request.user
@@ -106,6 +108,7 @@ def edit_profile(request, username):
     )
 
 
+#  
 def login_user(request):
     if request.method == "POST":
         email = request.POST.get('email')

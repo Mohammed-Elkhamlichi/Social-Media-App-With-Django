@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home),
     path('', include('core.urls', namespace='core')),
+    path('api-auth/', include('rest_framework.urls')),
     path('auth/', include('accounts.urls', namespace='auth')),
     path("__reload__/", include("django_browser_reload.urls")),
 ]
