@@ -8,11 +8,6 @@
 <div class="flex flex-col justify-start items-start my-4  w-full ">
     <div class="bg-slate-600  w-11/12 p-4  m-auto rounded ">
         <div class="flex flex-row justify-between items-center w-full my-5">
-            {% if form.errors %}
-            <div class="alert alert-danger">
-                {{ form.errors }}
-            </div>
-            {% endif %}
             <h1 class="text-xl text-gray-300">{{room.name}}</h1>
             <div>
                 {% if request.user in room.participants.all %}
@@ -35,9 +30,8 @@
             </div>
         </div>
         {% if request.user in room.participants.all %}
-        <div class="flex flex-col justify-start items-center content-start  h-96 w-full m-auto border rounded bg-slate-700 mt-5 px-3 pt-2"
-            id="message_container_join">
-
+        <div
+            class="flex flex-col justify-start items-center content-start  h-96 w-full m-auto border rounded bg-slate-700 mt-5 px-3 pt-2">
             <div
                 class=" flex flex-col h-5/6 justify-start items-start  w-full overflow-y-auto scrollbar scrollbar-thumb-gray-500 scrollbar-track-slate-600">
                 {% for message in conversation %}
@@ -79,8 +73,9 @@
             </form>
         </div>
         {% else %}
-        <div class="flex flex-col justify-center items-center content-center  h-96 w-full m-auto border rounded bg-slate-700 mt-5 px-3 pt-2"
-            id="message_container_quit">
+        <div
+            class="flex flex-col justify-center items-center content-center  h-96 w-full m-auto border rounded bg-slate-700 mt-5 px-3 pt-2">
+
             <p class="text-md text-gray-300 text-center space-x-3 py-4">
                 join the room and start sending messages
             <h4 class="text-md text-gray-300 text-center space-x-3 py-4">
@@ -89,13 +84,11 @@
             </p>
         </div>
         {% endif %}
+
     </div>
 </div>
 <script>
-    // handle quit join topic link
-    const messageContainerJoin = document.getElementById('message_container_if_join')
-    const messageContainerQuit = document.getElementById('message_container_if_quit')
-
+    // handle quit join room button
     const joinQuitRoomLink = document.getElementById('join_quit_room')
     joinQuitRoomLink.addEventListener('click', async function (e) {
         e.preventDefault()
@@ -104,16 +97,15 @@
             joinQuitRoomLink.innerHTML = "Join"
             quitJoinRoom("{{room.id}}", 'quit')
             joinQuitRoomLink.setAttribute('class', 'py-2 px-4 bg-green-600 border text-xs mx-1 rounded-lg text-gray-300   hover:font-bold')
+            window.location.reload()
 
         } else if (joinQuitRoomLink.innerHTML === "Join") {
             joinQuitRoomLink.setAttribute('class', 'py-2 px-4 bg-slate-600 border text-xs mx-1 rounded-lg text-gray-300  hover:font-bold')
-
             joinQuitRoomLink.innerHTML = "Quit"
             quitJoinRoom("{{room.id}}", 'join')
-
+            window.location.reload()
         }
     })
-
     function quitJoinRoom(roomID, state) {
         // http://127.0.0.1:8000/join-quit-room/120/join/
         let ApiUri = `http://127.0.0.1:8000/join-quit-room/${roomID}/${state}/`

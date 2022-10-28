@@ -14,14 +14,14 @@
         {{rooms.count}} Rooms available
     </div>
 </div>
-<div class="flex flex-col lg:grid lg:grid-cols-4">
+<div class="flex flex-col lg:grid lg:grid-cols-4 ">
     <!-- include the topics left side lg screens -->
-    <div class="hidden lg:flex lg:flex-col  lg:col-span-1 lg:row-start-1 m-auto my-4 w-10/12">
+    <div class="hidden lg:flex lg:flex-col  lg:col-span-1 lg:row-start-1 m-auto my-4 w-10/12 ">
         {% include "core/topics.html" with topics=topics %}
     </div>
 
     <div class="lg:col-span-2 lg:row-start-1">
-        <div class="flex flex-col justify-start items-center mt-5 w-11/12 m-auto">
+        <div class="flex flex-col justify-center items-center mt-5 w-11/12 m-auto">
             {% block home %}
             <h1 class="text-2xl text-center text-gray-400">
                 @Interesting Rooms

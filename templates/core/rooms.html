@@ -1,9 +1,10 @@
 {% load static %}
 {% load is_user_online %}
 
+
 {% for room in rooms %}
 <div
-    class="flex flex-col mx-2 my-5 w-full p-5 m-auto bg-slate-700 shadow-md shadow-gray-800 hover:shadow-gray-900 rounded transition dely-700 hover:scale-105 ease-in-out">
+    class="flex flex-col mx-2 my-5 w-full p-5 m-auto bg-slate-700 shadow-md shadow-gray-800 hover:shadow-gray-900 rounded transition dely-700 hover:scale-105 ease-in-out ">
     <div class="flex flex-row justify-between items-center">
         <div class="flex flex-row">
             <div class="">
@@ -63,6 +64,7 @@
 </div>
 {% empty %}
 <h1 class="text-gray-400">no existing room yet</h1>
+
 
 {% endfor %}
 {% if rooms %}

@@ -78,25 +78,51 @@ def room_detail(request, room_id):
     }
     return render(request, 'core/room_detail.html', context=context)
 
+
+
+
+@login_required(login_url='auth:login_user')
+def room_detail_js(request, room_id):
+    if not request.user.is_authenticated:
+        redirect('auth:login_user')
+    room_id = int(room_id)
+    room = Room.objects.get(pk=room_id)
+    form = MessageForm()
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        print(form)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.user = request.user
+            form.room = room
+            form.save()
+            room.participants.add(request.user)
+            form = MessageForm()
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+            # return redirect('core:room_detail', room.id)
+        else:
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+    else:
+        form = MessageForm()
+    conversation = Message.objects.filter(room=room)
+    context = {
+        "title": 'Room Detail Page',
+        'room': room,
+        "rooms": Room.objects.all(),
+        "topics": Topic.objects.all(),
+        "hosts": User.objects.all(),
+        "conversation": conversation,
+    }
+    return render(request, 'core/room_detail.html', context=context)
+
+
+
+
+
+
 # join or quit room
 @login_required(login_url='auth:login_user')
 def join_quit_room(request, room_id, state):
-    room_id = int(room_id)
-    room = Room.objects.get(pk=room_id)
-    # if the user not participant in the room and he want to join
-    if request.user not in room.participants.all() and str(state).lower() == "join":
-        room.participants.add(request.user)
-        room.save()
-    # else
-    elif request.user in room.participants.all() and str(state).lower() == "quit":
-        room.participants.remove(request.user)
-        room.save()
-    return redirect(request.META.get('HTTP_REFERER', '/'))
-
-
-# join or quit room
-@login_required(login_url='auth:login_user')
-def join_quit_room_js(request, room_id, state):
     try:
         room_id = int(room_id)
         room = Room.objects.get(pk=room_id)
@@ -188,6 +214,7 @@ def update_room(request, room_id):
         "is_update": True,
         "method": "PUT",
         "hosts": User.objects.all(),
+        "topics":Topic.objects.all()
     })
 
 # delete room
