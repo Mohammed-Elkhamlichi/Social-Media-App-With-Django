@@ -13,7 +13,6 @@ class User(AbstractUser):
     second = get_date.second
     minute = get_date.minute
     following = models.ManyToManyField(
-
         'User',
         related_name="user_following",
         null=True, blank=True

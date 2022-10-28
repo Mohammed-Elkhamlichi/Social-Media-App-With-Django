@@ -6,8 +6,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% tailwind_css %}
-    <title>{{ title }}</title>
+    <link rel="shortcut icon" href="{% static 'images/mylogo.png' %}" type="image/x-icon">
+    <title>MEM</title>
 </head>
 
 <body class="bg-slate-700 scrollbar scrollbar-thumb-gray-500 scrollbar-track-slate-600 scrollbar-rounded-full">
@@ -23,7 +26,8 @@
 
     {% include "footer.html" %}
     <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
-    <script src="{% static 'js/index.js' %}"></script>
+
 </body>
+
 
 </html>

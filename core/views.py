@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect, HttpResponseNotAllowed
+from django.http import HttpResponse, Http404, JsonResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from accounts.models import User
@@ -44,7 +44,7 @@ def home(request):
 # room detail
 
 
-@ login_required(login_url='auth:login')
+@login_required(login_url='auth:login_user')
 def room_detail(request, room_id):
     if not request.user.is_authenticated:
         redirect('auth:login_user')
@@ -78,8 +78,8 @@ def room_detail(request, room_id):
     }
     return render(request, 'core/room_detail.html', context=context)
 
-
 # join or quit room
+@login_required(login_url='auth:login_user')
 def join_quit_room(request, room_id, state):
     room_id = int(room_id)
     room = Room.objects.get(pk=room_id)
@@ -94,8 +94,32 @@ def join_quit_room(request, room_id, state):
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
+# join or quit room
+@login_required(login_url='auth:login_user')
+def join_quit_room_js(request, room_id, state):
+    try:
+        room_id = int(room_id)
+        room = Room.objects.get(pk=room_id)
+        print(room_id, room, state)
+        # if the user not participant in the room and he want to join
+        if request.user not in room.participants.all() and str(state).lower() == "join":
+            room.participants.add(request.user)
+            room.save()
+            return JsonResponse({"success":"true","message":"user join room success"})
+        # else
+        elif request.user in room.participants.all() and str(state).lower() == "quit":
+            room.participants.remove(request.user)
+            room.save()
+            return JsonResponse({"success":"true","message":"user quit room success"})
+        else:
+            return JsonResponse({"success":"false","message":"Internal Server Error"})
+    except:
+            return JsonResponse({"success":"false","message":"Internal Server Error"})
+
+
+
 # create new room
-@ login_required(login_url='auth:login')
+@login_required(login_url='auth:login_user')
 def create_room(request):
     if not request.user.is_authenticated:
         redirect('auth:login_user')
@@ -135,7 +159,7 @@ def create_room(request):
 
 
 # update room
-@ login_required(login_url='auth:login')
+@login_required(login_url='auth:login_user')
 def update_room(request, room_id):
     if not request.user.is_authenticated:
         redirect('auth:login_user')
@@ -169,7 +193,7 @@ def update_room(request, room_id):
 # delete room
 
 
-@ login_required(login_url='auth:login')
+@login_required(login_url='auth:login_user')
 def delete_room(request, room_id):
     if not request.user.is_authenticated:
         redirect('auth:login_user')
@@ -180,7 +204,7 @@ def delete_room(request, room_id):
     except Room.DoesNotExist:
         raise Http404
 
-
+@login_required(login_url='auth:login_user')
 # get all room exist in every single topic
 def topic_rooms(request, topic_id):
     topic_id = int(topic_id)
@@ -194,23 +218,23 @@ def topic_rooms(request, topic_id):
     })
 
 
+
+@login_required(login_url='auth:login_user')
 # join or quit topic
-def join_quit_topic(request):
+def join_quit_topic(request, topic_id, state):
+    # join-quit-topic-js/<int:topic_id>/<str:state/
     # add new Joined (join a topic)
-    if request.method == 'POST':
-        topic_name = request.POST.get('joined_topic')
-        quit_topic = request.POST.get('quit_topic')
-        join_topic = request.POST.get('join_topic')
-        print(join_topic, quit_topic, topic_name)
+        topic_id = int(topic_id)
+        print(topic_id, state)
         try:
             # if the topic name exist and the user need to join the topic
-            joined_topic = Topic.objects.get(name=topic_name)
-            if topic_name is not None and str(join_topic).lower() == "join":
-                joined_topic.subscribers.add(request.user)
-
+            topic = get_object_or_404(Topic,pk=topic_id)
+            if str(state).lower() == "join":
+                topic.subscribers.add(request.user)
+                return JsonResponse({"success":"true","message":"user join topic success"})
             # if the topic name exist and the user need to join the topic
-            elif topic_name is not None and str(quit_topic).lower() == "quit":
-                joined_topic.subscribers.remove(request.user)
+            elif str(state).lower() == "quit":
+                topic.subscribers.remove(request.user)
+                return JsonResponse({"success":"true","message":"user quit topic success"})
         except:
-            messages.success(request, f'Internal Server Error')
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+            return JsonResponse({"success":"false","message":"Internal Server Error"})

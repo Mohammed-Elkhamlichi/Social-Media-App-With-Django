@@ -17,10 +17,12 @@
             <div>
                 {% if request.user in room.participants.all %}
                 <a href="{% url 'core:join_quit_room' room.id 'quit' %}"
-                    class="py-2 px-4 bg-slate-600 border text-xs mx-1 rounded-lg text-gray-300 hover:bg-green-500 hover:text-black hover:font-bold">Quit</a>
+                    class="py-2 px-4 bg-slate-600 border text-xs mx-1 rounded-lg text-gray-300  hover:font-bold"
+                    id="join_quit_room">Quit</a>
                 {% else %}
                 <a href="{% url 'core:join_quit_room' room.id 'join' %}"
-                    class="py-2 px-4 bg-slate-600 border text-xs mx-1 rounded-lg text-gray-300 hover:bg-green-500 hover:text-black hover:font-bold">Join</a>
+                    class="py-2 px-4 bg-green-600 border text-xs mx-1 rounded-lg text-gray-300  hover:font-bold"
+                    id="join_quit_room">Join</a>
                 {% endif %}
             </div>
         </div>
@@ -33,8 +35,8 @@
             </div>
         </div>
         {% if request.user in room.participants.all %}
-        <div
-            class="flex flex-col justify-start items-center content-start  h-96 w-full m-auto border rounded bg-slate-700 mt-5 px-3 pt-2">
+        <div class="flex flex-col justify-start items-center content-start  h-96 w-full m-auto border rounded bg-slate-700 mt-5 px-3 pt-2"
+            id="message_container_join">
 
             <div
                 class=" flex flex-col h-5/6 justify-start items-start  w-full overflow-y-auto scrollbar scrollbar-thumb-gray-500 scrollbar-track-slate-600">
@@ -77,8 +79,8 @@
             </form>
         </div>
         {% else %}
-        <div
-            class="flex flex-col justify-center items-center content-center  h-96 w-full m-auto border rounded bg-slate-700 mt-5 px-3 pt-2">
+        <div class="flex flex-col justify-center items-center content-center  h-96 w-full m-auto border rounded bg-slate-700 mt-5 px-3 pt-2"
+            id="message_container_quit">
             <p class="text-md text-gray-300 text-center space-x-3 py-4">
                 join the room and start sending messages
             <h4 class="text-md text-gray-300 text-center space-x-3 py-4">
@@ -89,6 +91,38 @@
         {% endif %}
     </div>
 </div>
+<script>
+    // handle quit join topic link
+    const messageContainerJoin = document.getElementById('message_container_if_join')
+    const messageContainerQuit = document.getElementById('message_container_if_quit')
 
+    const joinQuitRoomLink = document.getElementById('join_quit_room')
+    joinQuitRoomLink.addEventListener('click', async function (e) {
+        e.preventDefault()
+        console.log(joinQuitRoomLink.innerHTML)
+        if (joinQuitRoomLink.innerHTML === "Quit") {
+            joinQuitRoomLink.innerHTML = "Join"
+            quitJoinRoom("{{room.id}}", 'quit')
+            joinQuitRoomLink.setAttribute('class', 'py-2 px-4 bg-green-600 border text-xs mx-1 rounded-lg text-gray-300   hover:font-bold')
+
+        } else if (joinQuitRoomLink.innerHTML === "Join") {
+            joinQuitRoomLink.setAttribute('class', 'py-2 px-4 bg-slate-600 border text-xs mx-1 rounded-lg text-gray-300  hover:font-bold')
+
+            joinQuitRoomLink.innerHTML = "Quit"
+            quitJoinRoom("{{room.id}}", 'join')
+
+        }
+    })
+
+    function quitJoinRoom(roomID, state) {
+        // http://127.0.0.1:8000/join-quit-room/120/join/
+        let ApiUri = `http://127.0.0.1:8000/join-quit-room/${roomID}/${state}/`
+        console.log({ ApiUri })
+        fetch(ApiUri)
+            .then(response => response.json())
+            .then(data => console.log({ data }))
+            .catch(err => console.error({ err }));
+    }
+</script>
 
 {% endblock home %}
