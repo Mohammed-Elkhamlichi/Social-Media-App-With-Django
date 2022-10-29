@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "whitenoise.runserver_nostatic",
 
     # My Apps.
     'core.apps.CoreConfig',
@@ -50,7 +51,6 @@ INSTALLED_APPS = [
     'online_users',
     'rest_framework',
     "corsheaders",
-    "whitenoise.runserver_nostatic",
 ]
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
