@@ -72,6 +72,7 @@ NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -82,12 +83,13 @@ MIDDLEWARE = [
     "django_browser_reload.middleware.BrowserReloadMiddleware",
     'online_users.middleware.OnlineNowMiddleware',
     
+    
     # cors headers
     
     
 ]
 
-# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 ROOT_URLCONF = 'social_media.urls'

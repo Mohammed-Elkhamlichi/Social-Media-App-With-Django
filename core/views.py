@@ -162,7 +162,8 @@ def create_room(request):
         user = User.objects.get(username=request.user.username)
         form = RoomForm(request.POST)
         if not form.is_valid():
-            return redirect(request.META.get('HTTP_REFERER', '/'))
+            # return redirect(request.META.get('HTTP_REFERER', '/'))
+            return HttpResponseRedirect('/')
         form = form.save(commit=False)
         form.host = request.user
         form.topic = topic
