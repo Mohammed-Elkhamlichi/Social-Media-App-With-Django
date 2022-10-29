@@ -38,7 +38,7 @@
         <div
             class="flex flex-col justify-start items-center content-start  h-96 w-full m-auto border rounded bg-slate-700 mt-5 px-3 pt-2">
             <div
-                class=" flex flex-col h-5/6 justify-start items-start  w-full overflow-y-auto scrollbar scrollbar-thumb-gray-500 scrollbar-track-slate-600">
+                class=" flex flex-col h-5/6 justify-start items-start  w-full overflow-y-auto scrollbar scrollbar-thumb-gray-500 scrollbar-track-slate-600" id="messages_list_container">
                 {% for message in conversation %}
                 <div
                     class="flex flex-col  my-4 border-l-4 rounded-md {% if room.host == message.user %} border-green-600 {% else %} border-l-white {% endif %} ">

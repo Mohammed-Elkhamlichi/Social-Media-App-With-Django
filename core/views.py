@@ -8,8 +8,9 @@ from django.contrib import messages
 from .models import Room, Topic, Message
 from .forms import RoomForm, MessageForm
 from accounts.views import is_user_online
-from .serializers import MessageSerializer
+from .serializers import MessageSerializer, RoomSerializer
 from accounts.serializers import UserSerializer
+import json
 # Create your views here.
 
 
@@ -90,19 +91,24 @@ def room_detail_js(request, room_id):
     room_id = int(room_id)
     room = Room.objects.get(pk=room_id)
     if request.method == 'POST':
+        req = json.loads(request.body)
+        user = request.user
+        print('request',req)
+        Message.objects.create(room=room, user=user, body=req['body'])
+        room.participants.add(user)
         messages = Message.objects.filter(room=room)
         users = User.objects.all()
+        roomSerializer = RoomSerializer(room, many=False)
         messagesSerializer = MessageSerializer(messages, many=True)
         usersSerializer = UserSerializer(users, many=True)
         data = {
             "messages": messagesSerializer.data,
             "users": usersSerializer.data,
+            "room": roomSerializer.data,
         }
         return JsonResponse(data, safe=False)
     else:
-        return JsonResponse({"success":"False"}, safe=False)
-
-
+        return JsonResponse({"success":False, "message":"method GET not allowed"}, safe=False)
 
 
 
