@@ -114,19 +114,34 @@ WSGI_APPLICATION = 'social_media.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'social-media-mem',
+#         'USER': 'root',
+#         'PASSWORD': 'MEM2022MEM',
+#         'HOST': '127.0.0.1',
+#         'PORT': '3306',
+#     }
+
+# }
+# DATABASE_URL=postgresql://${{ PGUSER }}:${{ PGPASSWORD }}@${{ PGHOST }}:${{ PGPORT }}/${{ PGDATABASE }}
+# PGDATABASE=railway
+# PGHOST=containers-us-west-46.railway.app
+# PGPASSWORD=1K3QGE80RCs2tG2IoZJG
+# PGPORT=6606
+# PGUSER=postgres
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'social-media-mem',
-        'USER': 'root',
-        'PASSWORD': 'MEM2022MEM',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': '1K3QGE80RCs2tG2IoZJG',
+        'HOST': 'containers-us-west-46.railway.app',
+        'PORT': '6606',
     }
-
 }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
