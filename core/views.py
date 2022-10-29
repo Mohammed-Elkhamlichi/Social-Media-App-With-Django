@@ -84,7 +84,6 @@ def room_detail(request, room_id):
 
 
 # room detail views test js fetch and send data
-@login_required(login_url='auth:login_user')
 def room_detail_js(request, room_id):
     if not request.user.is_authenticated:
         redirect('auth:login_user')
@@ -94,7 +93,7 @@ def room_detail_js(request, room_id):
         req = json.loads(request.body)
         user = request.user
         print('request',req)
-        Message.objects.create(room=room, user=user, body=req['body'])
+        message = Message.objects.create(room=room, user=user, body=req['body'])
         room.participants.add(user)
         messages = Message.objects.filter(room=room)
         users = User.objects.all()
@@ -104,13 +103,13 @@ def room_detail_js(request, room_id):
         userSerializer = UserSerializer(user, many=False)
         messagesSerializer = MessageSerializer(messages, many=True)
         usersSerializer = UserSerializer(users, many=True)
-        participantsSerializer = UserSerializer(participants, many=True)
+        messageSerializer = MessageSerializer(message, many=False)
         data = {
             "messages": messagesSerializer.data,
             "users": usersSerializer.data,
             "room": roomSerializer.data,
-            "room_participants": participantsSerializer.data,
             "authenticate_user": userSerializer.data,
+            "new_message": messageSerializer.data,
         }
         return JsonResponse(data, safe=False)
     else:

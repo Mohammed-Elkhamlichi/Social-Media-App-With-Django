@@ -19,7 +19,6 @@ function handleQuitJoinTopicForm() {
         });
     });
 }
-
 function quitJoinTopicFetch(topicID, state) {
     // http://127.0.0.1:8000/join-quit-topic/100/join/
     let ApiUri = `http://127.0.0.1:8000/join-quit-topic/${topicID}/${state}/`;

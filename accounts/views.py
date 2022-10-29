@@ -45,6 +45,8 @@ def profile(request, username):
         "is_user_online": is_user_online(username)
     }
     )
+    
+@login_required(login_url="accounts:login_user")
 # followers of every single user
 def user_followers(request, username):
     user = get_object_or_404(User, username=username)
@@ -58,7 +60,7 @@ def user_followers(request, username):
     })
 
 
-
+@login_required(login_url="accounts:login_user")
 # following of every single user
 def user_following(request, username):
     user = get_object_or_404(User, username=username)
@@ -72,20 +74,26 @@ def user_following(request, username):
     })
 
 
-
+@login_required(login_url="accounts:login_user")
 # 
 def follow_unfollow_user(request, username, state):
     # get the user was clicked on follow him
+    username = str(username)
     user = User.objects.get(username=username)
+    print('state',state,'username',username)
     if request.user not in user.followers.all() and str(state).lower() == "follow":
         # add  follower  and following
         user.followers.add(request.user)
         request.user.following.add(user)
+        return JsonResponse({"success":True})
     elif request.user in user.followers.all() and str(state).lower() == 'unfollow':
         # remove follower and following
         user.followers.remove(request.user)
         request.user.following.remove(user)
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        return JsonResponse({"success":True})
+    else:
+        return  JsonResponse({"success":False})
+    return  JsonResponse({"success":False})
 
 
 
