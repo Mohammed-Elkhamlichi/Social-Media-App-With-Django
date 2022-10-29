@@ -1,10 +1,10 @@
 {% load static %}
-<nav class="bg-white border-gray-200 px-2 md:px-4 py-2.5 dark:bg-gray-900">
+<nav class="shadow-sm  shadow-slate-800 border-gray-200 px-2 md:px-4 py-5 dark:bg-gray-900">
     <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
         <a href="{% url 'core:home' %}" class="flex items-center">
-            <img src="{% static '/images/mylogo.png' %}" class="mr-3 h-6 rounded-full sm:h-9" alt="El Khamlichi Logo" />
+            <img src="{{website.favicon.url}}" class="mr-3 h-6 rounded-full sm:h-9" alt="Logo" />
             <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-                MEM
+                {{website.name}}
             </span>
         </a>
         <div class="flex items-center md:order-2">

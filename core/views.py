@@ -8,6 +8,8 @@ from django.contrib import messages
 from .models import Room, Topic, Message
 from .forms import RoomForm, MessageForm
 from accounts.views import is_user_online
+from .serializers import MessageSerializer
+from accounts.serializers import UserSerializer
 # Create your views here.
 
 
@@ -80,40 +82,25 @@ def room_detail(request, room_id):
 
 
 
-
+# room detail views test js fetch and send data
 @login_required(login_url='auth:login_user')
 def room_detail_js(request, room_id):
     if not request.user.is_authenticated:
         redirect('auth:login_user')
     room_id = int(room_id)
     room = Room.objects.get(pk=room_id)
-    form = MessageForm()
     if request.method == 'POST':
-        form = MessageForm(request.POST)
-        print(form)
-        if form.is_valid():
-            form = form.save(commit=False)
-            form.user = request.user
-            form.room = room
-            form.save()
-            room.participants.add(request.user)
-            form = MessageForm()
-            return redirect(request.META.get('HTTP_REFERER', '/'))
-            # return redirect('core:room_detail', room.id)
-        else:
-            return redirect(request.META.get('HTTP_REFERER', '/'))
+        messages = Message.objects.filter(room=room)
+        users = User.objects.all()
+        messagesSerializer = MessageSerializer(messages, many=True)
+        usersSerializer = UserSerializer(users, many=True)
+        data = {
+            "messages": messagesSerializer.data,
+            "users": usersSerializer.data,
+        }
+        return JsonResponse(data, safe=False)
     else:
-        form = MessageForm()
-    conversation = Message.objects.filter(room=room)
-    context = {
-        "title": 'Room Detail Page',
-        'room': room,
-        "rooms": Room.objects.all(),
-        "topics": Topic.objects.all(),
-        "hosts": User.objects.all(),
-        "conversation": conversation,
-    }
-    return render(request, 'core/room_detail.html', context=context)
+        return JsonResponse({"success":"False"}, safe=False)
 
 
 

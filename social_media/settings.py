@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # My Apps.
     'core.apps.CoreConfig',
     'accounts.apps.AccountsConfig',
+    "website.apps.WebsiteConfig",
 
     # packages
     'tailwind',
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     'django_browser_reload',
     'online_users',
     'rest_framework',
+    'corsheaders',
 ]
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -78,6 +80,10 @@ MIDDLEWARE = [
     #
     "django_browser_reload.middleware.BrowserReloadMiddleware",
     'online_users.middleware.OnlineNowMiddleware',
+    
+    # cors headers
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
 ]
 
 ROOT_URLCONF = 'social_media.urls'
@@ -163,3 +169,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# cors headers config
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
+
+# CORS_ALLOW_ALL_ORIGINS: True

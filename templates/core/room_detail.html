@@ -29,13 +29,14 @@
         </div>
         {% if request.user in room.participants.all %}
         <div
-            class="flex flex-col justify-start items-center content-start  h-96 w-full m-auto border rounded bg-slate-700 mt-5 px-3 pt-2">
-            <div
-                class=" flex flex-col h-5/6 justify-start items-start  w-full overflow-y-auto scrollbar scrollbar-thumb-gray-500 scrollbar-track-slate-600">
+            class="flex flex-col justify-start items-center content-start h-96  w-full m-auto  rounded bg-slate-700 mt-5 px-3 pt-2">
+            <div class=" flex flex-col h-5/6 justify-start items-start  w-full overflow-y-auto scrollbar scrollbar-thumb-gray-500 scrollbar-track-slate-600 "
+                id="messages_container">
+
                 {% for message in conversation %}
                 <div
-                    class="flex flex-col  my-4 border-l-4 rounded-md {% if room.host == message.user %} border-green-600 {% else %} border-l-white {% endif %} ">
-                    <div class="flex flex-row ml-1 items-center">
+                    class="flex flex-col w-80   my-4 border py-2 px-4   rounded-md {% if room.host == message.user %} border-green-600 bg-gray-600  {% else %} border-green-600 bg-slate-700  ml-auto mr-10 justify-center   {% endif %}">
+                    <div class="flex flex-row  items-center ">
                         <img src="{{message.user.profile_pic.url}}" alt="room host" class=" h-8 w-8  rounded-full">
                         <a href="{% url 'accounts:profile' message.user.username %}"
                             class="text-xs mx-1 text-slate-300">
@@ -54,7 +55,7 @@
                         {% endif %}
                         {% endif %}
                     </div>
-                    <div class="text-xs text-gray-300 px-2 py-0 ml-1">
+                    <div class="text-xs text-gray-300 px-2 py-0 ml-1 whitespace-normal indent-4  leading-1 break-all">
                         {{message.body}}
                     </div>
                 </div>
@@ -62,12 +63,16 @@
                 <h1 class="text-gray-300">No message yet</h1>
                 {% endfor %}
             </div>
-            <form action="" method="post" class="block w-full m-auto">
+            <form action="" method="post" class=" w-full m-auto flex flex-row items-center justify-start"
+                id="send_message_form">
                 {% csrf_token %}
-                <input type="text" name="body" id="body" placeholder="write your message here and start discovering"
-                    class="w-full rounded bottom-0 right-0 left-0 -mb-6 text-sm" required>
-                <input type="hidden" name="user" value="">
-                <input type="hidden" name="room" value="">
+                <input type="text" name="body" id="message_body"
+                    placeholder="write your message here and start discovering"
+                    class="py-2 text-sm text-gray-300  w-auto flex-1 bg-slate-700 border border-slate-600 rounded-lg"
+                    required>
+                <input type="hidden" name="user" id="message_user" value="{{request.user}}">
+                <input type="hidden" name="room" id="message_room" value="{{room.id}}">
+                <!-- <input type="submit" value="Send" class="text-sm bg-green-500 text-white px-4 py-2 w-auto w-2/12"> -->
             </form>
         </div>
         {% else %}

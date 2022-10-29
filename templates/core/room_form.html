@@ -6,9 +6,8 @@
         <div class="w-full">
             <!-- {#% include "messages.html" %#} -->
         </div>
-
-        <h2 class="text-center m-auto text-xl border-b-2 py-5 w-full dark:bg-gray-700 text-gray-300">
-            {% if is_updated %} Update {% else %} Create {% endif %} Study Room
+        <h2 class="text-center m-auto text-2xl border-b-2 py-5 w-full dark:bg-gray-700 text-gray-300">
+            {% if is_update %} Update {% else %} Create {% endif %} Study Room
         </h2>
         {% csrf_token %}
         <input type="hidden" name="id_host" {% if room %} value="{{room.host}}" {% endif %} />
