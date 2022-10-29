@@ -9,7 +9,6 @@ async function followUnfollowUserProfileFetch(username, state) {
 }
 
 // change the number of following and followers of the user after follow or unfollow people
-
 // this script is to handle the follow and unfollow btn from the user profile
 async function handleFollowUnfollowUserProfile() {
     let userFollowersLink = document.getElementById("user_followers_link");

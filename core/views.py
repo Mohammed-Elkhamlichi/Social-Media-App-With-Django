@@ -98,13 +98,19 @@ def room_detail_js(request, room_id):
         room.participants.add(user)
         messages = Message.objects.filter(room=room)
         users = User.objects.all()
+        participants = room.participants.all()
+        # serializers
         roomSerializer = RoomSerializer(room, many=False)
+        userSerializer = UserSerializer(user, many=False)
         messagesSerializer = MessageSerializer(messages, many=True)
         usersSerializer = UserSerializer(users, many=True)
+        participantsSerializer = UserSerializer(participants, many=True)
         data = {
             "messages": messagesSerializer.data,
             "users": usersSerializer.data,
             "room": roomSerializer.data,
+            "room_participants": participantsSerializer.data,
+            "authenticate_user": userSerializer.data,
         }
         return JsonResponse(data, safe=False)
     else:

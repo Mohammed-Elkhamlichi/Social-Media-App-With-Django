@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django_browser_reload',
     'online_users',
     'rest_framework',
-    'corsheaders',
+    "corsheaders",
 ]
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
