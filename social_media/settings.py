@@ -80,11 +80,15 @@ MIDDLEWARE = [
     #
     "django_browser_reload.middleware.BrowserReloadMiddleware",
     'online_users.middleware.OnlineNowMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     
     # cors headers
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
 ]
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 ROOT_URLCONF = 'social_media.urls'
 
