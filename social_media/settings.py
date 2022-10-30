@@ -178,18 +178,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/theme/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'live-static', 'static-root')
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'theme/static'),
+    os.path.join(BASE_DIR, 'theme/static'), 
     BASE_DIR / "theme/static",
 ]
 MEDIA_URL = '/media/'
-MEDIAFILES_DIRS = [
-    os.path.join(BASE_DIR, 'media'),
-    BASE_DIR / "media",
-]
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'live-static', 'media-root')
 # STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
