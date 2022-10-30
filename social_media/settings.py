@@ -182,7 +182,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, '/theme/static'),
-    "web-production-3449.up.railway.app/theme/static",
+    "web-production-3449.up.railway.app/static",
     "/theme/static"
 ]
 MEDIA_URL = '/media/'
