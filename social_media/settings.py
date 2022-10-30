@@ -20,10 +20,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-28jy(i=wt*mis)1qv)4_+8mxew&g5t(^rnd48%o5#5y=uv%8k&'
+# SECRET_KEY = 'django-insecure-28jy(i=wt*mis)1qv)4_+8mxew&g5t(^rnd48%o5#5y=uv%8k&'
+SECRET_KEY = '$)58z7=b&%z4u8yw+6_7-%4)&=4!zc%!7#4k$@e*3abfi*&ya$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True 
+DEBUG = False 
 
 ALLOWED_HOSTS = ["*"]
 
@@ -91,13 +92,12 @@ MIDDLEWARE = [
 ]
 
 
-
 ROOT_URLCONF = 'social_media.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': BASE_DIR / 'templates',
+        'DIRS': os.path.join(BASE_DIR,'templates'),
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -182,7 +182,7 @@ STATIC_URL = '/theme/static/'
 STATIC_ROOT = os.path.join(BASE_DIR , 'static')
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR , 'theme/static')
+    BASE_DIR , 'theme/static'
 ]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR , 'media')
