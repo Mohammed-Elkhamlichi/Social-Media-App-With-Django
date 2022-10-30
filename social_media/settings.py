@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '$)58z7=b&%z4u8yw+6_7-%4)&=4!zc%!7#4k$@e*3abfi*&ya$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False 
+DEBUG = True 
 
 ALLOWED_HOSTS = ["*"]
 
@@ -97,7 +97,7 @@ ROOT_URLCONF = 'social_media.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': os.path.join(BASE_DIR,'templates'),
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
