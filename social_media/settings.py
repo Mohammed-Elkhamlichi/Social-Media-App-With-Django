@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '$)58z7=b&%z4u8yw+6_7-%4)&=4!zc%!7#4k$@e*3abfi*&ya$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True 
+DEBUG = False 
 
 ALLOWED_HOSTS = ["*"]
 
@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # "whitenoise.runserver_nostatic",
 
     # My Apps.
     'core.apps.CoreConfig',
@@ -73,7 +72,7 @@ NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    "whitenoise.middleware.WhiteNoiseMiddleware",
+    # "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -84,11 +83,6 @@ MIDDLEWARE = [
     #
     "django_browser_reload.middleware.BrowserReloadMiddleware",
     'online_users.middleware.OnlineNowMiddleware',
-    
-    
-    # cors headers
-    
-    
 ]
 
 
@@ -115,24 +109,6 @@ WSGI_APPLICATION = 'social_media.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'social-media-mem',
-#         'USER': 'root',
-#         'PASSWORD': 'MEM2022MEM',
-#         'HOST': '127.0.0.1',
-#         'PORT': '3306',
-#     }
-
-# }
-# DATABASE_URL=postgresql://${{ PGUSER }}:${{ PGPASSWORD }}@${{ PGHOST }}:${{ PGPORT }}/${{ PGDATABASE }}
-# PGDATABASE=railway
-# PGHOST=containers-us-west-46.railway.app
-# PGPASSWORD=1K3QGE80RCs2tG2IoZJG
-# PGPORT=6606
-# PGUSER=postgres
 
 DATABASES = {
     'default': {
@@ -184,7 +160,7 @@ STATIC_ROOT = os.path.join(BASE_DIR , 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR ,'theme/static')
 ]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR , 'media')
