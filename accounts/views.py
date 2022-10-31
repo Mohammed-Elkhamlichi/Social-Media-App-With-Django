@@ -118,6 +118,8 @@ def edit_profile(request, username):
 
 #  
 def login_user(request):
+    if request.user.is_authenticated:
+        return redirect('core:home')
     if request.method == "POST":
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -142,6 +144,8 @@ def login_user(request):
 
 
 def register_user(request):
+    if request.user.is_authenticated:
+        return redirect('core:home')
     form = UserRegisterForm()
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
