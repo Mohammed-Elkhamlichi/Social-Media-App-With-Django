@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '$)58z7=b&%z4u8yw+6_7-%4)&=4!zc%!7#4k$@e*3abfi*&ya$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False 
+DEBUG = True 
 
 ALLOWED_HOSTS = ["*"]
 
@@ -110,14 +110,24 @@ WSGI_APPLICATION = 'social_media.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': '1K3QGE80RCs2tG2IoZJG',
+#         'HOST': 'containers-us-west-46.railway.app',
+#         'PORT': '6606',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': '1K3QGE80RCs2tG2IoZJG',
-        'HOST': 'containers-us-west-46.railway.app',
-        'PORT': '6606',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django-social-media',
+        'USER': 'root',
+        'PASSWORD': 'Mohammed**202010**',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 # Password validation
@@ -182,3 +192,4 @@ CORS_ALLOW_ALL_ORIGINS: True
 
 CORS_ORIGIN_ALLOW_ALL = True
 # CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000","http://localhost:8000"]
+# source /home/elkhhrlw/virtualenv/django-social-media-app/3.9/bin/activate && cd /home/elkhhrlw/django-social-media-app    

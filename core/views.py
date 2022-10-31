@@ -163,7 +163,7 @@ def create_room(request):
         form = RoomForm(request.POST)
         if not form.is_valid():
             # return redirect(request.META.get('HTTP_REFERER', '/'))
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('.')
         form = form.save(commit=False)
         form.host = request.user
         form.topic = topic
@@ -172,7 +172,9 @@ def create_room(request):
         form.save()
         form.participants.add(request.user)
         form = MessageForm()
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('core:home')
+    else:
+        pass
 
     return render(request, 'core/room_form.html', context={
         "form": form,
