@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from accounts.models import User
 import math
+from django.urls import reverse
 from django.contrib import messages
 from .models import Room, Topic, Message
 from .forms import RoomForm, MessageForm
@@ -146,7 +147,7 @@ def join_quit_room(request, room_id, state):
 @login_required(login_url='auth:login_user')
 def create_room(request):
     if not request.user.is_authenticated:
-        redirect('auth:login_user')
+        return redirect('auth:login_user')
     form = RoomForm()
     if request.method == 'POST':
         host = request.POST.get('id_host')
@@ -156,14 +157,13 @@ def create_room(request):
             # create new topic
             topic = Topic.objects.create(name=request.POST.get('id_topic'))
             topic = topic.subscribers.add(request.user)
-            return topic
         description = request.POST.get('description')
         name = request.POST.get('name')
         user = User.objects.get(username=request.user.username)
         form = RoomForm(request.POST)
         if not form.is_valid():
             # return redirect(request.META.get('HTTP_REFERER', '/'))
-            return HttpResponseRedirect('.')
+            return HttpResponseRedirect(reverse('core:create_room'))
         form = form.save(commit=False)
         form.host = request.user
         form.topic = topic
@@ -172,9 +172,9 @@ def create_room(request):
         form.save()
         form.participants.add(request.user)
         form = MessageForm()
-        return HttpResponseRedirect('core:home')
+        return HttpResponseRedirect(reverse('core:home'))
     else:
-        pass
+        form = RoomForm()
 
     return render(request, 'core/room_form.html', context={
         "form": form,

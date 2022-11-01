@@ -1,31 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-    {% load tailwind_tags %} {% load static %} {% load website %} {% website as website %}
+{% load tailwind_tags %} {% load static %} {% load website %} {% website as website %}
 
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        {% tailwind_css %}
-        <link rel="shortcut icon" href="{{website.favicon.url}}" type="image/x-icon" />
-        <!-- <link rel="stylesheet" href="{% static 'css/dist/style.css' %}"> -->
-        <title>{{website.title}}</title>
-    </head>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% tailwind_css %}
+    <link rel="shortcut icon" href="{{website.favicon.url}}" type="image/x-icon" />
+    <!-- <link rel="stylesheet" href="{% static 'css/dist/style.css' %}"> -->
+    <title>{{website.title}}</title>
+</head>
 
-    <body class="bg-slate-700 scrollbar scrollbar-thumb-gray-500 scrollbar-track-slate-600 scrollbar-rounded-full">
-        {% include "navbar.html" %}
-        <!-- search rooms template -->
-        {#% include "core/search_rooms.html" %#}
-        <div class="items-start justify-center m-auto">{% block base %} {% endblock base %}</div>
+<body class="bg-slate-700 scrollbar scrollbar-thumb-gray-500 scrollbar-track-slate-600 scrollbar-rounded-full">
+    {% include "navbar.html" %}
+    <!-- search rooms template -->
+    {#% include "core/search_rooms.html" %#}
+    <div class="items-start justify-center m-auto">{% block base %} {% endblock base %}</div>
 
-        {% include "footer.html" %}
-        <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
-        <script type="text/javascript" src="{% static 'js/room_messages_scroll.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/room_send_messages.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/join_quit_room.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/join_quit_topic.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/follow_unfollow_user_from_sidebar.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/follow_unfollow_user_from_profile.js' %}"></script>
-    </body>
+    {% include "footer.html" %}
+    <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
+    <script src="{% static 'js/bundle.js' %}"></script>
+    <script src="{#% static 'js/alerts.js' %#}"></script>
+    <script src="{#% static 'js/room_messages_scroll.js' %#}"></script>
+    <script src="{#% static 'js/room_send_messages.js' %#}"></script>
+    <script src="{#% static 'js/join_quit_room.js' %#}"></script>
+    <script src="{#% static 'js/join_quit_topic.js' %#}"></script>
+    <script src="{#% static 'js/follow_unfollow_user_from_sidebar.js' %#}"></script>
+    <script src="{#% static 'js/follow_unfollow_user_from_profile.js' %#}"></script>
+</body>
+
 </html>
