@@ -5,10 +5,10 @@ export function setAlert(success, message) {
     // create the message container
     let alertMessage = document.createElement("h1");
     if (success) {
-        alertContainer.setAttribute("class", "my-2 bg-green-300 p-3 w-full rounded m-auto");
+        alertContainer.setAttribute("class", "my-2 bg-green-100 p-3 w-full rounded m-auto");
         alertMessage.setAttribute("class", "text-md text-green-700");
     } else {
-        alertContainer.setAttribute("class", "my-2 bg-red-300  p-3 w-full rounded m-auto");
+        alertContainer.setAttribute("class", "my-2 bg-red-100  p-3 w-full rounded m-auto");
         alertMessage.setAttribute("class", "text-md  text-red-700");
     }
 

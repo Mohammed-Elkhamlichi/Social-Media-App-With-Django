@@ -24,13 +24,13 @@ if (loginUserForm !== null && email !== null && password !== null && csrfToken !
             .then((login_data) => {
                 console.log({ login_data });
                 // alerts_div container
+                setAlert(login_data.success, login_data.message);
                 if (login_data.success) {
                     let username = login_data.username;
                     setTimeout(() => {
                         window.location.replace(`/auth/${username}/profile/`);
                     }, 2000);
                 }
-                setAlert(login_data.success, login_data.message);
             })
             .catch((login_error) => {
                 console.log({ login_error });

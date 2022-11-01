@@ -42,13 +42,12 @@ def profile(request, username):
     # is_user_online(username)
     hosts = User.objects.all()
     return render(request, 'accounts/profile.html', {
-        "hosts": hosts,
-        "user": get_user,
-        "rooms": rooms,
-        "topics": Topic.objects.all(),
-        "is_user_online": is_user_online(username)
-    }
-    )
+            "hosts": hosts,
+            "user": get_user,
+            "rooms": rooms,
+            "topics": Topic.objects.all(),
+            "is_user_online": is_user_online(username)
+        })
     
 @login_required(login_url="accounts:login_user")
 # followers of every single user
@@ -100,8 +99,6 @@ def follow_unfollow_user(request, username, state):
     return  JsonResponse({"success":False})
 
 
-
-# 
 @login_required(login_url="accounts:login_user")
 def edit_profile(request, username):
     user = request.user
@@ -116,15 +113,13 @@ def edit_profile(request, username):
         "topics": Topic.objects.all(),
         "hosts": User.objects.all(),
         "is_user_online": is_user_online(username)
-    }
-    )
+    })
 
-
-#  
 def login_user(request):
     if request.user.is_authenticated:
         return redirect('core:home')
     return render(request, 'accounts/login_user.html')
+
 
 def login_user_api(request):
     if request.user.is_authenticated:
@@ -146,7 +141,7 @@ def login_user_api(request):
                 login(request, user)
                 return JsonResponse({
                     'success':True, 
-                    "message":f'{user.username} you login success to your account', 
+                    "message":'Login Success', 
                     "username":user.username
                     })
             else:
