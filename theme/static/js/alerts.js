@@ -1,18 +1,23 @@
-let alertContainer = document.getElementById("alerts_container") || null;
-let closeAlert = document.getElementById("close_alert") || null;
-if (alertContainer !== null) {
+export function setAlert(success, message) {
+    let alertsContainer = document.getElementById("alerts_container");
+    // create the alert container
+    let alertContainer = document.createElement("div");
+    // create the message container
+    let alertMessage = document.createElement("h1");
+    if (success) {
+        alertContainer.setAttribute("class", "my-2 bg-green-300 p-3 w-full rounded m-auto");
+        alertMessage.setAttribute("class", "text-md text-green-700");
+    } else {
+        alertContainer.setAttribute("class", "my-2 bg-red-300  p-3 w-full rounded m-auto");
+        alertMessage.setAttribute("class", "text-md  text-red-700");
+    }
+
+    alertMessage.textContent = message;
+    alertContainer.appendChild(alertMessage);
+    if (alertsContainer !== null) {
+        alertsContainer.appendChild(alertContainer);
+    }
     setTimeout(function () {
-        alertContainer.setAttribute("class", "transition  duration-1000 ease-in-out  -translate-x-full");
-        closeAlert.setAttribute("class", "transition  duration-1000 ease-in-out  -translate-x-full");
+        alertContainer.setAttribute("class", "hidden");
     }, 5000);
-} else {
-    console.log("container not found");
-}
-console.log({ closeAlert });
-if (closeAlert !== null) {
-    closeAlert.addEventListener("click", (e) => {
-        e.preventDefault();
-        closeAlert.setAttribute("class", "transition  duration-1000 ease-in-out  translate-x-full");
-        alertContainer.setAttribute("class", "transition  duration-400 ease-in-out  -translate-x-full");
-    });
 }

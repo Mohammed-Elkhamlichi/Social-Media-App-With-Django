@@ -5,7 +5,7 @@
 </div>
 {% for topic in topics %}
 <div
-    class="transition ease-in-out  duration-300 flex flex-row justify-between items-center my-3 w-full p-2 m-auto bg-slate-700 shadow-sm shadow-gray-800 hover:shadow-gray-900 rounded hover:translate-x-2">
+    class="transition ease-in-out  duration-300 flex flex-row justify-between items-center my-2 w-full p-3 m-auto bg-slate-700 shadow-sm shadow-gray-800 hover:shadow-gray-900 rounded  hover:translate-x-3 hover:-translate-y-1">
     <a href="{% url 'core:topic_rooms' topic.id %}"
         class="text-gray-400 font-bold text-sm text-center ">{{topic.name|title}}</a>
     <form name="topic_join_form" action="" method="post"

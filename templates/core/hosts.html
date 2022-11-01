@@ -19,13 +19,13 @@
         {% if request.user in host.followers.all %}
 
         <button
-            class="mx-2 text-green-500 border-2 rounded-full py-1 px-4 transition duration-200 ease-in-out hover:border-green-500 hover:text-white cursor-pointer"
+            class="mx-2 text-green-500 text-sm border-2 rounded-full py-1 px-2 transition duration-200 ease-in-out hover:border-green-500 hover:text-white cursor-pointer"
             id="{{host.username}}">
             unfollow
         </button>
         {% else %}
         <button
-            class="mx-2 text-green-500 border-2 rounded-full py-1 px-4 transition duration-200 ease-in-out hover:border-green-500 hover:text-white cursor-pointer"
+            class="mx-2 text-green-500 border-2 text-sm rounded-full py-1 px-3 transition duration-200 ease-in-out hover:border-green-500 hover:text-white cursor-pointer"
             id="{{host.username}}">
             follow
         </button>

@@ -1,30 +1,31 @@
 let messageParent = document.getElementById("messages_parent");
 let messagesListContainer = document.getElementById("messages_container");
+let csrfToken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 async function handleSendMessagesForm() {
     // get the message body, user, room, form
     let sendMessageForm = document.getElementById("send_message_form");
     let messageBody = document.getElementById("message_body");
     let messageUser = document.getElementById("message_user");
     let messageRoom = document.getElementById("message_room");
-    let csrfToken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
-    messageBody.focus();
-
-    // when the user submit the form
-    sendMessageForm.addEventListener("submit", async function (e) {
-        e.preventDefault();
-        let roomID = parseInt(messageRoom.value);
-        let body = messageBody.value;
-        let user = messageUser.value;
-        console.log({ roomID, user, body, csrfToken });
-        await messagesApi(roomID, user, body, csrfToken);
-        messageBody.value = "";
-    });
+    if (sendMessageForm !== null && messageBody !== null && messageUser !== null && messageRoom !== null) {
+        messageBody.focus();
+        // when the user submit the form
+        sendMessageForm.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            let roomID = parseInt(messageRoom.value);
+            let body = messageBody.value;
+            let user = messageUser.value;
+            console.log({ roomID, user, body, csrfToken });
+            await messagesApi(roomID, user, body, csrfToken);
+            messageBody.value = "";
+        });
+    }
 }
-let csrfToken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+
 // post and get data from the server
 async function messagesApi(roomID, user, body, csrfToken) {
     // http://127.0.0.1:8000/12/detail/
-    let apiUri = `http://127.0.0.1:8000/${roomID}/detail-js/`;
+    let apiUri = `http://localhost:8000/${roomID}/detail-js/`;
     fetch(apiUri, {
         method: "POST",
         headers: {
@@ -47,10 +48,13 @@ async function messagesApi(roomID, user, body, csrfToken) {
             room.id === user.id
                 ? (x = "border-green-600 bg-gray-600")
                 : (x = "border-green-600 bg-slate-700  ml-auto mr-10 justify-center");
-            messageContainer.setAttribute("class", `flex flex-col w-80 my-4 border py-2 px-4 rounded-md ${x}`);
+            messageContainer.setAttribute(
+                "class",
+                `flex flex-col w-11/12 mx-auto   my-3 border p-2  rounded-lg border-green-600 bg-slate-700`
+            );
             // create the message user info  and set to it some attributes
             let messageUserInfoContainer = document.createElement("div");
-            messageUserInfoContainer.setAttribute("class", "flex flex-row  items-center ");
+            messageUserInfoContainer.setAttribute("class", "flex flex-row  items-center");
 
             // create the message user image and set some attributes
             let messageUserImage = document.createElement("img");

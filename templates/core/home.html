@@ -6,12 +6,8 @@
 {% include "core/search_rooms.html" %}
 
 <!-- include alerts -->
-{% if messages %}
-{% for message in messages %}
-message_tags: {{message.tags}}
-{% include "alerts.html" with message=message %}
-{% endfor %}
-{% endif %}
+
+{% include "alerts.html"%}
 
 <!-- rooms number -->
 

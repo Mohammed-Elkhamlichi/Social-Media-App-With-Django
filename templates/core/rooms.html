@@ -1,10 +1,7 @@
-{% load static %}
-{% load is_user_online %}
-
-
-{% for room in rooms %}
+{% load static %} {% load is_user_online %} {% for room in rooms %}
 <div
-    class="flex flex-col mx-2 my-5 w-full p-5 m-auto bg-slate-700 shadow-md shadow-gray-800 hover:shadow-gray-900 rounded transition dely-700 hover:scale-105 ease-in-out ">
+    class="transition ease-in-out duration-200 flex flex-col mx-2 my-5 w-full p-5 m-auto bg-slate-700 shadow-md shadow-gray-800 hover:translate-y-2 rounded"
+>
     <div class="flex flex-row justify-between items-center">
         <div class="flex flex-row">
             <div class="">
@@ -19,28 +16,29 @@
             </a>
         </div>
         {% if request.user.is_authenticated and room.host.username == request.user.username %}
-        <div class="mt-5 mb-2">
-            <a href="{% url 'core:update_room' room.id %}"
-                class="bg-green-600 w-32 py-1 px-4 text-center text-sm text-white m-2 rounded">Update
+        <div class="mt-5 mb-2 flex flex-row items-center justify-center">
+            <a
+                href="{% url 'core:update_room' room.id %}"
+                class="bg-green-500 w-8 h-8 m-2 p-1 text-center text-sm text-white rounded-full hover:text-black border-2 border-green-500 hover:border-white"
+                ><i class="fa fa-edit"></i>
             </a>
-            <a href="{% url 'core:delete_room' room.id %}"
-                class="bg-red-500 w-32 m-2 py-1 px-4 text-center text-sm text-white rounded">delete
+            <a
+                href="{% url 'core:delete_room' room.id %}"
+                class="bg-red-500 w-8 h-8 p-1 m-2 text-center text-sm text-white rounded-full border-2 border-red-500 hover:border-white hover:text-black"
+                ><i class="fa fa-trash"></i>
             </a>
         </div>
         {% endif %}
     </div>
     <div class="my-5">
-        <a href=" {% url 'core:room_detail' room.id %}" class="text-gray-400">
-            {{room.name}}
-        </a>
+        <a href=" {% url 'core:room_detail' room.id %}" class="text-gray-200 font-mono text-sm"> {{room.name}} </a>
     </div>
     <hr class="border border-slate-600 mt-5" />
     <div class="flex flex-row justify-between item-center">
         <div class="flex flex-row mt-5 mb-2">
             <img src="{{room.participants.first.profile_pic.url}}" alt="" class="h-6 w-6 rounded-full mr-1" />
             <a href="" class="text-sm font-weight h-6">
-                <span class="text-gray-400 font-weight text-sm">{{room.participants.count}} Joined
-                </span>
+                <span class="text-gray-400 font-weight text-sm">{{room.participants.count}} Joined </span>
             </a>
         </div>
         <div class="flex flex-row mt-5 mb-2">
@@ -54,20 +52,18 @@
         </div>
 
         <div class="mt-5 mb-2">
-            <a href=" {% url 'core:topic_rooms' room.topic.id %}"
-                class="bg-slate-600 text-gray-300 px-4 py-2 rounded-full text-sm">
+            <a
+                href=" {% url 'core:topic_rooms' room.topic.id %}"
+                class="bg-slate-600 text-gray-300 px-4 py-2 rounded-full text-sm"
+            >
                 {{room.topic}}
             </a>
         </div>
     </div>
-
 </div>
 {% empty %}
 <h1 class="text-gray-400">no existing room yet</h1>
 
-
-{% endfor %}
-{% if rooms %}
+{% endfor %} {% if rooms %}
 <!-- pagination -->
-{% include "core/pagination.html" with range=range %}
-{% endif %}
+{% include "core/pagination.html" with range=range %} {% endif %}

@@ -1,5 +1,10 @@
 {
-    "cSpell.words": ["psycopg", "tiktok", "unfollow"],
+    "cSpell.words": [
+        "csrfmiddlewaretoken",
+        "psycopg",
+        "tiktok",
+        "unfollow"
+    ],
     "editor.wordWrap": "on",
     "html.format.wrapAttributes": "auto",
     "debug.console.wordWrap": true,

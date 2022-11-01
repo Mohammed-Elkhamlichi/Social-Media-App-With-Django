@@ -1,3 +1,5 @@
+
+from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib import messages
@@ -10,7 +12,9 @@ import online_users.models
 from datetime import timedelta
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
+from rest_framework.response import Response
 import datetime
+import json
 # Create your views here.
 
 # check if the user online or not
@@ -120,9 +124,17 @@ def edit_profile(request, username):
 def login_user(request):
     if request.user.is_authenticated:
         return redirect('core:home')
+    return render(request, 'accounts/login_user.html')
+
+def login_user_api(request):
+    if request.user.is_authenticated:
+        return redirect('core:home')
     if request.method == "POST":
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+        data = json.loads(request.body)
+        email = data['email']
+        password = data['password']
+        print('login_data', data)
+        print('email',email,'password',password)
         try:
             user = User.objects.get(email=email)
             user = authenticate(
@@ -132,16 +144,15 @@ def login_user(request):
             )
             if user is not None:
                 login(request, user)
-                messages.success(
-                    request, f'welcome back,{user.username} you login success to your account')
-                return redirect('accounts:profile', user.username)
+                return JsonResponse({
+                    'success':True, 
+                    "message":f'{user.username} you login success to your account', 
+                    "username":user.username
+                    })
             else:
-                messages.error(request, 'enter a valid email and password')
+                return JsonResponse({"success":False, "message":"enter a valid email and password"})
         except:
-            messages.error(
-                request, 'user with this credentials not exist')
-    return render(request, 'accounts/login_user.html')
-
+            return JsonResponse({"success":False, "message":"user with this credentials not exist"})
 
 def register_user(request):
     if request.user.is_authenticated:
