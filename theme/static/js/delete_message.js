@@ -1,5 +1,5 @@
 let deleteMessageBtn = document.getElementsByName("delete_message_btn");
-setInterval(deleMessage(), 500);
+
 function deleMessage() {
     Object.entries(deleteMessageBtn).map((link) => {
         let messageID = link[1].id;
@@ -21,3 +21,5 @@ function deleMessage() {
         });
     });
 }
+
+deleMessage();

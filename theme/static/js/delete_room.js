@@ -3,7 +3,6 @@ function deleRoom() {
     Object.entries(deleteRoomBtn).map((element) => {
         let roomID = element[1].id;
         let apiUrl = `http://localhost:8000/${roomID}/delete/`;
-        console.log({ roomID, apiUrl });
         element[1].addEventListener("click", (e) => {
             e.preventDefault();
             let confirm = window.confirm("are you sure you want to delete this Room");

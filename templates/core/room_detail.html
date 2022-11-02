@@ -30,15 +30,16 @@
         {% if request.user in room.participants.all %}
         <div
             class="flex flex-col justify-start items-center content-start h-96  w-full m-auto  rounded bg-slate-700 mt-5 px-3 pt-2" id="message_parent">
+            
             <div class=" flex flex-col h-5/6 justify-start items-start  w-full overflow-y-auto scrollbar scrollbar-thumb-gray-500 scrollbar-track-slate-600 "
                 id="messages_container">
 
                 {% for message in conversation %}
                 <div
                    {% if message.user == request.user %}
-                   class="flex flex-col w-10/12  mx-auto   my-3 border p-2  rounded-lg border-green-600 bg-slate-800"
+                   class="flex flex-col max-w-xs md:max-w-sm my-3 items-left border p-2  rounded-lg border-green-600 bg-slate-800"
                     {% else %}
-                   class="flex flex-col w-10/12  mx-auto   my-3 border p-2  rounded-lg border-green-600 bg-slate-700"
+                   class="flex flex-col  max-w-xs md:max-w-sm my-3 border p-2  items-right  rounded-lg border-green-600 bg-slate-700"
 
                    {% endif %}
                   >
@@ -76,8 +77,8 @@
                         {{message.body}}
                     </div>
                 </div>
-                {% empty %}
-                <h1 class="text-gray-300">No message yet</h1>
+                <!-- {#% empty %}
+                <h1 class="text-gray-300">No message yet</h1> -->
                 {% endfor %}
             </div>
             <form action="" method="post" class=" w-full m-auto flex flex-row items-center justify-start"

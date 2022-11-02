@@ -6,3 +6,5 @@ import "./join_quit_room";
 import "./join_quit_topic";
 import "./room_messages_scroll";
 import "./room_send_messages";
+import "./delete_message";
+import "./delete_room";

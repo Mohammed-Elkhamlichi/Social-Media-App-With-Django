@@ -21,10 +21,10 @@ if (loginUserForm !== null && email !== null && password !== null && csrfToken !
             credentials: "include",
         })
             .then((res) => res.json())
-            .then((login_data) => {
-                console.log({ login_data });
+            .then(async (login_data) => {
+                console.log({ success: login_data.success });
                 // alerts_div container
-                setAlert(login_data.success, login_data.message);
+                await setAlert(login_data);
                 if (login_data.success) {
                     let username = login_data.username;
                     setTimeout(() => {

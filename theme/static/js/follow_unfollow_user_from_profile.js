@@ -13,7 +13,7 @@ async function followUnfollowUserProfileFetch(username, state) {
 async function handleFollowUnfollowUserProfile() {
     let userFollowersLink = document.getElementById("user_followers_link");
     let container = document.getElementById("profile_follow_unfollow");
-    if(userFollowersLink !== null && container  !== null && btn !== null){
+    if(userFollowersLink !== null && container  !== null){
         let btn = container.children[0]
         btn.addEventListener("click", async function (e) {
             e.preventDefault();

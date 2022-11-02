@@ -1,21 +1,20 @@
-export function setAlert(success, message) {
+export function setAlert(data) {
     let alertsContainer = document.getElementById("alerts_container");
     // create the alert container
     let alertContainer = document.createElement("div");
     // create the message container
     let alertMessage = document.createElement("h1");
-    if (success) {
-        alertContainer.setAttribute("class", "my-2 bg-green-100 p-3 w-full rounded m-auto");
-        alertMessage.setAttribute("class", "text-md text-green-700");
-        alertMessage.textContent = message;
+    if (data.success) {
+        alertContainer.setAttribute("class", "my-2 bg-green-500 p-3 w-full rounded m-auto");
+        alertMessage.setAttribute("class", "text-md text-white");
+    } else {
+        alertContainer.setAttribute("class", "my-2  p-3 w-full rounded m-auto");
+        alertContainer.style.background = "#ff9898";
+        alertMessage.setAttribute("class", "text-md  text-white");
     }
-    if (!success) {
-        alertContainer.setAttribute("class", "my-2 bg-red-100  p-3 w-full rounded m-auto");
-        alertMessage.setAttribute("class", "text-md  text-red-700");
-        alertMessage.textContent = message;
-    }
-
+    alertMessage.textContent = data.message;
     alertContainer.appendChild(alertMessage);
+
     if (alertsContainer !== null) {
         alertsContainer.appendChild(alertContainer);
     }

@@ -21,5 +21,5 @@ def is_user_online(username):
     for user in users:
         # check if the user is online
         if user.user == get_user:
-            tailwind = """relative group-hover:bg-green-400 group-hover:border-slate-800 -bottom-4    border-2 bg-green-600 rounded-full"""
+            tailwind = """absolute top-0 left-1  group-hover:bg-green-400 group-hover:border-slate-800 border-2 bg-green-600 rounded-full """
             return tailwind

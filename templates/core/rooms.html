@@ -4,8 +4,8 @@
 >
     <div class="flex flex-row justify-between items-center">
         <div class="flex flex-row">
-            <div class="">
-                <div class="h-3 w-3 {% is_user_online room.host.username %} -mt-1 -ml-1"></div>
+            <div class="relative">
+                <div class="{% is_user_online room.host.username %} h-3 w-3 00"></div>
                 <img src="{{room.host.profile_pic.url}}" alt="" class="h-8 w-8 rounded-full mr-1" />
             </div>
             <a href="{% url 'accounts:profile' room.host.username %}" class="text-sm">

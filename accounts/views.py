@@ -143,9 +143,9 @@ def login_user_api(request):
                     "username":user.username
                     })
             else:
-                return JsonResponse({"success":False, "message":"enter a valid email and password"})
+                return JsonResponse({"success":False, "message":"Incorrect Email or Password "})
         except:
-            return JsonResponse({"success":False, "message":"user with this credentials not exist"})
+            return JsonResponse({"success":False, "message":"User not exist"})
 
 
 def register_user(request):
