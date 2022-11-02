@@ -128,8 +128,6 @@ def login_user_api(request):
         data = json.loads(request.body)
         email = data['email']
         password = data['password']
-        print('login_data', data)
-        print('email',email,'password',password)
         try:
             user = User.objects.get(email=email)
             user = authenticate(
@@ -148,6 +146,7 @@ def login_user_api(request):
                 return JsonResponse({"success":False, "message":"enter a valid email and password"})
         except:
             return JsonResponse({"success":False, "message":"user with this credentials not exist"})
+
 
 def register_user(request):
     if request.user.is_authenticated:
@@ -171,5 +170,4 @@ def register_user(request):
 
 def logout_user(request):
     logout(request)
-    messages.success(request, 'success logout')
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    return HttpResponseRedirect(reverse('accounts:login_user'))

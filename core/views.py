@@ -54,23 +54,23 @@ def room_detail(request, room_id):
         redirect('auth:login_user')
     room_id = int(room_id)
     room = Room.objects.get(pk=room_id)
-    form = MessageForm()
-    if request.method == 'POST':
-        form = MessageForm(request.POST)
-        print(form)
-        if form.is_valid():
-            form = form.save(commit=False)
-            form.user = request.user
-            form.room = room
-            form.save()
-            room.participants.add(request.user)
-            form = MessageForm()
-            return redirect(request.META.get('HTTP_REFERER', '/'))
-            # return redirect('core:room_detail', room.id)
-        else:
-            return redirect(request.META.get('HTTP_REFERER', '/'))
-    else:
-        form = MessageForm()
+    # form = MessageForm()
+    # if request.method == 'POST':
+    #     form = MessageForm(request.POST)
+    #     print(form)
+    #     if form.is_valid():
+    #         form = form.save(commit=False)
+    #         form.user = request.user
+    #         form.room = room
+    #         form.save()
+    #         room.participants.add(request.user)
+    #         form = MessageForm()
+    #         return redirect(request.META.get('HTTP_REFERER', '/'))
+    #         # return redirect('core:room_detail', room.id)
+    #     else:
+    #         return redirect(request.META.get('HTTP_REFERER', '/'))
+    # else:
+    #     form = MessageForm()
     conversation = Message.objects.filter(room=room)
     context = {
         "title": 'Room Detail Page',
@@ -85,7 +85,7 @@ def room_detail(request, room_id):
 
 
 # room detail views test js fetch and send data
-def room_detail_js(request, room_id):
+def room_detail_api(request, room_id):
     if not request.user.is_authenticated:
         redirect('auth:login_user')
     room_id = int(room_id)
@@ -96,7 +96,7 @@ def room_detail_js(request, room_id):
         print('request',req)
         message = Message.objects.create(room=room, user=user, body=req['body'])
         room.participants.add(user)
-        messages = Message.objects.filter(room=room)
+        messages = Message.objects.filter(room=room).exclude(id=message.id)
         users = User.objects.all()
         participants = room.participants.all()
         # serializers
@@ -116,7 +116,13 @@ def room_detail_js(request, room_id):
     else:
         return JsonResponse({"success":False, "message":"method GET not allowed"}, safe=False)
 
-
+def delete_message_api(request, message_id):
+    if not request.user.is_authenticated:
+        return  redirect("accounts:login_user")
+    message = get_object_or_404(Message, pk=message_id)
+    message.delete()
+    messageSerializer = MessageSerializer(message, many=False)
+    return JsonResponse({"success":True,'message':messageSerializer.data})
 
 
 # join or quit room
@@ -223,12 +229,15 @@ def update_room(request, room_id):
 
 @login_required(login_url='auth:login_user')
 def delete_room(request, room_id):
+    room_id = int(room_id)
     if not request.user.is_authenticated:
         redirect('auth:login_user')
+    print({'room_id':room_id})
     try:
         room = Room.objects.get(pk=room_id)
         room.delete()
-        return redirect('core:home')
+        return JsonResponse({"success":True})
+        # return redirect('core:home')
     except Room.DoesNotExist:
         raise Http404
 

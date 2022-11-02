@@ -35,7 +35,13 @@
 
                 {% for message in conversation %}
                 <div
-                    class="flex flex-col w-10/12  mx-auto   my-3 border p-2  rounded-lg border-green-600 bg-slate-700">
+                   {% if message.user == request.user %}
+                   class="flex flex-col w-10/12  mx-auto   my-3 border p-2  rounded-lg border-green-600 bg-slate-800"
+                    {% else %}
+                   class="flex flex-col w-10/12  mx-auto   my-3 border p-2  rounded-lg border-green-600 bg-slate-700"
+
+                   {% endif %}
+                  >
                     <div class="flex flex-row  items-center ">
                         <img src="{{message.user.profile_pic.url}}" alt="room host" class=" h-8 w-8  rounded-full">
                         <a href="{% url 'accounts:profile' message.user.username %}"
@@ -55,13 +61,16 @@
                             class="mx-2 text-green-500 border-2 rounded-full py-1 px-2 text-xs transition duration-200 ease-in-out hover:border-green-500 hover:text-white cursor-pointer">follow</a>
                         {% endif %}
                         {% endif %}
+                        {% if message.user == request.user %}
                         <div class="flex flex-row items-center justify-center mx-3">
-                            <a
-                                href="{#% url 'core:delete_message' message.id %#}"
+                            <button
                                 class="bg-red-500 w-6 h-6 text-center text-sm  text-white rounded-full border-2 border-red-500 hover:border-white"
+                                name="delete_message_btn"
+                                id="{{message.id}}" 
                                 ><i class="fa fa-trash"></i>
-                            </a>
+                            </button>
                         </div>
+                        {% endif %}
                     </div>
                     <div class="text-xs text-gray-300 px-2 py-0 ml-1 whitespace-normal indent-4  leading-1 break-all">
                         {{message.body}}
