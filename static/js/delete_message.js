@@ -1,10 +1,12 @@
 let deleteMessageBtn = document.getElementsByName("delete_message_btn");
-
-function deleMessage() {
-    Object.entries(deleteMessageBtn).map((link) => {
-        let messageID = link[1].id;
+// console.log(deleteMessageBtn);
+async function deleMessage() {
+    deleteMessageBtn.forEach((link) => {
+        // console.log({ link: link.id });
+        let messageID = link.id;
         let apiUrl = `http://localhost:8000/delete-message/${messageID}/`;
-        link[1].addEventListener("click", (e) => {
+        link.addEventListener("click", (e) => {
+            // console.log({ apiUrl });
             e.preventDefault();
             let confirm = window.confirm("are you sure you want to delete this message");
             if (confirm) {
@@ -12,7 +14,7 @@ function deleMessage() {
                     .then((res) => res.json())
                     .then((data) => {
                         if (data.success) {
-                            let deleteMessageParent = link[1].parentElement.parentElement.parentElement;
+                            let deleteMessageParent = link.parentElement.parentElement.parentElement;
                             deleteMessageParent.remove();
                         }
                     })

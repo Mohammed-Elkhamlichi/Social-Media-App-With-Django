@@ -36,18 +36,19 @@ async function messagesApi(roomID, user, body, csrfToken) {
         .then((res) => res.json())
         .then((data) => {
             let { messages, users, room, authenticate_user, new_message } = data;
-            console.log({ messages, users, room, authenticate_user, new_message });
+            // console.log({ messages, users, room, authenticate_user, new_message });
             // for loop to all messages.
             let isMessage = messages.filter((item) => item.id !== new_message.id);
-            console.log({ isMessage: isMessage.length });
             // if ((isMessage.length > 0)) {
             user = users.find((user) => user.id === new_message.user);
             // create the message container and set to it some attributes
             let messageContainer = document.createElement("div");
             let x = "";
             user.id === new_message.user
-                ? (x = "flex flex-col w-auto max-w-xs md:max-w-sm my-3 border p-2  rounded-lg border-green-600 bg-slate-800")
-                : (x = "flex flex-col w-auto max-w-xs md:max-w-sm my-3 border p-2  rounded-lg border-green-600 bg-slate-700");
+                ? (x =
+                      "flex flex-col w-auto max-w-xs md:max-w-sm my-3 border p-2  rounded-lg border-green-600 bg-slate-800")
+                : (x =
+                      "flex flex-col w-auto max-w-xs md:max-w-sm my-3 border p-2  rounded-lg border-green-600 bg-slate-700");
             messageContainer.setAttribute("class", x);
             // create the message user info  and set to it some attributes
             let messageUserInfoContainer = document.createElement("div");

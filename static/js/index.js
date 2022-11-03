@@ -1,3 +1,4 @@
+import "./close_open_nav";
 import "./alerts";
 import "./login_user";
 import "./follow_unfollow_user_from_profile";
@@ -8,3 +9,4 @@ import "./room_messages_scroll";
 import "./room_send_messages";
 import "./delete_message";
 import "./delete_room";
+import "./google_user_info";

@@ -1,10 +1,10 @@
 function handleQuitJoinRoomBtn() {
     // handle quit join room button
     const btn = document.getElementById("join_quit_room") || null;
-    if(btn !== null){
+    if (btn !== null) {
         btn.addEventListener("click", async function (e) {
             e.preventDefault();
-            console.log(btn.innerHTML);
+            // console.log(btn.innerHTML);
             let room_id = parseInt(btn.value);
             if (btn.innerHTML === "Quit") {
                 btn.innerHTML = "Join";
@@ -29,10 +29,12 @@ function handleQuitJoinRoomBtn() {
 function quitJoinRoomFetch(roomID, state) {
     // http://127.0.0.1:8000/join-quit-room/120/join/
     let ApiUri = `http://localhost:8000/join-quit-room/${roomID}/${state}/`;
-    console.log({ ApiUri });
+    // console.log({ ApiUri });
     fetch(ApiUri)
         .then((response) => response.json())
-        .then((data) => console.log({ data }))
+        .then((data) => {
+            // console.log({ data });
+        })
         .catch((err) => console.error({ err }));
 }
 handleQuitJoinRoomBtn();

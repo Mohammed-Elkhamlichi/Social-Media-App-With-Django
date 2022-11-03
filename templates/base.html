@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-    {% load tailwind_tags %} {% load static %} {% load website %} {% website as website %}
+    {% load static %} {% load website %} {% website as website %}
 
     <head>
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        {% tailwind_css %}
+        <!-- <meta
+            name="google-signin-client_id"
+            content="157500872304-fqg3brtlhtj1svljljj9ch4e8ftrb6qd.apps.googleusercontent.com"
+        /> -->
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
         <link rel="shortcut icon" href="{{website.favicon.url}}" type="image/x-icon" />
         <link
             rel="stylesheet"
@@ -16,26 +20,16 @@
         <!-- <link rel="stylesheet" href="{% static 'css/dist/style.css' %}"> -->
         <title>{{website.title}}</title>
     </head>
-
-    <body class="bg-slate-700 scrollbar scrollbar-thumb-gray-500 scrollbar-track-slate-600 scrollbar-rounded-full">
-        {% if request.user.is_authenticated %}
-
-         {% include "navbar.html" %}
-         
-         {% endif %}
+    <body
+        class="bg-slate-700 scrollbar scrollbar-thumb-gray-500 scrollbar-track-slate-600 scrollbar-rounded-full mx-auto w-full"
+    >
+        {% if request.user.is_authenticated %} {% include "navbar.html" %} {% endif %}
         <!-- search rooms template -->
         {#% include "core/search_rooms.html" %#}
-        <div class="items-start justify-center m-auto">
-            {% block base %}
-             {% endblock base %}
-        </div>
+        <div class="items-start justify-center mx-auto w-full">{% block base %} {% endblock base %}</div>
 
-        {% if request.user.is_authenticated %}
-
-        {% include "footer.html" %}
-
-        {% endif %}
-       
+        {% if request.user.is_authenticated %} {% include "footer.html" %} {% endif %}
+        <!-- <script src="https://apis.google.com/js/platform.js" async defer></script> -->
         <script type="module" src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
         <script type="module" src="{% static 'js/bundle.js' %}"></script>
         <script type="module" src="{#% static 'js/login_user.js' %#}"></script>

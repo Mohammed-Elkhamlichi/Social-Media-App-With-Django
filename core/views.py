@@ -8,7 +8,6 @@ from django.urls import reverse
 from django.contrib import messages
 from .models import Room, Topic, Message
 from .forms import RoomForm, MessageForm
-from accounts.views import is_user_online
 from .serializers import MessageSerializer, RoomSerializer
 from accounts.serializers import UserSerializer
 import json
@@ -54,23 +53,6 @@ def room_detail(request, room_id):
         redirect('auth:login_user')
     room_id = int(room_id)
     room = Room.objects.get(pk=room_id)
-    # form = MessageForm()
-    # if request.method == 'POST':
-    #     form = MessageForm(request.POST)
-    #     print(form)
-    #     if form.is_valid():
-    #         form = form.save(commit=False)
-    #         form.user = request.user
-    #         form.room = room
-    #         form.save()
-    #         room.participants.add(request.user)
-    #         form = MessageForm()
-    #         return redirect(request.META.get('HTTP_REFERER', '/'))
-    #         # return redirect('core:room_detail', room.id)
-    #     else:
-    #         return redirect(request.META.get('HTTP_REFERER', '/'))
-    # else:
-    #     form = MessageForm()
     conversation = Message.objects.filter(room=room)
     context = {
         "title": 'Room Detail Page',
@@ -81,7 +63,6 @@ def room_detail(request, room_id):
         "conversation": conversation,
     }
     return render(request, 'core/room_detail.html', context=context)
-
 
 
 # room detail views test js fetch and send data
@@ -162,23 +143,25 @@ def create_room(request):
         if topic is None:
             # create new topic
             topic = Topic.objects.create(name=request.POST.get('id_topic'))
-            topic = topic.subscribers.add(request.user)
+            topic.subscribers.add(request.user)
+            topic = topic
+
         description = request.POST.get('description')
         name = request.POST.get('name')
         user = User.objects.get(username=request.user.username)
         form = RoomForm(request.POST)
-        if not form.is_valid():
-            # return redirect(request.META.get('HTTP_REFERER', '/'))
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.host = request.user
+            form.topic = topic
+            form.description = description
+            form.name = name
+            form.save()
+            form.participants.add(request.user)
+            form = MessageForm()
+            return HttpResponseRedirect(reverse('core:home'))
+        else:
             return HttpResponseRedirect(reverse('core:create_room'))
-        form = form.save(commit=False)
-        form.host = request.user
-        form.topic = topic
-        form.description = description
-        form.name = name
-        form.save()
-        form.participants.add(request.user)
-        form = MessageForm()
-        return HttpResponseRedirect(reverse('core:home'))
     else:
         form = RoomForm()
 
@@ -204,8 +187,8 @@ def update_room(request, room_id):
         if topic is None:
             # create new topic
             topic = Topic.objects.create(name=request.POST.get('id_topic'))
-            topic = topic.subscribers.add(request.user)
-            return topic
+            topic.subscribers.add(request.user)
+            topic = topic
         # topic = Topic.objects.filter(name=request.POST.get('id_topic')).first()
         form = RoomForm(request.POST or None, instance=room)
         if form.is_valid():

@@ -1,6 +1,6 @@
 function handleFollowUnfollowUserSidebar() {
     let container = document.getElementsByName("follow_unfollow_container") || null;
-    if(container !== null){
+    if (container !== null) {
         container.forEach((element) => {
             // if the user click on the button follow or unfollow
             let btn = element.children[1].children[0];
@@ -10,7 +10,7 @@ function handleFollowUnfollowUserSidebar() {
                 let item = element.children[1].children[0];
                 // get the username from the button id
                 let username = item.id;
-                console.log({ username });
+                // console.log({ username });
                 if (item.innerText === "unfollow") {
                     item.innerText = "follow";
                     followUnfollowUserSidebarFetch(username, "unfollow");
@@ -25,10 +25,12 @@ function handleFollowUnfollowUserSidebar() {
 function followUnfollowUserSidebarFetch(username, state) {
     // http://127.0.0.1:8000/auth/najim/follow-unfollow/unfollow
     let ApiUri = `http://localhost:8000/auth/${username}/follow-unfollow/${state}/`;
-    console.log({ ApiUri });
+    // console.log({ ApiUri });
     fetch(ApiUri)
         .then((response) => response.json())
-        .then((data) => console.log({ data }))
+        .then((data) => {
+            // console.log({ data });
+        })
         .catch((err) => console.error({ err }));
 }
 handleFollowUnfollowUserSidebar();

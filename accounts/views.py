@@ -8,7 +8,6 @@ from .forms import UserRegisterForm, UserForm
 from accounts.models import User
 from django.db.models import Q
 from core.models import Room, Topic
-import online_users.models
 from datetime import timedelta
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
@@ -19,34 +18,19 @@ import json
 
 # check if the user online or not
 
-
-def is_user_online(username):
-    # get the user object
-    get_user = User.objects.get(username=username)
-    # get all the users online
-    user_status = online_users.models.OnlineUserActivity.get_user_activities(
-        timedelta(seconds=60))
-    users = (user for user in user_status)
-    for user in users:
-        # check if the user is online
-        if user.user == get_user:
-            return True
-
-
 @login_required(login_url="accounts:login_user")
 def profile(request, username):
     # get the user object
     get_user = User.objects.get(username=username)
     # get rooms of this user
     rooms = Room.objects.filter(host=get_user)
-    # is_user_online(username)
     hosts = User.objects.all()
     return render(request, 'accounts/profile.html', {
             "hosts": hosts,
             "user": get_user,
             "rooms": rooms,
             "topics": Topic.objects.all(),
-            "is_user_online": is_user_online(username)
+
         })
     
 @login_required(login_url="accounts:login_user")
@@ -59,7 +43,6 @@ def user_followers(request, username):
         "hosts": User.objects.all(),
         "rooms": Room.objects.all(),
         "topics": Topic.objects.all(),
-        "is_user_online": is_user_online(username)
     })
 
 
@@ -73,12 +56,10 @@ def user_following(request, username):
         "hosts": User.objects.all(),
         "rooms": Room.objects.all(),
         "topics": Topic.objects.all(),
-        "is_user_online": is_user_online(username)
     })
 
 
 @login_required(login_url="accounts:login_user")
-# 
 def follow_unfollow_user(request, username, state):
     # get the user was clicked on follow him
     username = str(username)
@@ -112,8 +93,8 @@ def edit_profile(request, username):
         "rooms": Room.objects.all(),
         "topics": Topic.objects.all(),
         "hosts": User.objects.all(),
-        "is_user_online": is_user_online(username)
     })
+
 
 def login_user(request):
     if request.user.is_authenticated:

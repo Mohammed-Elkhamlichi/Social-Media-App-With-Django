@@ -1,5 +1,4 @@
 {% extends "base.html" %} {% load static %} {% block base %}
-
 <div class="my-20 mx-auto w-full">
     <form
         action=""
@@ -9,6 +8,7 @@
     >
         {% csrf_token %}
         <div id="alerts_container"></div>
+
         <div class="mb-6">
             <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                 >Email address</label

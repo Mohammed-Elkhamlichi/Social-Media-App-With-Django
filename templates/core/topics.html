@@ -1,15 +1,19 @@
 <div class="flex flex-col items-center justify-center text-center">
-    <h1 class="text-2xl  text-gray-400 text-xl">
-        @Interesting Topics
-    </h1>
+    <h1 class="text-2xl text-gray-400 text-xl">@Interesting Topics</h1>
 </div>
 {% for topic in topics %}
 <div
-    class="transition ease-in-out  duration-300 flex flex-row justify-between items-center my-2 w-full p-3 m-auto bg-slate-700 shadow-sm shadow-gray-800 hover:shadow-gray-900 rounded  hover:translate-x-3 hover:-translate-y-1">
-    <a href="{% url 'core:topic_rooms' topic.id %}"
-        class="text-gray-400 font-bold text-sm text-center ">{{topic.name|title}}</a>
-    <form name="topic_join_form" action="" method="post"
-        class="transition ease-in-out duration-100 text-gray-300 bg-cyan-300  font-bold px-3 py-2 text-sm rounded dark:text-slate-800 cursor-pointer">
+    class="transition ease-in-out duration-200 flex flex-row justify-between items-center my-2 w-full p-3 m-auto bg-slate-700 shadow-sm shadow-gray-800 md:hover:shadow-gray-900 rounded md:hover:translate-x-3"
+>
+    <a href="{% url 'core:topic_rooms' topic.id %}" class="text-gray-400 font-bold text-sm text-center"
+        >{{topic.name|title}}</a
+    >
+    <form
+        name="topic_join_form"
+        action=""
+        method="post"
+        class="transition ease-in-out duration-100 text-gray-300 bg-cyan-300 font-bold px-3 py-2 text-sm rounded dark:text-slate-800 cursor-pointer"
+    >
         {% csrf_token %}
         <input type="hidden" name="joined_topic" value="{{topic.name}}" />
         {% if request.user in topic.subscribers.all %}
@@ -19,6 +23,5 @@
 
         {% endif %}
     </form>
-
 </div>
 {% endfor %}

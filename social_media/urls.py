@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 from core.views import home
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # path('accounts/', include('allauth.urls')),
     path('', home),
     path('', include('core.urls', namespace='core')),
     path('api-auth/', include('rest_framework.urls')),

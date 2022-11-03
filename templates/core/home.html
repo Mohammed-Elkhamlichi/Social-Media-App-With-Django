@@ -14,14 +14,14 @@
 <div class="flex justify-center item-center px-5 py-2">
     <div class="font-bold text-sm text-gray-400">{{rooms.count}} Rooms available</div>
 </div>
-<div class="flex flex-col lg:grid lg:grid-cols-4">
+<div class="flex flex-col lg:grid lg:grid-cols-4 m-auto  w-full">
     <!-- include the topics left side lg screens -->
     <div class="hidden lg:flex lg:flex-col lg:col-span-1 lg:row-start-1 m-auto my-4 w-10/12">
         {% include "core/topics.html" with topics=topics %}
     </div>
 
-    <div class="lg:col-span-2 lg:row-start-1">
-        <div class="flex flex-col justify-center items-center mt-5 w-11/12 m-auto">
+    <div class="lg:col-span-2 lg:row-start-1 justify-items-center m-auto w-full">
+        <div class="flex flex-col justify-center items-center mt-5 w-full mx-auto">
             {% block home %}
             <h1 class="text-2xl text-center text-gray-400">@Interesting Rooms</h1>
             <!-- include rooms templates -->

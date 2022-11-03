@@ -22,7 +22,7 @@ if (loginUserForm !== null && email !== null && password !== null && csrfToken !
         })
             .then((res) => res.json())
             .then(async (login_data) => {
-                console.log({ success: login_data.success });
+                // console.log({ success: login_data.success });
                 // alerts_div container
                 await setAlert(login_data);
                 if (login_data.success) {
@@ -33,7 +33,7 @@ if (loginUserForm !== null && email !== null && password !== null && csrfToken !
                 }
             })
             .catch((login_error) => {
-                console.log({ login_error });
+                // console.log({ login_error });
                 setAlert(false, "Internal Server Error");
             });
     });

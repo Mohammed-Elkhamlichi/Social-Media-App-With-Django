@@ -5,7 +5,7 @@ from accounts.models import User
 
 class Topic(models.Model):
     name = models.CharField(max_length=200, unique=True)
-    subscribers = models.ManyToManyField(User)
+    subscribers = models.ManyToManyField(User, null=True)
 
     def __str__(self):
         return self.name
