@@ -28,7 +28,7 @@ function handleQuitJoinRoomBtn() {
 }
 function quitJoinRoomFetch(roomID, state) {
     // http://127.0.0.1:8000/join-quit-room/120/join/
-    let ApiUri = `http://localhost:8000/join-quit-room/${roomID}/${state}/`;
+    let ApiUri = `/join-quit-room/${roomID}/${state}/`;
     // console.log({ ApiUri });
     fetch(ApiUri)
         .then((response) => response.json())

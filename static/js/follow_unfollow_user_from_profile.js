@@ -1,7 +1,7 @@
 // follow unfollow user from his profile send request
 async function followUnfollowUserProfileFetch(username, state) {
     // http://127.0.0.1:8000/auth/najim/follow-unfollow/unfollow
-    let ApiUri = `http://localhost:8000/auth/${username}/follow-unfollow/${state}/`;
+    let ApiUri = `/auth/${username}/follow-unfollow/${state}/`;
     fetch(ApiUri)
         .then((response) => response.json())
         .then((data) => console.log({ data }))

@@ -10,7 +10,7 @@ if (loginUserForm !== null && email !== null && password !== null && csrfToken !
         e.preventDefault();
         let emailValue = email.value;
         let passwordValue = password.value;
-        let apiUrl = "http://localhost:8000/auth/login-api/";
+        let apiUrl = "/auth/login-api/";
         fetch(apiUrl, {
             method: "POST",
             headers: {

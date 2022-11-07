@@ -11,71 +11,71 @@ from .forms import RoomForm, MessageForm
 from .serializers import MessageSerializer, RoomSerializer
 from accounts.serializers import UserSerializer
 import json
+
 # Create your views here.
 
 
-@login_required(login_url='auth:login_user')
+@login_required(login_url="auth:login_user")
 def home(request):
     if not request.user.is_authenticated:
-        redirect('auth:login_user')
-    hosts = User.objects.all().order_by('-username')
+        redirect("auth:login_user")
+    hosts = User.objects.all().order_by("-username")
     limit_display_rooms = 10
     rooms = Room.objects.all()[:limit_display_rooms]
-    topics = Topic.objects.all().order_by('name')
+    topics = Topic.objects.all().order_by("name")
     # pagination
-    page_number = request.GET.get('page')
+    page_number = request.GET.get("page")
     if page_number is not None:
-        x = int(page_number)*limit_display_rooms
-        rooms = Room.objects.all()[(x-limit_display_rooms):x]
+        x = int(page_number) * limit_display_rooms
+        rooms = Room.objects.all()[(x - limit_display_rooms) : x]
     pages = math.floor(Room.objects.count() / limit_display_rooms)
 
     # search for rooms
-    search = request.GET.get('search')
+    search = request.GET.get("search")
     if search is not None:
-        rooms = Room.objects.filter(
-            Q(name__icontains=search)
-        ).order_by('-created', '-updated')
+        rooms = Room.objects.filter(Q(name__icontains=search)).order_by("-created", "-updated")
     context = {
-        "title": 'Room Page',
-        'rooms': rooms,
-        "range": range(1, pages+1),
+        "title": "Room Page",
+        "rooms": rooms,
+        "range": range(1, pages + 1),
         "topics": topics,
         "hosts": hosts,
     }
-    return render(request, 'core/home.html', context=context)
+    return render(request, "core/home.html", context=context)
+
 
 # room detail
 
 
-@login_required(login_url='auth:login_user')
+@login_required(login_url="auth:login_user")
 def room_detail(request, room_id):
     if not request.user.is_authenticated:
-        redirect('auth:login_user')
+        redirect("auth:login_user")
     room_id = int(room_id)
     room = Room.objects.get(pk=room_id)
     conversation = Message.objects.filter(room=room)
     context = {
-        "title": 'Room Detail Page',
-        'room': room,
+        "title": "Room Detail Page",
+        "room": room,
         "rooms": Room.objects.all(),
         "topics": Topic.objects.all(),
         "hosts": User.objects.all(),
         "conversation": conversation,
     }
-    return render(request, 'core/room_detail.html', context=context)
+    return render(request, "core/room_detail.html", context=context)
 
 
 # room detail views test js fetch and send data
 def room_detail_api(request, room_id):
     if not request.user.is_authenticated:
-        redirect('auth:login_user')
+        redirect("auth:login_user")
     room_id = int(room_id)
     room = Room.objects.get(pk=room_id)
-    if request.method == 'POST':
+    if request.method == "POST":
         req = json.loads(request.body)
         user = request.user
-        print('request',req)
-        message = Message.objects.create(room=room, user=user, body=req['body'])
+        print("request", req)
+        message = Message.objects.create(room=room, user=user, body=req["body"])
         room.participants.add(user)
         messages = Message.objects.filter(room=room).exclude(id=message.id)
         users = User.objects.all()
@@ -93,21 +93,22 @@ def room_detail_api(request, room_id):
             "authenticate_user": userSerializer.data,
             "new_message": messageSerializer.data,
         }
-        return JsonResponse(data, safe=False)
+        return JsonResponse({"success": False, "message": "success create new message"}, safe=False)
     else:
-        return JsonResponse({"success":False, "message":"method GET not allowed"}, safe=False)
+        return JsonResponse({"success": False, "message": "method GET not allowed"}, safe=False)
+
 
 def delete_message_api(request, message_id):
     if not request.user.is_authenticated:
-        return  redirect("accounts:login_user")
+        return redirect("accounts:login_user")
     message = get_object_or_404(Message, pk=message_id)
     message.delete()
     messageSerializer = MessageSerializer(message, many=False)
-    return JsonResponse({"success":True,'message':messageSerializer.data})
+    return JsonResponse({"success": True, "message": messageSerializer.data})
 
 
 # join or quit room
-@login_required(login_url='auth:login_user')
+@login_required(login_url="auth:login_user")
 def join_quit_room(request, room_id, state):
     try:
         room_id = int(room_id)
@@ -117,37 +118,36 @@ def join_quit_room(request, room_id, state):
         if request.user not in room.participants.all() and str(state).lower() == "join":
             room.participants.add(request.user)
             room.save()
-            return JsonResponse({"success":"true","message":"user join room success"})
+            return JsonResponse({"success": "true", "message": "user join room success"})
         # else
         elif request.user in room.participants.all() and str(state).lower() == "quit":
             room.participants.remove(request.user)
             room.save()
-            return JsonResponse({"success":"true","message":"user quit room success"})
+            return JsonResponse({"success": "true", "message": "user quit room success"})
         else:
-            return JsonResponse({"success":"false","message":"Internal Server Error"})
+            return JsonResponse({"success": "false", "message": "Internal Server Error"})
     except:
-            return JsonResponse({"success":"false","message":"Internal Server Error"})
-
+        return JsonResponse({"success": "false", "message": "Internal Server Error"})
 
 
 # create new room
-@login_required(login_url='auth:login_user')
+@login_required(login_url="auth:login_user")
 def create_room(request):
     if not request.user.is_authenticated:
-        return redirect('auth:login_user')
+        return redirect("auth:login_user")
     form = RoomForm()
-    if request.method == 'POST':
-        host = request.POST.get('id_host')
-        participant = request.POST.get('id_participants')
-        topic = Topic.objects.filter(name=request.POST.get('id_topic')).first()
+    if request.method == "POST":
+        host = request.POST.get("id_host")
+        participant = request.POST.get("id_participants")
+        topic = Topic.objects.filter(name=request.POST.get("id_topic")).first()
         if topic is None:
             # create new topic
-            topic = Topic.objects.create(name=request.POST.get('id_topic'))
+            topic = Topic.objects.create(name=request.POST.get("id_topic"))
             topic.subscribers.add(request.user)
             topic = topic
 
-        description = request.POST.get('description')
-        name = request.POST.get('name')
+        description = request.POST.get("description")
+        name = request.POST.get("name")
         user = User.objects.get(username=request.user.username)
         form = RoomForm(request.POST)
         if form.is_valid():
@@ -159,34 +159,38 @@ def create_room(request):
             form.save()
             form.participants.add(request.user)
             form = MessageForm()
-            return HttpResponseRedirect(reverse('core:home'))
+            return HttpResponseRedirect(reverse("core:home"))
         else:
-            return HttpResponseRedirect(reverse('core:create_room'))
+            return HttpResponseRedirect(reverse("core:create_room"))
     else:
         form = RoomForm()
 
-    return render(request, 'core/room_form.html', context={
-        "form": form,
-        "is_update": False,
-        "method": "POST",
-        'topics': Topic.objects.all(),
-        'hosts': User.objects.all(),
-    })
+    return render(
+        request,
+        "core/room_form.html",
+        context={
+            "form": form,
+            "is_update": False,
+            "method": "POST",
+            "topics": Topic.objects.all(),
+            "hosts": User.objects.all(),
+        },
+    )
 
 
 # update room
-@login_required(login_url='auth:login_user')
+@login_required(login_url="auth:login_user")
 def update_room(request, room_id):
     if not request.user.is_authenticated:
-        redirect('auth:login_user')
+        redirect("auth:login_user")
     room_id = int(room_id)
     room = Room.objects.get(pk=room_id)
     form = RoomForm(instance=room)
-    if request.method == 'POST':
-        topic = Topic.objects.filter(name=request.POST.get('id_topic')).first()
+    if request.method == "POST":
+        topic = Topic.objects.filter(name=request.POST.get("id_topic")).first()
         if topic is None:
             # create new topic
-            topic = Topic.objects.create(name=request.POST.get('id_topic'))
+            topic = Topic.objects.create(name=request.POST.get("id_topic"))
             topic.subscribers.add(request.user)
             topic = topic
         # topic = Topic.objects.filter(name=request.POST.get('id_topic')).first()
@@ -196,65 +200,100 @@ def update_room(request, room_id):
             form.host = request.user
             form.topic = topic
             form.save()
-            return redirect('core:home')
+            return redirect("core:home")
 
-    return render(request, 'core/room_form.html', context={
-        "form": form,
-        "room": room,
-        "is_update": True,
-        "method": "PUT",
-        "hosts": User.objects.all(),
-        "topics":Topic.objects.all()
-    })
+    return render(
+        request,
+        "core/room_form.html",
+        context={
+            "form": form,
+            "room": room,
+            "is_update": True,
+            "method": "PUT",
+            "hosts": User.objects.all(),
+            "topics": Topic.objects.all(),
+        },
+    )
+
 
 # delete room
 
 
-@login_required(login_url='auth:login_user')
+@login_required(login_url="auth:login_user")
 def delete_room(request, room_id):
     room_id = int(room_id)
     if not request.user.is_authenticated:
-        redirect('auth:login_user')
-    print({'room_id':room_id})
+        redirect("auth:login_user")
+    print({"room_id": room_id})
     try:
         room = Room.objects.get(pk=room_id)
         room.delete()
-        return JsonResponse({"success":True})
+        return JsonResponse({"success": True})
         # return redirect('core:home')
     except Room.DoesNotExist:
         raise Http404
 
-@login_required(login_url='auth:login_user')
+
+@login_required(login_url="auth:login_user")
 # get all room exist in every single topic
 def topic_rooms(request, topic_id):
     topic_id = int(topic_id)
     topic = get_object_or_404(Topic, pk=topic_id)
     rooms = Room.objects.filter(topic=topic)
 
-    return render(request, 'core/topic_rooms.html', {
-        "rooms": rooms,
-        "topics": Topic.objects.all(),
-        "hosts": User.objects.all(),
-    })
+    return render(
+        request,
+        "core/topic_rooms.html",
+        {
+            "rooms": rooms,
+            "topics": Topic.objects.all(),
+            "hosts": User.objects.all(),
+        },
+    )
 
 
-
-@login_required(login_url='auth:login_user')
+@login_required(login_url="auth:login_user")
 # join or quit topic
 def join_quit_topic(request, topic_id, state):
     # join-quit-topic-js/<int:topic_id>/<str:state/
     # add new Joined (join a topic)
-        topic_id = int(topic_id)
-        print(topic_id, state)
-        try:
-            # if the topic name exist and the user need to join the topic
-            topic = get_object_or_404(Topic,pk=topic_id)
-            if str(state).lower() == "join":
-                topic.subscribers.add(request.user)
-                return JsonResponse({"success":"true","message":"user join topic success"})
-            # if the topic name exist and the user need to join the topic
-            elif str(state).lower() == "quit":
-                topic.subscribers.remove(request.user)
-                return JsonResponse({"success":"true","message":"user quit topic success"})
-        except:
-            return JsonResponse({"success":"false","message":"Internal Server Error"})
+    topic_id = int(topic_id)
+    print(topic_id, state)
+    try:
+        # if the topic name exist and the user need to join the topic
+        topic = get_object_or_404(Topic, pk=topic_id)
+        if str(state).lower() == "join":
+            topic.subscribers.add(request.user)
+            return JsonResponse({"success": "true", "message": "user join topic success"})
+        # if the topic name exist and the user need to join the topic
+        elif str(state).lower() == "quit":
+            topic.subscribers.remove(request.user)
+            return JsonResponse({"success": "true", "message": "user quit topic success"})
+    except:
+        return JsonResponse({"success": "false", "message": "Internal Server Error"})
+
+
+def get_messages(request, room_id):
+    # room
+    room = get_object_or_404(Room, id=room_id)
+    roomSerializer = RoomSerializer(room, many=False)
+    # user
+    user = request.user
+    userSerializer = UserSerializer(user, many=False)
+
+    # users
+    users = User.objects.all()
+    usersSerializer = UserSerializer(users, many=True)
+
+    # messages
+    messages = Message.objects.filter(room=room)
+    messagesSerializer = MessageSerializer(messages, many=True)
+
+    data = {
+        "messages": messagesSerializer.data,
+        "users": usersSerializer.data,
+        "room": roomSerializer.data,
+        "authenticate_user": userSerializer.data,
+        "success": True,
+    }
+    return JsonResponse(data, safe=False)

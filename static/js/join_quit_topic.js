@@ -23,7 +23,7 @@ function handleQuitJoinTopicForm() {
 }
 function quitJoinTopicFetch(topicID, state) {
     // http://127.0.0.1:8000/join-quit-topic/100/join/
-    let ApiUri = `http://localhost:8000/join-quit-topic/${topicID}/${state}/`;
+    let ApiUri = `/join-quit-topic/${topicID}/${state}/`;
     // console.log({ ApiUri });
     fetch(ApiUri)
         .then((response) => response.json())

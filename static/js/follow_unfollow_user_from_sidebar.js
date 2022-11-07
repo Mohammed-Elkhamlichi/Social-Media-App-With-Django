@@ -24,7 +24,7 @@ function handleFollowUnfollowUserSidebar() {
 }
 function followUnfollowUserSidebarFetch(username, state) {
     // http://127.0.0.1:8000/auth/najim/follow-unfollow/unfollow
-    let ApiUri = `http://localhost:8000/auth/${username}/follow-unfollow/${state}/`;
+    let ApiUri = `/auth/${username}/follow-unfollow/${state}/`;
     // console.log({ ApiUri });
     fetch(ApiUri)
         .then((response) => response.json())

@@ -4,7 +4,7 @@ async function deleMessage() {
     deleteMessageBtn.forEach((link) => {
         // console.log({ link: link.id });
         let messageID = link.id;
-        let apiUrl = `http://localhost:8000/delete-message/${messageID}/`;
+        let apiUrl = `/delete-message/${messageID}/`;
         link.addEventListener("click", (e) => {
             // console.log({ apiUrl });
             e.preventDefault();
